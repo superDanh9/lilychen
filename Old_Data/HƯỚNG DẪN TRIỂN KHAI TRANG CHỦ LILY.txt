@@ -1,0 +1,310 @@
+HƯỚNG DẪN TRIỂN KHAI TRANG CHỦ LILY CHEN MAKEUP
+📦 Bạn nhận được 2 file
+
+lilychen-homepage.txt — Code shortcode Flatsome cho 9 section
+lilychen-custom.css — CSS tùy chỉnh
+
+
+🚀 CÁC BƯỚC TRIỂN KHAI (THEO THỨ TỰ)
+Bước 1: Backup trang chủ hiện tại
+Trước khi đụng gì cũng cứ copy nguyên shortcode trang chủ cũ vào 1 file .txt lưu lại. Lỡ có gì còn rollback được.
+Bước 2: Tạo Contact Form 7
+Vào Liên hệ > Thêm mới trong WordPress, tạo form với các field:
+<label>Họ và tên (bắt buộc)
+    [text* your-name placeholder "Nhập họ tên của bạn"]</label>
+
+<label>Số điện thoại (bắt buộc)
+    [tel* your-phone placeholder "0xxx xxx xxx"]</label>
+
+<label>Bạn quan tâm khóa nào?
+    [select your-course "Tư vấn cho tôi" "Khóa Makeup Cá Nhân" "Khóa Makeup Chuyên Nghiệp"]</label>
+
+<label>Lời nhắn (không bắt buộc)
+    [textarea your-message x4 placeholder "Bạn có câu hỏi gì cho Lily Chen?"]</label>
+
+[submit "🎁 Nhận tư vấn miễn phí"]
+Sau khi save, CF7 sẽ cho bạn 1 shortcode dạng [contact-form-7 id="123" title="..."] — copy số ID đó.
+Bước 3: Thay ID form vào shortcode trang chủ
+Trong file lilychen-homepage.txt, có 2 chỗ ghi id="REPLACE_ID" — thay bằng ID thật của form vừa tạo. Nếu muốn track riêng conversion từ Hero vs Final CTA, tạo 2 form khác nhau với tên khác nhau.
+Bước 4: Thay ID hình ảnh
+Trong code có các ID hình ảnh placeholder:
+
+bg="276" → background hero section
+bg="376" → background final CTA
+img="285", img="288", img="289" → icon trong 3 lý do
+bg="284", bg="283" → 2 khóa học
+ids="341,342,343,344" → gallery Before/After
+
+Cách lấy ID hình: Vào WordPress > Media Library > click vào hình > nhìn URL có ?attachment_id=XXX hoặc xem ô "Attachment ID" bên phải. Thay các số đó vào code.
+Bước 5: Paste code shortcode
+
+Vào Trang > Tất cả trang > Trang chủ > Chỉnh sửa
+Chuyển sang chế độ Text/Code (không phải Visual)
+Xóa toàn bộ nội dung cũ
+Paste nội dung từ lilychen-homepage.txt
+Bấm Cập nhật
+
+Bước 6: Paste CSS
+
+Vào Flatsome > Advanced > Global Custom CSS
+Paste toàn bộ nội dung lilychen-custom.css vào ô bên dưới (nếu có CSS cũ, để xuống dưới)
+Bấm Save Changes
+
+Bước 7: Test
+
+Mở trang chủ ở chế độ ẩn danh (incognito) → đảm bảo không bị cache
+Test trên cả desktop + mobile
+Click vào nút "Nhận tư vấn lộ trình" → phải scroll xuống form
+Submit form thử → check email có nhận được không
+
+
+✅ CHECKLIST DANH CẦN LÀM SAU KHI DEPLOY
+Ngay lập tức (trước khi nộp đồ án):
+
+ Thu thập 3-5 review thật từ học viên cũ (zalo, facebook, tiktok)
+ Chụp 4-8 ảnh Before/After thật (xin phép học viên trước)
+ Cập nhật giá khóa học thật vào section 4
+ Cập nhật số học viên đã đào tạo vào section 2
+ Cập nhật số điện thoại liên hệ ở section 9
+
+Để được điểm cao (đây là phần ăn điểm Digital Marketing):
+
+ Cài Google Tag Manager (research nói cần)
+ Set up event tracking trong GA4 cho:
+
+Form submit (Hero + Final CTA)
+Click nút "Tư vấn lộ trình"
+Scroll depth (50%, 75%, 100%)
+
+
+ Cài Facebook Pixel để remarketing (research đã nói)
+ Test tốc độ trang trên Google PageSpeed Insights
+ Thêm Schema markup cho FAQ (giúp SEO mạnh)
+
+
+🎯 BÁO CÁO ĐỒ ÁN - GỢI Ý CẤU TRÚC
+Khi viết báo cáo nộp giảng viên, dùng cấu trúc này để link UI ↔ Strategy rõ ràng:
+1. Phân tích trang cũ (chụp screenshot)
+
+Hero trống → không truyền tải USP
+Không có form trên trang chủ → mất lead
+Không có lộ trình học, giá, review → khách không đủ thông tin quyết định
+Không có social proof → thiếu trust
+
+2. Mapping research → quyết định thiết kế
+Insight từ ResearchQuyết định trên trang chủUSP "90% thực hành, lớp nhỏ"Đưa vào Hero + Section "3 Lý Do"Customer Journey có giai đoạn Consideration cần xem lộ trình + giá + reviewThêm Section 5 (Lộ trình), Section 4 (Giá), Section 7 (Review)Đối thủ thắng nhờ "Portfolio Before/After"Thêm Section 6 Before/After thay gallery thườngCPC Google Ads cao → cần landing page conversion tốt2 form bắt lead (Hero + Final CTA), nhiều CTA xuyên suốtPersona Gen Z 18-24 + Văn phòng 25-352 khóa học target riêng biệt với copy khác nhau
+3. Đo lường (sau khi deploy + chạy 1-2 tuần)
+
+Bounce rate before vs after
+Time on page before vs after
+Form submission rate
+Conversion path trong GA4
+
+Đây mới là cái giảng viên Digital Marketing muốn thấy — không phải UI đẹp, mà là logic đằng sau UI.
+
+🔧 NHỮNG THỨ TÔI KHÔNG LÀM ĐƯỢC (CẦN DANH XỬ LÝ)
+
+Hình ảnh: Tôi không truy cập được WordPress library, Danh phải tự thay ID
+Review thật: Không bịa được, Danh phải thu thập
+Giá khóa học: Không có data, Danh điền vào placeholder
+Số điện thoại + thông tin liên hệ: Tự điền
+Test thực tế: Sau khi deploy, Danh test trên thiết bị thật
+
+
+💡 GỢI Ý "CÁCH LÀM THÔNG MINH HƠN"
+Về thu thập review học viên cũ — nhanh nhất:
+Nhắn Zalo/FB cho 5-10 học viên cũ với template:
+
+"Chào em, chị Lily đang làm website mới cho academy. Em có thể giúp chị 2 phút được không? Chỉ cần em trả lời 3 câu:
+
+Trước khi học, em gặp khó khăn gì với makeup?
+Sau khóa học, em làm được gì mà trước không làm được?
+Điều em ấn tượng nhất khi học tại Lily Chen là gì?
+
+Em ghi âm voice cũng được, chị transcribe ra. Cảm ơn em nhiều! 💕"
+
+Tỉ lệ phản hồi cao hơn nhiều so với hỏi chung chung "cho chị xin feedback".
+Về Before/After:
+Nếu chưa có ảnh, gợi ý: hôm sau buổi học, nhờ học viên tự chụp ảnh trước khi vào lớp (mặt mộc) và sau khi tốt nghiệp (mặt đã trang điểm). Đây là content tự nhiên, không cần dàn dựng.
+
+
+
+HANDOFF — LILY CHEN MAKEUP (CẬP NHẬT)
+
+File này thay thế phiên bản handoff cũ (đã có trong Project Knowledge).
+Đưa file này vào Project Knowledge để chat mới có đầy đủ ngữ cảnh.
+Cập nhật lần cuối: Sau khi deploy trang chủ v2 + trang khóa học style Liphamy + phân tích đối thủ.
+Phiên làm việc tiếp theo: Technical SEO + Footer redesign
+
+
+1. BỐI CẢNH DỰ ÁN (Không đổi)
+Đồ án là gì
+
+Tên: Website Lily Chen Makeup Academy (lilychenmakeup.com)
+Loại: Đồ án cuối kỳ chương trình "Digital Marketing with AI" — FPT Skillking
+Deadline: Đầu tháng 7/2026
+Người làm: Nguyễn Thành Danh (sinh 02/11/2003)
+
+Đặc điểm site
+
+Platform: WordPress + theme Flatsome
+Workflow: Code shortcode Flatsome → paste → tinh chỉnh UX Builder
+URL chính thức: lilychenmakeup.com
+URL staging: lilychenmakeup.com/trang-chu-draf/
+Plugins đã cài: Google Analytics, Site Kit, Popup Maker, Contact Form 7, Rank Math SEO, Flatsome theme
+
+Tiêu chí chấm điểm đồ án (ưu tiên theo thứ tự)
+
+Thẩm mỹ UI
+Conversion
+SEO + cấu trúc nội dung
+
+
+2. RESEARCH ĐÃ CÓ (Không đổi)
+Brand info
+
+Tên: Lily Chen Makeup Academy
+Địa điểm: B14, Đường số 3, KDC Hiệp Phát 2, P. Hiệp Thành, TP. Thủ Dầu Một, Bình Dương
+Giờ mở cửa: 7:00 - 21:00
+Hotline: 088 997 97 91
+Email hiện tại: thlongntl@gmail.com (⚠️ là email cá nhân Danh, không phải email brand)
+Màu thương hiệu chính thức: Hồng #ff8da1, #d4537a, #ff5e7d, #ff8fa3 (gradient)
+Màu hiện tại trên footer: #ff1493 hoặc tương tự (CHÓI, không khớp palette — cần sửa)
+
+USP (3 điểm khác biệt chính)
+
+90% thời lượng thực hành trên mẫu thật
+Lớp tối đa 5 học viên — Lily Chen trực tiếp cầm tay chỉ việc
+Học phí tối ưu — phù hợp sinh viên + người đi làm
+
+Persona
+
+Persona 1: Gen Z 18-24 — muốn làm nghề makeup/KOC/KOL
+Persona 2: Văn phòng 25-35 — muốn makeup cá nhân
+
+Đối thủ chính (đã phân tích trong file Phan-tich-doi-thu-LilyChen.docx)
+
+Trực tiếp (Bình Dương): Seoul Academy, DIVA Academy, SHE Makeup, Ngân Đồng, Phương Vi... (14 đối thủ, 12/14 KHÔNG có website)
+Gián tiếp (hình mẫu Digital): Tina Lê (tinalemakeup.vn), Quách Ánh, DIVA Academy, Vinnie, Tokyo Beauty, Liphamy
+Cơ hội: Đối thủ Bình Dương KHÔNG có website → SEO local là cơ hội lớn
+
+
+3. CÁC QUYẾT ĐỊNH ĐÃ CHỐT QUA CÁC PHIÊN
+Quyết định đã chốt cho TRANG CHỦ v2 (đã deploy)
+#SectionMô tả1HeroHeadline center + 2 CTA (KHÔNG có form), background ảnh model, overlay 0.452Trust bar4 số: học viên / 90% / 1:5 / 24/733 Lý do3 USP featured box4Khóa học2 khóa zigzag (Cá Nhân + Chuyên Nghiệp)5Lộ trình học4 bước: Nền tảng → Kỹ thuật → Thực chiến → Tốt nghiệp6Before/AfterGallery 4 ảnh7Reviews3 card placeholder8FAQ6 câu accordion, icon + tùy chỉnh (xoay 45° khi mở)9Final CTAForm đăng ký + ưu đãi + SĐT10BlogBài viết + fallback message
+Quyết định đã chốt cho TRANG /KHOA-HOC/ (đã deploy)
+
+Style tham khảo Liphamy (clean, sang trọng, không overlay đen)
+Layout zigzag: Khóa Cá Nhân (text trái + ảnh phải) | Khóa Chuyên Nghiệp (ảnh trái + text phải)
+Mỗi card có: persona tag → tiêu đề → mô tả → 4 bullet benefit → giá → nút "XEM CHI TIẾT KHÓA HỌC"
+Giá khóa Chuyên Nghiệp: dùng Price Anchoring (30tr gạch ngang → 25tr) — Danh đã chốt thực hiện
+
+Typography đã thống nhất
+
+Heading: Playfair Display (serif, sang trọng)
+Body + Button + Input: Nunito (sans-serif, đọc tiếng Việt đẹp)
+
+Popup Maker plugin (đang chạy ổn, KHÔNG đụng)
+
+Popup desktop ID 389 (layout 2 cột ảnh + form)
+Popup mobile ID 412 (layout 1 cột, không ảnh)
+CSS popup đã được merge vào Global Custom CSS
+
+
+4. FILES ĐÃ CÓ (CURRENT VERSION)
+Đã deploy
+
+lilychen-homepage-v2.txt — Shortcode trang chủ
+lilychen-custom-v2-MERGED.css — CSS đầy đủ (popup + trang chủ v2)
+lilychen-trang-khoa-hoc.txt — Shortcode trang /khoa-hoc/
+lilychen-css-trang-khoa-hoc.css — CSS bổ sung cho trang khóa học
+
+Tài liệu reference
+
+research_lilychenmakeup.docx — Research gốc của Lily Chen
+Phan-tich-doi-thu-LilyChen.docx — Phân tích 22 đối thủ + 3 ưu tiên sâu (Tina Lê, DIVA, Seoul Academy)
+HUONG-DAN-DEPLOY-V2.md — Hướng dẫn deploy trang chủ v2
+HUONG-DAN-TRANG-KHOA-HOC.md — Hướng dẫn deploy trang khóa học
+
+Sắp tạo (phiên tiếp theo)
+
+File shortcode/CSS Footer mới
+Checklist Technical SEO
+Files tối ưu hình ảnh
+
+
+5. TRẠNG THÁI HIỆN TẠI
+Đã xong
+
+✅ Trang chủ v2 deploy lên lilychenmakeup.com
+✅ Trang /khoa-hoc/ redesign theo style Liphamy đã deploy
+✅ Phân tích đối thủ (file Word) hoàn chỉnh
+✅ Price anchoring áp dụng cho khóa Chuyên Nghiệp (30tr → 25tr)
+
+Đang chờ xử lý (phiên tiếp theo)
+
+⏳ Footer redesign (vấn đề hiện tại: màu chói, email cá nhân, thiếu local SEO info)
+⏳ Technical SEO toàn site:
+
+Tối ưu hình ảnh (compress, alt text, lazy loading, WebP)
+Meta tags (title, description) cho từng trang
+Schema markup (Local Business, Course, FAQ)
+Sitemap XML
+Robots.txt
+Core Web Vitals (LCP, FID, CLS)
+Mobile responsiveness audit
+Internal linking
+Heading hierarchy (H1, H2, H3)
+
+
+
+Việc cần Danh làm song song
+
+Thu thập 3-5 review thật từ học viên cũ
+Chụp/xin 4-8 ảnh Before/After thật
+Lấy số học viên đã đào tạo thực tế từ Lily Chen
+Xác nhận giá khóa Cá Nhân + thông tin trả góp
+Tạo email brand chính thức (vd: lienhe@lilychenmakeup.com)
+Set up Google Tag Manager + GA4 event tracking
+
+
+6. VẤN ĐỀ CỤ THỂ CỦA FOOTER HIỆN TẠI (Cho chat mới biết)
+Dựa trên screenshot mới nhất:
+Vấn đềMức nghiêm trọngGiải pháp đề xuấtMàu nền hồng chói #ff1493 không khớp brand palette #d4537a🔴 CaoĐổi sang #d4537a hoặc #2c2c2c (đen sang trọng)Email thlongntl@gmail.com là email cá nhân Danh🔴 CaoTạo email brand lienhe@lilychenmakeup.comBản đồ là ảnh tĩnh, không phải Google Maps embed live🟡 TrungEmbed iframe Google Maps → tốt cho UX + SEOThiếu Schema Local Business🟡 TrungThêm JSON-LD schemaCopyright thiếu links Privacy Policy, Terms🟡 TrungThêm 2 link, tạo 2 trang nội dungLogo nền trắng chèn vào nền hồng → tạo box vuông xấu🟢 ThấpDùng logo trắng PNG transparent trực tiếpSocial icons có Email icon → trùng lặp với Email text ở trên🟢 ThấpBỏ Email icon, giữ Facebook/Instagram/TikTokCột "Bản đồ" có "Mở trong Maps" overlay che mất nhìn🟢 ThấpStyle lại embed Google Maps cleanerNAP (Name-Address-Phone) chưa structured cho Local SEO🔴 CaoWrap địa chỉ, SĐT, email trong markup itemprop
+
+7. PHONG CÁCH LÀM VIỆC DANH ƯA THÍCH
+
+Hỏi trước nếu chưa rõ, không tự đoán
+Cô đọng, có ví dụ thực tế, ứng dụng được ngay
+Nhắc khi có cách làm thông minh hơn
+Không thích: tâng bốc, lý thuyết suông, nói chung chung
+Gom feedback rồi sửa 1 lần, không sửa lặt vặt nhiều vòng
+Đạo đức marketing: Không bịa số, không dùng review giả, dùng placeholder [CẬP NHẬT] cho data chưa có
+
+
+8. PROMPT MẪU CHO CHAT MỚI
+Chào, tôi muốn tiếp tục dự án Lily Chen Makeup Academy.
+Project Knowledge có file "HANDOFF-LILYCHEN-MAKEUP.md" chứa toàn bộ ngữ cảnh.
+
+Hôm nay tôi muốn tập trung 2 việc:
+
+1. **Tối ưu Technical SEO** cho toàn site, bao gồm:
+   - Tối ưu hình ảnh (compress, alt text, WebP, lazy loading)
+   - Meta tags + Schema markup (Local Business, Course, FAQ)
+   - Heading hierarchy
+   - Core Web Vitals
+   - Mobile audit
+   - Internal linking
+
+2. **Redesign Footer** vì footer hiện tại có nhiều vấn đề:
+   - Màu nền hồng chói không khớp brand palette
+   - Email là email cá nhân
+   - Thiếu Schema Local Business cho SEO local
+   - Bản đồ là ảnh tĩnh, không embed
+   - Thiếu links Privacy/Terms
+
+Đọc handoff trước, rồi bắt đầu bằng việc hỏi tôi vài câu để làm rõ ưu tiên + scope.
+Đừng tự đoán, đừng làm tất cả cùng lúc — tôi muốn từng bước rõ ràng.
+
+9. QUICK REFERENCE
+ItemValueURL chínhlilychenmakeup.comURL staginglilychenmakeup.com/trang-chu-draf/PlatformWordPress + Flatsome themePlugins SEORank Math SEO + Site KitFont headingPlayfair DisplayFont bodyNunitoMàu chính#ff8da1, #d4537a (KHÔNG dùng #ff1493)Địa chỉB14, Đường số 3, KDC Hiệp Phát 2, P. Hiệp Thành, TP. Thủ Dầu Một, Bình DươngHotline088 997 97 91Email hiện tạithlongntl@gmail.com (CẦN ĐỔI sang email brand)Giờ mở cửa7:00 - 21:00Popup desktop ID389Popup mobile ID412Version trang chủv2 (đã deploy)Version trang khóa họcLiphamy-style (đã deploy)Version footerv1 cũ (sắp redesign)Technical SEOChưa làm

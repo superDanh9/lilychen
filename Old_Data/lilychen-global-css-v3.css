@@ -1,0 +1,2428 @@
+/* ============================================================
+   LILY CHEN MAKEUP — GLOBAL CUSTOM CSS (v3 CLEAN)
+   ============================================================
+   Phien ban: 28/05/2026
+   Tai cau truc: danh so lien mach, gom fix ve dung nhom,
+   sua tai nguon (khong patch chong), gom responsive ve cuoi.
+
+   CAU TRUC FILE:
+   01. Imports & Typography
+   02. Global Components & Flatsome Helpers
+   03. Trang chu
+   04. Trang Khoa hoc
+   05. Trang Gioi thieu
+   06. Trang Lien he
+   07. Trang Dang ky
+   08. Form CF7
+   09. Popup Desktop
+   10. Force hide popup mobile
+   11. FAB (Floating Action Button)
+   12. Footer
+   13. Header CTA Button
+   14. Landing — Shared components (.lc-lp-*)
+   15. Landing — Khoa Ca Nhan
+   16. Landing — Khoa Chuyen Nghiep
+   17. Responsive (toan bo @media)
+
+   HUONG DAN PASTE:
+   - Flatsome > Advanced > Global Custom CSS
+   - XOA TOAN BO CSS hien co
+   - PASTE toan bo file nay vao > Save Changes
+   ============================================================ */
+
+
+/* ============================================================
+   01. IMPORTS & TYPOGRAPHY
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Nunito:wght@400;600;700&display=swap');
+
+body,
+body p,
+body li,
+body a {
+    font-family: 'Nunito', Arial, sans-serif;
+    color: #333;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+h2 {
+    font-size: 2.2em;
+    color: #2c2c2c;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+
+/* ============================================================
+   02. GLOBAL COMPONENTS & FLATSOME HELPERS
+   ============================================================ */
+
+/* ----- Buttons ----- */
+.button {
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Nunito', Arial, sans-serif;
+}
+.button.primary,
+.button[style*="rgb(255, 141, 161)"] {
+    box-shadow: 0 4px 15px rgba(255, 141, 161, 0.35);
+}
+.button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 83, 122, 0.4);
+}
+
+/* ----- Animations ----- */
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+.section {
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* ----- Flatsome helper: 1 col duy nhat trong row tu can giua -----
+   Flatsome xep col theo flex-start nen col le (vd span 10) bi lech trai.
+   Rule nay can giua moi col la con duy nhat cua row. */
+.row > .col:only-child {
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+
+/* ============================================================
+   03. TRANG CHU — Hero, Features, Course Cards, FAQ, Gallery
+   ============================================================ */
+
+/* ----- Hero ----- */
+.section[data-label="Hero"] {
+    position: relative;
+}
+.section[data-label="Hero"] h1 {
+    text-shadow: 0 2px 30px rgba(0, 0, 0, 0.5);
+    animation: fadeInDown 1s ease-out;
+}
+.section[data-label="Hero"] p {
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+.section[data-label="Hero"] .button {
+    animation: fadeInUp 1s ease-out 0.6s both;
+}
+
+/* ----- Featured boxes (3 ly do) ----- */
+.featured-box {
+    transition: transform 0.3s;
+    padding: 20px;
+}
+.featured-box:hover {
+    transform: translateY(-5px);
+}
+.featured-box .icon {
+    margin-bottom: 20px;
+}
+
+/* ----- Course cards zigzag ----- */
+.course-card-row {
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+    border-radius: 15px;
+    overflow: hidden;
+    background: #fff;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.course-card-row:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(212, 83, 122, 0.15);
+}
+.course-card-row .img {
+    height: 100% !important;
+    min-height: 500px;
+}
+.course-card-row .img-inner {
+    height: 100% !important;
+    background-position: center !important;
+    background-size: cover !important;
+}
+
+/* ----- FAQ Accordion ----- */
+.faq-accordion-custom .accordion-item {
+    border: none !important;
+    background: #fff;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    transition: box-shadow 0.3s;
+}
+.faq-accordion-custom .accordion-item:hover {
+    box-shadow: 0 4px 15px rgba(212, 83, 122, 0.1);
+}
+.faq-accordion-custom .accordion-title {
+    padding: 18px 25px 18px 60px !important;
+    font-weight: 600 !important;
+    color: #333 !important;
+    background: #fff !important;
+    position: relative !important;
+    cursor: pointer;
+    font-size: 1em !important;
+    line-height: 1.5 !important;
+    transition: all 0.3s;
+    font-family: 'Nunito', Arial, sans-serif !important;
+}
+.faq-accordion-custom .accordion-title:hover {
+    background: #fff5f7 !important;
+    color: #d4537a !important;
+}
+.faq-accordion-custom .accordion-title .toggle,
+.faq-accordion-custom .accordion-title:before,
+.faq-accordion-custom .accordion-title i {
+    display: none !important;
+}
+.faq-accordion-custom .accordion-title:after {
+    content: '+';
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    line-height: 26px;
+    text-align: center;
+    background: #ff8da1;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 1.3em;
+    font-weight: 300;
+    transition: transform 0.3s, background 0.3s;
+}
+.faq-accordion-custom .accordion-item.active .accordion-title:after,
+.faq-accordion-custom .accordion-title.active:after {
+    transform: translateY(-50%) rotate(45deg);
+    background: #d4537a;
+}
+.faq-accordion-custom .accordion-inner {
+    padding: 5px 25px 22px 60px !important;
+    color: #555 !important;
+    line-height: 1.7 !important;
+    font-size: 0.95em !important;
+}
+
+/* ----- Gallery Before/After ----- */
+.gallery-col {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.gallery-col:hover {
+    transform: scale(1.03);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* ----- Blog fallback ----- */
+.blog-fallback {
+    display: none;
+}
+.blog-section-wrapper:empty + .blog-fallback,
+.blog-section-wrapper:has(> :empty) + .blog-fallback {
+    display: block;
+}
+.blog-section-wrapper:empty {
+    display: none;
+}
+
+
+/* ============================================================
+   04. TRANG KHOA HOC — Liphamy style detail row
+   ============================================================ */
+
+.course-detail-row {
+    border-radius: 0;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.4s ease;
+    animation: fadeInUp 0.8s ease-out;
+}
+.course-detail-row:hover {
+    box-shadow: 0 20px 50px rgba(212, 83, 122, 0.12);
+}
+.course-detail-row .img {
+    height: 100% !important;
+    min-height: 650px;
+}
+.course-detail-row .img-inner {
+    height: 100% !important;
+    background-position: center !important;
+    background-size: cover !important;
+}
+.course-detail-row .img-inner img {
+    transition: transform 0.6s ease;
+}
+.course-detail-row:hover .img-inner img {
+    transform: scale(1.03);
+}
+.course-detail-row .button {
+    padding: 14px 35px !important;
+    font-size: 0.85em !important;
+    font-weight: 600 !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    transition: all 0.3s ease !important;
+    border: 2px solid #2c2c2c !important;
+}
+.course-detail-row .button:hover {
+    background: #d4537a !important;
+    border-color: #d4537a !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212, 83, 122, 0.3);
+}
+.course-detail-row ul li {
+    transition: color 0.2s ease;
+}
+.course-detail-row ul li:hover {
+    color: #333 !important;
+}
+.course-detail-row p[style*="2em"] {
+    transition: transform 0.3s ease;
+}
+
+
+/* ============================================================
+   05. TRANG GIOI THIEU — About page (.lc-about-*)
+   ============================================================ */
+
+/* ----- Hero About ----- */
+.lc-about-hero {
+    background: linear-gradient(135deg, #fff5f7 0%, #ffe8ee 100%);
+}
+.lc-about-hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 3em;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin-bottom: 0.4em;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+}
+.lc-about-hero-sub {
+    font-size: 1.15em;
+    color: #555;
+    max-width: 720px;
+    margin: 0 auto 1.2em;
+    line-height: 1.6;
+}
+.lc-about-hero-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 0.95em;
+    color: #d4537a;
+    font-weight: 600;
+    margin-top: 1em;
+}
+
+/* ----- Section divider chung ----- */
+.lc-section-divider {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #ff8da1, #d4537a);
+    margin: 16px auto 24px;
+    border-radius: 2px;
+}
+.lc-section-sub {
+    font-size: 1.05em;
+    color: #666;
+    font-style: italic;
+    margin-top: -0.4em;
+    margin-bottom: 0;
+}
+
+/* ----- Heading chung cac section About ----- */
+.lc-about-story h2,
+.lc-about-instructor h2,
+.lc-about-philosophy h2,
+.lc-about-numbers h2,
+.lc-about-tdmu h2,
+.lc-about-japan h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2em;
+    font-weight: 700;
+    color: #2c2c2c;
+    letter-spacing: 0.02em;
+    margin-bottom: 0;
+}
+
+/* ----- Story ----- */
+.lc-about-story p {
+    font-size: 1.05em;
+    line-height: 1.85;
+    color: #444;
+    text-align: justify;
+    margin-bottom: 1.2em;
+}
+
+/* ----- Instructor ----- */
+.lc-instructor-name {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 1.6em !important;
+    color: #d4537a !important;
+    margin-bottom: 0.2em !important;
+    font-weight: 700 !important;
+}
+.lc-instructor-role {
+    font-size: 0.95em;
+    color: #888;
+    font-style: italic;
+    margin-bottom: 1.2em;
+}
+.lc-about-instructor p {
+    font-size: 1em;
+    line-height: 1.75;
+    color: #444;
+    margin-bottom: 1em;
+}
+
+/* ----- Philosophy cards ----- */
+.lc-philosophy-card {
+    background: #ffffff;
+    padding: 36px 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(212, 83, 122, 0.08);
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 4px solid #ff8da1;
+    text-align: left;
+}
+.lc-philosophy-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 28px rgba(212, 83, 122, 0.15);
+}
+.lc-philosophy-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5em;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ff8da1, #d4537a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 0.2em;
+    line-height: 1;
+}
+.lc-philosophy-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4em;
+    color: #2c2c2c;
+    margin-bottom: 0.7em;
+    margin-top: 0.2em;
+}
+.lc-philosophy-card p {
+    font-size: 0.98em;
+    line-height: 1.7;
+    color: #555;
+    margin: 0;
+}
+
+/* ----- Numbers (metric cards) ----- */
+.lc-number-card {
+    text-align: center;
+    padding: 24px 12px;
+}
+.lc-number-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.2em;
+    font-weight: 700;
+    background: linear-gradient(135deg, #ff8da1, #d4537a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.1;
+    margin-bottom: 0.3em;
+}
+.lc-number-label {
+    font-size: 0.95em;
+    color: #555;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+/* ----- TDMU section ----- */
+.lc-about-tdmu p {
+    font-size: 1.05em;
+    line-height: 1.8;
+    color: #444;
+    margin-bottom: 1em;
+}
+.lc-tdmu-quote {
+    border-left: 4px solid #d4537a;
+    background: #fff5f7;
+    padding: 18px 24px;
+    margin: 24px 0;
+    font-style: italic;
+    color: #2c2c2c;
+    font-size: 1.1em;
+    border-radius: 0 8px 8px 0;
+}
+.lc-tdmu-quote cite {
+    display: block;
+    margin-top: 10px;
+    font-size: 0.85em;
+    color: #888;
+    font-style: normal;
+    font-weight: 500;
+}
+
+/* ----- Japan section ----- */
+.lc-japan-text {
+    font-size: 1.05em;
+    line-height: 1.85;
+    color: #444;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+/* ----- CTA About ----- */
+.lc-about-cta {
+    background: linear-gradient(135deg, #ff8da1 0%, #d4537a 100%);
+}
+.lc-cta-title {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 2.3em !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-bottom: 0.3em !important;
+}
+.lc-cta-sub {
+    font-size: 1.1em;
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 620px;
+    margin: 0 auto 1em;
+    line-height: 1.6;
+}
+.lc-cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+}
+.lc-about-cta .button {
+    margin: 0;
+}
+.lc-about-cta .button.is-shade {
+    background-color: #ffffff !important;
+    color: #d4537a !important;
+    border-color: #ffffff !important;
+}
+.lc-about-cta .button.is-link {
+    color: #ffffff !important;
+    border-bottom-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+
+/* ============================================================
+   06. TRANG LIEN HE — Info + Map + Action Cards + CTA
+   ============================================================ */
+
+/* ----- Hero chung Lien he + Dang ky ----- */
+.lc-page-hero {
+    background: linear-gradient(135deg, #fff5f7 0%, #ffe8ee 100%);
+}
+.lc-page-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8em;
+    font-weight: 700;
+    color: #2c2c2c;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.4em;
+    line-height: 1.15;
+}
+.lc-page-sub {
+    font-size: 1.1em;
+    color: #666;
+    max-width: 680px;
+    margin: 0 auto;
+    line-height: 1.65;
+}
+
+/* ----- Block thong tin business ----- */
+.lc-contact-block-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6em;
+    color: #d4537a;
+    margin-bottom: 28px;
+    font-weight: 700;
+}
+.lc-contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 22px;
+}
+.lc-contact-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    margin-top: 4px;
+    display: block;
+}
+.lc-contact-item > div {
+    flex: 1;
+}
+.lc-contact-item strong {
+    display: block;
+    color: #2c2c2c;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+    font-weight: 700;
+}
+.lc-contact-item a {
+    color: #d4537a;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(212, 83, 122, 0.4);
+    transition: border-color 0.2s ease;
+}
+.lc-contact-item a:hover {
+    border-bottom-style: solid;
+    border-bottom-color: #d4537a;
+}
+
+/* ----- Map container ----- */
+.lc-map-container {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    min-height: 420px;
+    background: #f5f5f5;
+}
+.lc-map-container iframe {
+    width: 100%;
+    height: 100%;
+    min-height: 420px;
+    border: 0;
+    display: block;
+}
+
+/* ----- 3 Action cards (Goi/Zalo/Messenger) ----- */
+.lc-action-card {
+    display: block;
+    background: #ffffff;
+    padding: 36px 24px;
+    border-radius: 12px;
+    text-align: center;
+    text-decoration: none !important;
+    color: inherit;
+    box-shadow: 0 4px 20px rgba(212, 83, 122, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-top: 4px solid #ff8da1;
+    height: 100%;
+    position: relative;
+}
+.lc-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+.lc-action-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 28px rgba(212, 83, 122, 0.2);
+    color: inherit;
+    text-decoration: none;
+}
+.lc-action-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff8da1, #d4537a);
+    margin: 0 auto 16px;
+}
+.lc-action-icon-wrap img {
+    width: 28px;
+    height: 28px;
+    display: block;
+}
+.lc-action-icon-zalo {
+    background: #ffffff !important;
+    border: 2px solid #0068ff;
+}
+.lc-action-icon-fb {
+    background: linear-gradient(135deg, #0084ff, #0064d1) !important;
+}
+.lc-action-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4em;
+    color: #2c2c2c;
+    margin-bottom: 6px;
+    margin-top: 0;
+}
+.lc-action-card p {
+    color: #666;
+    margin: 0;
+    font-size: 0.95em;
+}
+
+/* ----- CTA Pink (cuoi trang Lien he) ----- */
+.lc-cta-pink {
+    background: linear-gradient(135deg, #ff8da1 0%, #d4537a 100%);
+}
+.lc-cta-title-pink {
+    font-family: 'Playfair Display', serif !important;
+    font-size: 2.2em !important;
+    color: #ffffff !important;
+    margin-bottom: 0.3em !important;
+    font-weight: 700 !important;
+}
+.lc-cta-sub-light {
+    font-size: 1.1em;
+    color: rgba(255, 255, 255, 0.95);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+.lc-cta-buttons-center {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+}
+.lc-cta-pink .button.is-shade {
+    background-color: #ffffff !important;
+    color: #d4537a !important;
+    border-color: #ffffff !important;
+}
+.lc-cta-pink .button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ============================================================
+   07. TRANG DANG KY — Form wrap + Trust strip
+   ============================================================ */
+
+.lc-register-form-wrap {
+    background: #ffffff;
+    padding: 44px 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 36px rgba(212, 83, 122, 0.12);
+    border: 1px solid rgba(212, 83, 122, 0.08);
+}
+
+.lc-trust-strip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid #eee;
+    font-size: 0.92em;
+    color: #555;
+}
+.lc-trust-item {
+    color: #2e7d4f;
+    font-weight: 500;
+}
+.lc-trust-divider {
+    color: #ccc;
+}
+
+.lc-secondary-text {
+    color: #555;
+    font-size: 1em;
+    line-height: 1.7;
+    margin-bottom: 6px;
+}
+.lc-secondary-address {
+    color: #888;
+    font-size: 0.92em;
+    margin: 0;
+}
+.lc-inline-link {
+    color: #d4537a !important;
+    text-decoration: none;
+    border-bottom: 1px dashed rgba(212, 83, 122, 0.4);
+}
+.lc-inline-link:hover {
+    border-bottom-style: solid;
+}
+
+
+/* ============================================================
+   08. FORM CF7 — Global + Register override + Full-width fix
+   ============================================================ */
+
+/* ----- CF7 global (trang chu CTA cuoi) ----- */
+.wpcf7-form p {
+    margin-bottom: 12px;
+}
+.wpcf7-form input[type="text"],
+.wpcf7-form input[type="tel"],
+.wpcf7-form input[type="email"],
+.wpcf7-form textarea,
+.wpcf7-form select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1.5px solid #f0c8d0;
+    border-radius: 8px;
+    font-size: 0.95em;
+    background: #fff;
+    transition: border-color 0.2s;
+    font-family: 'Nunito', Arial, sans-serif;
+}
+.wpcf7-form input:focus,
+.wpcf7-form textarea:focus,
+.wpcf7-form select:focus {
+    outline: none;
+    border-color: #d4537a;
+    box-shadow: 0 0 0 3px rgba(212, 83, 122, 0.1);
+}
+.wpcf7-form input[type="submit"] {
+    background: linear-gradient(135deg, #ff8da1 0%, #d4537a 100%);
+    color: #fff;
+    border: none;
+    padding: 14px 30px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 1em;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    font-family: 'Nunito', Arial, sans-serif;
+}
+.wpcf7-form input[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212, 83, 122, 0.3);
+}
+
+/* ----- CF7 override trong .lc-register-form-wrap ----- */
+.lc-register-form-wrap label {
+    display: block;
+    font-weight: 600;
+    color: #2c2c2c;
+    margin-bottom: 8px;
+    font-size: 0.95em;
+}
+.lc-register-form-wrap input[type="text"],
+.lc-register-form-wrap input[type="email"],
+.lc-register-form-wrap input[type="tel"],
+.lc-register-form-wrap textarea {
+    width: 100%;
+    padding: 14px 16px !important;
+    border: 1.5px solid #e5d4d8 !important;
+    border-radius: 8px !important;
+    background-color: #fff !important;
+    color: #2c2c2c !important;
+    font-size: 1em !important;
+    line-height: 1.5 !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    box-shadow: none !important;
+}
+.lc-register-form-wrap select,
+.lc-register-form-wrap .wpcf7-select,
+.lc-register-form-wrap select.wpcf7-form-control {
+    width: 100%;
+    padding: 14px 44px 14px 16px !important;
+    border: 1.5px solid #e5d4d8 !important;
+    border-radius: 8px !important;
+    background-color: #fff !important;
+    color: #2c2c2c !important;
+    font-size: 1em !important;
+    line-height: 1.5 !important;
+    min-height: 50px !important;
+    height: auto !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSI3IiB2aWV3Qm94PSIwIDAgMTIgNyI+PHBhdGggZmlsbD0iI2Q0NTM3YSIgZD0iTTYgN0wwIDBoMTJ6Ii8+PC9zdmc+") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 16px center !important;
+    background-size: 12px !important;
+    cursor: pointer;
+}
+.lc-register-form-wrap input:focus,
+.lc-register-form-wrap textarea:focus,
+.lc-register-form-wrap select:focus {
+    outline: none !important;
+    border-color: #d4537a !important;
+    box-shadow: 0 0 0 3px rgba(212, 83, 122, 0.15) !important;
+}
+.lc-register-form-wrap .wpcf7-submit,
+.lc-register-form-wrap input[type="submit"] {
+    width: 100%;
+    background: linear-gradient(135deg, #ff8da1 0%, #d4537a 100%) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    padding: 16px !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    font-size: 1em !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(212, 83, 122, 0.35) !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease !important;
+    margin-top: 8px;
+}
+.lc-register-form-wrap .wpcf7-submit:hover,
+.lc-register-form-wrap input[type="submit"]:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 8px 24px rgba(212, 83, 122, 0.5) !important;
+    filter: brightness(1.05);
+}
+.lc-register-form-wrap .wpcf7-not-valid-tip {
+    color: #d4537a !important;
+    font-size: 0.88em;
+    margin-top: 4px;
+}
+.lc-register-form-wrap .wpcf7-response-output {
+    border-radius: 8px;
+    margin: 16px 0 0 !important;
+    padding: 12px 16px !important;
+}
+
+/* ----- CF7 full-width fix (span wrapper khong co lam input bi co) ----- */
+.lc-register-form-wrap span.wpcf7-form-control-wrap,
+.lc-register-form-wrap .wpcf7-form-control-wrap {
+    display: block !important;
+    width: 100% !important;
+}
+.lc-register-form-wrap .wpcf7-form > p {
+    width: 100%;
+    display: block;
+}
+.lc-register-form-wrap .wpcf7-form-control:not([type="submit"]):not([type="checkbox"]):not([type="radio"]):not([type="button"]) {
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+
+/* ============================================================
+   09. POPUP DESKTOP — .luxury-popup (Popup ID 389, desktop only)
+   ============================================================ */
+
+.luxury-popup {
+    display: flex !important;
+    flex-direction: row !important;
+    background: #ffffff !important;
+    max-width: 880px !important;
+    height: 580px !important;
+    margin: 0 auto !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    font-family: 'Nunito', Arial, sans-serif !important;
+}
+.luxury-gallery {
+    flex: 0 0 42% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+}
+.gallery-img {
+    flex: 1 !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    object-position: center 20% !important;
+    display: block !important;
+    min-height: 0 !important;
+}
+.luxury-form {
+    flex: 1 !important;
+    padding: 28px 36px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    overflow-y: auto !important;
+    background: #fff !important;
+}
+.form-logo {
+    text-align: center !important;
+    margin-bottom: 14px !important;
+}
+.form-logo img {
+    height: 48px !important;
+    width: auto !important;
+    display: inline-block !important;
+}
+.custom-title {
+    font-family: 'Playfair Display', Georgia, serif !important;
+    font-size: 22px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+    color: #222 !important;
+    margin: 0 0 8px !important;
+    letter-spacing: 0.5px !important;
+}
+.header-line {
+    width: 50px !important;
+    height: 3px !important;
+    background: linear-gradient(90deg, #ff8da1, #d4537a) !important;
+    margin: 0 auto 10px !important;
+    border-radius: 2px !important;
+    display: block !important;
+}
+.makeup-subtitle {
+    text-align: center !important;
+    font-size: 13px !important;
+    color: #888 !important;
+    margin: 0 0 14px !important;
+    line-height: 1.5 !important;
+}
+.luxury-form .field-group {
+    margin-bottom: 10px !important;
+    width: 100% !important;
+    display: block !important;
+}
+.luxury-form label {
+    display: block !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    color: #555 !important;
+    margin-bottom: 4px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+}
+.luxury-form p,
+.luxury-form span.wpcf7-form-control-wrap {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.luxury-form input[type="text"],
+.luxury-form input[type="tel"],
+.luxury-form input[type="email"],
+.luxury-form select {
+    width: 100% !important;
+    height: 42px !important;
+    border: 1.5px solid #eee !important;
+    border-radius: 8px !important;
+    padding: 0 14px !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    font-family: 'Nunito', Arial, sans-serif !important;
+    font-size: 13px !important;
+    color: #333 !important;
+    background: #fafafa !important;
+    outline: none !important;
+    transition: border-color 0.2s !important;
+}
+.luxury-form input[type="text"]:focus,
+.luxury-form input[type="tel"]:focus,
+.luxury-form input[type="email"]:focus,
+.luxury-form select:focus {
+    border-color: #ff8da1 !important;
+    background: #fff !important;
+}
+.luxury-form .wpcf7-form-control-wrap {
+    position: relative !important;
+    display: block !important;
+}
+.luxury-form select {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23d4537a' d='M6 8L1 3h10z'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 14px center !important;
+    padding-right: 36px !important;
+}
+.luxury-form input[type="submit"] {
+    background: linear-gradient(135deg, #ff8da1, #d4537a) !important;
+    color: #fff !important;
+    font-family: 'Nunito', Arial, sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 13px !important;
+    letter-spacing: 1.5px !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 13px !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    margin-top: 6px !important;
+    transition: opacity 0.2s !important;
+}
+.luxury-form input[type="submit"]:hover {
+    opacity: 0.88 !important;
+}
+
+
+/* ============================================================
+   10. FORCE HIDE POPUP 389 TREN MOBILE
+   ============================================================ */
+
+@media screen and (max-width: 768px) {
+    #popmake-389,
+    .pum-overlay[data-popmake-id="389"] {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+}
+
+
+/* ============================================================
+   11. FAB (FLOATING ACTION BUTTON)
+   ============================================================ */
+
+.lc-fab-wrapper {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9990;
+    font-family: 'Nunito', sans-serif;
+}
+.lc-fab-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+.lc-fab-wrapper.lc-fab-open .lc-fab-actions {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+.lc-fab-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2c6e7a;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: none;
+    cursor: pointer;
+}
+.lc-fab-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+.lc-fab-btn img {
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+.lc-fab-zalo {
+    background: #ffffff;
+    border: 2px solid #0068ff;
+}
+.lc-fab-toggle {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #ff8da1 0%, #d4537a 100%);
+    color: #ffffff;
+    font-size: 30px;
+    font-weight: 300;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(212, 83, 122, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+    animation: lc-fab-pulse 2s infinite;
+    padding: 0;
+}
+.lc-fab-toggle:hover {
+    transform: scale(1.05);
+}
+.lc-fab-wrapper.lc-fab-open .lc-fab-toggle {
+    transform: rotate(45deg);
+    animation: none;
+}
+@keyframes lc-fab-pulse {
+    0%, 100% {
+        box-shadow: 0 4px 16px rgba(212, 83, 122, 0.45),
+                    0 0 0 0 rgba(212, 83, 122, 0.5);
+    }
+    50% {
+        box-shadow: 0 4px 16px rgba(212, 83, 122, 0.45),
+                    0 0 0 14px rgba(212, 83, 122, 0);
+    }
+}
+.lc-fab-icon-close { display: none; }
+.lc-fab-wrapper.lc-fab-open .lc-fab-icon-open { display: none; }
+.lc-fab-wrapper.lc-fab-open .lc-fab-icon-close { display: inline-block; }
+body.pum-open-overlay .lc-fab-wrapper {
+    display: none;
+}
+.lc-fab-btn::before {
+    content: attr(data-tooltip);
+    position: absolute;
+    right: 60px;
+    background: rgba(44, 44, 44, 0.9);
+    color: #ffffff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    pointer-events: none;
+}
+.lc-fab-btn:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* ============================================================
+   12. FOOTER — Den #2c2c2c + 4 cot + copyright
+   ============================================================ */
+
+#footer,
+.footer-wrapper,
+.footer-1,
+.footer-2,
+body #footer,
+body .footer-wrapper {
+    background: #2c2c2c !important;
+    background-color: #2c2c2c !important;
+    color: #b8b8b8 !important;
+    padding-top: 60px !important;
+}
+#footer .row,
+.footer-wrapper .row {
+    max-width: 1170px;
+    margin: 0 auto;
+    background: transparent !important;
+}
+#footer .col,
+.footer-wrapper .col {
+    background: transparent !important;
+}
+#footer p {
+    color: #b8b8b8;
+}
+
+/* ----- An absolute-footer mac dinh ----- */
+.absolute-footer {
+    display: none !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+}
+.footer-wrapper,
+#footer {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+}
+#footer + * {
+    margin-top: 0 !important;
+}
+
+/* ----- Cot 1: Brand ----- */
+.lily-footer-brand {
+    padding-right: 10px;
+}
+.lily-footer-logo {
+    font-family: 'Playfair Display', serif !important;
+    color: #ffffff !important;
+    font-size: 2em !important;
+    letter-spacing: 3px !important;
+    margin: 0 0 5px 0 !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
+}
+.lily-footer-logo-sub {
+    font-family: 'Playfair Display', serif !important;
+    color: #ff8da1 !important;
+    font-size: 1.05em !important;
+    font-style: italic !important;
+    margin: 0 0 20px 0 !important;
+    letter-spacing: 1px;
+}
+.lily-footer-tagline {
+    color: #b8b8b8 !important;
+    font-size: 0.92em;
+    line-height: 1.7;
+    margin: 0 0 25px 0;
+}
+
+/* ----- Social icons ----- */
+.lily-footer-social {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+.lily-footer-social a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    text-decoration: none !important;
+}
+.lily-footer-social a:hover {
+    background: #d4537a;
+    border-color: #d4537a;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(212, 83, 122, 0.3);
+}
+.lily-footer-social a svg {
+    width: 16px;
+    height: 16px;
+    fill: #ffffff;
+    display: block;
+    transition: fill 0.3s ease;
+}
+.lily-footer-social a img {
+    width: 16px !important;
+    height: 16px !important;
+    display: block;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    transition: transform 0.3s ease;
+}
+.lily-footer-social a:hover img {
+    transform: scale(1.1);
+}
+
+/* ----- Heading cac cot ----- */
+.lily-footer-block {
+    padding-top: 0;
+}
+.lily-footer-heading {
+    font-family: 'Playfair Display', serif !important;
+    color: #ffffff !important;
+    font-size: 1.15em !important;
+    margin: 0 0 22px 0 !important;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 141, 161, 0.25);
+    letter-spacing: 0.5px;
+    font-weight: 600 !important;
+}
+
+/* ----- Cot 2: Lien he NAP ----- */
+.lily-footer-contact {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.lily-footer-contact li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 14px;
+    color: #b8b8b8 !important;
+    font-size: 0.9em;
+    line-height: 1.6;
+    list-style: none !important;
+}
+.lily-footer-contact li:before {
+    display: none !important;
+}
+.lily-footer-contact .lily-footer-icon {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 20px !important;
+    height: 20px !important;
+    color: #ff8da1 !important;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+.lily-footer-contact .lily-footer-icon svg {
+    width: 16px;
+    height: 16px;
+    fill: #ff8da1;
+    display: block;
+}
+.lily-footer-contact .lily-footer-icon img {
+    width: 16px !important;
+    height: 16px !important;
+    display: block;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
+.lily-footer-contact a {
+    color: #b8b8b8 !important;
+    text-decoration: none !important;
+    transition: color 0.2s ease;
+}
+.lily-footer-contact a:hover {
+    color: #ff8da1 !important;
+}
+
+/* ----- Cot 3: Menu links ----- */
+.lily-footer-menu {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+.lily-footer-menu li {
+    margin-bottom: 12px;
+    list-style: none !important;
+}
+.lily-footer-menu li:before {
+    display: none !important;
+}
+.lily-footer-menu a {
+    color: #b8b8b8 !important;
+    text-decoration: none !important;
+    font-size: 0.92em;
+    transition: all 0.2s ease;
+    display: inline-block;
+    position: relative;
+    padding-left: 0;
+}
+.lily-footer-menu a::before {
+    content: "→";
+    color: #ff8da1;
+    margin-right: 8px;
+    opacity: 0;
+    transform: translateX(-8px);
+    display: inline-block;
+    transition: all 0.2s ease;
+}
+.lily-footer-menu a:hover {
+    color: #ff8da1 !important;
+    padding-left: 5px;
+}
+.lily-footer-menu a:hover::before {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ----- Cot 4: Google Maps ----- */
+.lily-footer-map {
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    line-height: 0;
+}
+.lily-footer-map iframe {
+    display: block;
+    filter: grayscale(20%) contrast(1.05);
+    transition: filter 0.3s ease;
+    width: 100%;
+}
+.lily-footer-map:hover iframe {
+    filter: grayscale(0%) contrast(1);
+}
+
+/* ----- Copyright bar ----- */
+.lily-footer-copyright {
+    background: #1a1a1a !important;
+    margin-top: 50px;
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+.lily-footer-copyright-inner {
+    max-width: 1170px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+.lily-footer-copyright p {
+    color: #888 !important;
+    font-size: 0.85em;
+    margin: 0;
+}
+.lily-footer-copyright p strong {
+    color: #ffffff !important;
+    font-weight: 500;
+}
+.lily-footer-legal {
+    list-style: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex;
+    gap: 20px;
+}
+.lily-footer-legal li {
+    list-style: none !important;
+    margin: 0 !important;
+}
+.lily-footer-legal li:before {
+    display: none !important;
+}
+.lily-footer-legal a {
+    color: #888 !important;
+    font-size: 0.85em;
+    text-decoration: none !important;
+    transition: color 0.2s ease;
+}
+.lily-footer-legal a:hover {
+    color: #ff8da1 !important;
+}
+
+
+/* ============================================================
+   13. HEADER CTA BUTTON — Button 1 (desktop) + Button 2 (mobile)
+   ============================================================ */
+
+.header-button-1 .button,
+.header-button-1 a.button,
+.header-button-2 .button,
+.header-button-2 a.button,
+.header-main .header-button-1 .button,
+.header-mobile .header-button-2 .button {
+    background: linear-gradient(135deg, #ff8da1 0%, #d4537a 100%) !important;
+    color: #ffffff !important;
+    border: 0 !important;
+    box-shadow: 0 4px 14px rgba(212, 83, 122, 0.35);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+}
+.header-button-1 .button:hover,
+.header-button-1 a.button:hover,
+.header-button-2 .button:hover,
+.header-button-2 a.button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 22px rgba(212, 83, 122, 0.55);
+    filter: brightness(1.08);
+    color: #ffffff !important;
+    background: linear-gradient(135deg, #ff8da1 0%, #d4537a 100%) !important;
+}
+
+
+/* ============================================================
+   14. LANDING — SHARED COMPONENTS (.lc-lp-*)
+   Dung chung cho ca Landing Ca Nhan + Chuyen Nghiep
+   ============================================================ */
+
+/* ---------- Hero ---------- */
+.lc-lp-hero-textbox {
+    background: rgba(255, 255, 255, 0.93);
+    padding: 38px 40px;
+    border-radius: 18px;
+    box-shadow: 0 16px 50px rgba(212, 83, 122, 0.18);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+.lc-lp-hero-label {
+    display: inline-block;
+    font-family: 'Nunito', Arial, sans-serif;
+    font-size: 0.75em;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #d4537a;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    padding: 5px 16px;
+    background: #fff5f7;
+    border-radius: 99px;
+}
+.lc-lp-hero-textbox h1.lc-lp-hero-h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.7em;
+    line-height: 1.12;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin: 0 0 16px;
+    letter-spacing: -1px;
+}
+/* Mau dam de chu mo ta khong bi mo tren nen trang */
+.lc-lp-hero-textbox .lc-lp-hero-sub {
+    font-size: 1em;
+    line-height: 1.65;
+    color: #2c2c2c;
+    margin: 0 0 20px;
+}
+.lc-lp-hero-bullets {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 24px;
+}
+.lc-lp-hero-bullets li {
+    position: relative;
+    padding: 5px 0 5px 30px;
+    color: #2c2c2c;
+    font-size: 0.96em;
+    font-weight: 500;
+}
+.lc-lp-hero-bullets li:before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #ff8da1, #d4537a);
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+    font-size: 0.72em;
+    font-weight: 700;
+}
+
+/* ---------- Section label & heading ---------- */
+.lc-lp-section-label {
+    display: inline-block;
+    font-family: 'Nunito', Arial, sans-serif;
+    font-size: 0.78em;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #d4537a;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding: 5px 16px;
+    background: #fff5f7;
+    border-radius: 99px;
+}
+h2.lc-lp-section-h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.3em;
+    line-height: 1.2;
+    color: #2c2c2c;
+    margin: 0 0 14px;
+    letter-spacing: -0.5px;
+}
+.lc-lp-section-desc {
+    max-width: 640px;
+    margin: 0 auto;
+    font-size: 1.02em;
+    line-height: 1.65;
+    color: #666;
+}
+
+/* ---------- USP strip (3 cam ket) ---------- */
+.lc-lp-usp-section {
+    border-top: 1px solid rgba(212, 83, 122, 0.08);
+    border-bottom: 1px solid rgba(212, 83, 122, 0.08);
+}
+.lc-lp-usp-card {
+    padding: 10px 14px;
+    transition: transform 0.3s ease;
+}
+.lc-lp-usp-card:hover {
+    transform: translateY(-3px);
+}
+.lc-lp-usp-icon {
+    font-size: 2.4em;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+.lc-lp-usp-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin-bottom: 6px;
+}
+.lc-lp-usp-desc {
+    font-size: 0.92em;
+    color: #666;
+    line-height: 1.55;
+    max-width: 280px;
+    margin: 0 auto;
+}
+
+/* ---------- Goal cards (4 ky nang) ---------- */
+.lc-lp-goal-row {
+    margin-top: 0;
+}
+.lc-lp-goal-card {
+    background: #fff;
+    padding: 32px 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(212, 83, 122, 0.08);
+    height: 100%;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(212, 83, 122, 0.06);
+}
+.lc-lp-goal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 36px rgba(212, 83, 122, 0.15);
+}
+.lc-lp-goal-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.6em;
+    font-weight: 700;
+    color: #ff8da1;
+    line-height: 1;
+    margin-bottom: 12px;
+    opacity: 0.9;
+}
+h4.lc-lp-goal-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.35em;
+    color: #2c2c2c;
+    margin: 0 0 12px;
+    line-height: 1.3;
+}
+.lc-lp-goal-card p {
+    font-size: 0.95em;
+    line-height: 1.65;
+    color: #555;
+    margin: 0;
+}
+
+/* ---------- Founder section ---------- */
+.lc-lp-founder-img img {
+    border-radius: 20px;
+    box-shadow: 0 14px 40px rgba(212, 83, 122, 0.18);
+}
+.lc-lp-founder-tag {
+    display: inline-block;
+    background: #fff5f7;
+    color: #d4537a;
+    font-size: 0.9em;
+    font-weight: 600;
+    padding: 6px 18px;
+    border-radius: 99px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(212, 83, 122, 0.15);
+}
+.lc-lp-founder-desc {
+    font-size: 1.02em;
+    line-height: 1.75;
+    color: #555;
+    margin-bottom: 28px;
+}
+.lc-lp-founder-stats {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.lc-lp-stat {
+    flex: 1;
+    min-width: 130px;
+    padding: 18px 18px;
+    background: #fff;
+    border-radius: 12px;
+    border-left: 3px solid #d4537a;
+    box-shadow: 0 4px 14px rgba(212, 83, 122, 0.08);
+    transition: transform 0.3s ease;
+}
+.lc-lp-stat:hover {
+    transform: translateY(-3px);
+}
+.lc-lp-stat-num {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.75em;
+    font-weight: 700;
+    color: #d4537a;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+.lc-lp-stat-label {
+    font-size: 0.85em;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* ---------- Gallery row ---------- */
+.lc-lp-gallery-row .gallery-col {
+    margin-bottom: 18px;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+}
+.lc-lp-gallery-row .gallery-col img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+.lc-lp-gallery-row .gallery-col:hover img {
+    transform: scale(1.05);
+}
+
+
+/* ============================================================
+   15. LANDING — KHOA CA NHAN (Pricing 3 goi)
+   ============================================================ */
+
+.lc-lp-pricing-row {
+    align-items: stretch;
+}
+.lc-lp-pricing-row > .col {
+    padding: 15px !important;
+    display: flex;
+}
+.lc-lp-price-card {
+    background: #fff;
+    padding: 38px 30px 32px;
+    border-radius: 18px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    border: 2px solid transparent;
+}
+.lc-lp-price-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 44px rgba(212, 83, 122, 0.18);
+}
+.lc-lp-price-featured {
+    border-color: #d4537a;
+    box-shadow: 0 14px 40px rgba(212, 83, 122, 0.22);
+    transform: scale(1.04);
+}
+.lc-lp-price-featured:hover {
+    transform: scale(1.04) translateY(-6px);
+}
+.lc-lp-price-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #ff8da1, #d4537a);
+    color: #fff;
+    font-family: 'Nunito', Arial, sans-serif;
+    font-size: 0.72em;
+    font-weight: 700;
+    letter-spacing: 2px;
+    padding: 7px 18px;
+    border-radius: 99px;
+    box-shadow: 0 4px 14px rgba(212, 83, 122, 0.45);
+    white-space: nowrap;
+}
+.lc-lp-price-badge-vip {
+    background: linear-gradient(135deg, #2c2c2c, #555);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+.lc-lp-price-tier {
+    font-family: 'Nunito', Arial, sans-serif;
+    font-size: 0.85em;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #d4537a;
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-top: 4px;
+}
+.lc-lp-price-amount {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2.3em;
+    font-weight: 700;
+    color: #2c2c2c;
+    text-align: center;
+    line-height: 1.1;
+    margin-bottom: 4px;
+}
+.lc-lp-price-amount span {
+    font-size: 0.48em;
+    font-weight: 600;
+    color: #d4537a;
+    margin-left: 3px;
+    vertical-align: top;
+}
+.lc-lp-price-meta {
+    text-align: center;
+    font-size: 0.88em;
+    color: #888;
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px dashed #f0c8d0;
+}
+.lc-lp-price-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 26px;
+    flex-grow: 1;
+}
+.lc-lp-price-features li {
+    position: relative;
+    padding: 9px 0 9px 30px;
+    color: #444;
+    font-size: 0.94em;
+    line-height: 1.5;
+}
+.lc-lp-price-features li:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 11px;
+    width: 20px;
+    height: 20px;
+    background: #fff5f7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d4537a'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E") center/13px no-repeat;
+    border-radius: 50%;
+}
+.lc-lp-price-card .button {
+    margin: 0 !important;
+    width: 100% !important;
+    justify-content: center;
+}
+
+
+/* ============================================================
+   16. LANDING — KHOA CHUYEN NGHIEP
+   (audience, bonus, pro-pricing, testimonial)
+   ============================================================ */
+
+/* ---------- Audience cards (3 nhom hoc vien) ---------- */
+.lc-lp-audience-row {
+    align-items: stretch;
+}
+.lc-lp-audience-card {
+    background: #fff;
+    padding: 36px 28px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(212, 83, 122, 0.08);
+    height: 100%;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(212, 83, 122, 0.06);
+}
+.lc-lp-audience-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 14px 36px rgba(212, 83, 122, 0.15);
+}
+.lc-lp-audience-icon {
+    font-size: 3em;
+    line-height: 1;
+    margin-bottom: 18px;
+}
+h4.lc-lp-audience-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.35em;
+    color: #2c2c2c;
+    margin: 0 0 12px;
+    line-height: 1.3;
+}
+.lc-lp-audience-card p {
+    font-size: 0.95em;
+    line-height: 1.65;
+    color: #555;
+    margin: 0;
+}
+
+/* ---------- Bonus cards (3 qua tang) ---------- */
+.lc-lp-bonus-row {
+    align-items: stretch;
+}
+.lc-lp-bonus-card {
+    background: #fff;
+    padding: 40px 28px 32px;
+    border-radius: 18px;
+    box-shadow: 0 8px 28px rgba(212, 83, 122, 0.12);
+    height: 100%;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 2px solid transparent;
+}
+.lc-lp-bonus-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 18px 44px rgba(212, 83, 122, 0.22);
+    border-color: rgba(212, 83, 122, 0.2);
+}
+.lc-lp-bonus-badge {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #ff8da1, #d4537a);
+    color: #fff;
+    font-family: 'Nunito', Arial, sans-serif;
+    font-size: 0.72em;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    padding: 7px 22px;
+    border-radius: 99px;
+    box-shadow: 0 4px 14px rgba(212, 83, 122, 0.45);
+}
+.lc-lp-bonus-icon {
+    font-size: 3.5em;
+    line-height: 1;
+    margin-bottom: 16px;
+    margin-top: 8px;
+}
+h4.lc-lp-bonus-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.3em;
+    color: #2c2c2c;
+    margin: 0 0 10px;
+    line-height: 1.3;
+}
+.lc-lp-bonus-value {
+    display: inline-block;
+    background: #fff5f7;
+    color: #d4537a;
+    font-weight: 700;
+    font-size: 0.92em;
+    padding: 6px 18px;
+    border-radius: 99px;
+    margin-bottom: 18px;
+    border: 1px solid rgba(212, 83, 122, 0.15);
+}
+.lc-lp-bonus-card p {
+    font-size: 0.94em;
+    line-height: 1.65;
+    color: #555;
+    margin: 0;
+}
+
+/* ---------- Pro pricing card (1 card lon) ---------- */
+.lc-lp-pro-pricing {
+    background: #fff;
+    border-radius: 22px;
+    padding: 50px 50px 40px;
+    box-shadow: 0 16px 48px rgba(212, 83, 122, 0.18);
+    border: 2px solid #d4537a;
+    position: relative;
+}
+.lc-lp-pro-badge {
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #ff8da1, #d4537a);
+    color: #fff;
+    font-family: 'Nunito', Arial, sans-serif;
+    font-size: 0.78em;
+    font-weight: 700;
+    letter-spacing: 3px;
+    padding: 9px 26px;
+    border-radius: 99px;
+    box-shadow: 0 6px 18px rgba(212, 83, 122, 0.5);
+    white-space: nowrap;
+}
+.lc-lp-pro-header {
+    text-align: center;
+    padding-top: 8px;
+}
+.lc-lp-pro-tier {
+    font-family: 'Nunito', Arial, sans-serif;
+    font-size: 0.88em;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    color: #d4537a;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+}
+.lc-lp-pro-price-wrap {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+.lc-lp-pro-price-old {
+    font-family: 'Nunito', Arial, sans-serif;
+    font-size: 1.4em;
+    color: #aaa;
+    text-decoration: line-through;
+    font-weight: 600;
+}
+.lc-lp-pro-price-new {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 3em;
+    font-weight: 700;
+    color: #2c2c2c;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+.lc-lp-pro-price-unit {
+    font-size: 0.4em;
+    color: #d4537a;
+    margin-left: 4px;
+    vertical-align: top;
+}
+.lc-lp-pro-saving {
+    display: inline-block;
+    background: linear-gradient(135deg, #fff5f7, #ffe8ee);
+    color: #d4537a;
+    font-weight: 700;
+    font-size: 0.95em;
+    padding: 8px 22px;
+    border-radius: 99px;
+    margin-bottom: 6px;
+    border: 1px dashed #d4537a;
+}
+.lc-lp-pro-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #f0c8d0, transparent);
+    margin: 28px 0;
+}
+.lc-lp-pro-includes-label {
+    font-family: 'Nunito', Arial, sans-serif;
+    font-size: 0.85em;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+}
+.lc-lp-pro-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.lc-lp-pro-features li {
+    position: relative;
+    padding: 10px 0 10px 32px;
+    color: #444;
+    font-size: 0.97em;
+    line-height: 1.55;
+    border-bottom: 1px dashed #f5e5ea;
+}
+.lc-lp-pro-features li:last-child {
+    border-bottom: none;
+}
+.lc-lp-pro-features li:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 13px;
+    width: 20px;
+    height: 20px;
+    background: #fff5f7 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23d4537a'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E") center/13px no-repeat;
+    border-radius: 50%;
+}
+.lc-lp-pro-features li em {
+    color: #d4537a;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 0.92em;
+}
+.lc-lp-pro-total,
+.lc-lp-pro-pay {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.lc-lp-pro-total-label,
+.lc-lp-pro-pay-label {
+    font-family: 'Nunito', Arial, sans-serif;
+    color: #666;
+    font-size: 0.95em;
+}
+.lc-lp-pro-total-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #aaa;
+    font-size: 1.3em;
+    font-weight: 700;
+    text-decoration: line-through;
+}
+.lc-lp-pro-pay {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #fff5f7, #ffe8ee);
+    border-radius: 12px;
+    margin-top: 10px;
+}
+.lc-lp-pro-pay-label {
+    font-weight: 600;
+    color: #2c2c2c;
+    font-size: 1em;
+}
+.lc-lp-pro-pay-value {
+    font-family: 'Playfair Display', Georgia, serif;
+    color: #d4537a;
+    font-size: 1.8em;
+    font-weight: 700;
+    line-height: 1;
+}
+.lc-lp-pro-cta-btn.button {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 18px !important;
+    font-size: 1em !important;
+    letter-spacing: 2px !important;
+    background: linear-gradient(135deg, #ff8da1, #d4537a) !important;
+    border: 0 !important;
+    color: #fff !important;
+    box-shadow: 0 8px 24px rgba(212, 83, 122, 0.4) !important;
+    text-transform: uppercase !important;
+    font-weight: 700 !important;
+}
+.lc-lp-pro-cta-btn.button:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 14px 36px rgba(212, 83, 122, 0.55) !important;
+    filter: brightness(1.05);
+}
+.lc-lp-pro-note {
+    text-align: center;
+    font-size: 0.88em;
+    color: #888;
+    margin-top: 16px;
+    font-style: italic;
+}
+
+/* ---------- Testimonial cards ---------- */
+.lc-lp-testimonial-row {
+    align-items: stretch;
+}
+.lc-lp-testimonial-card {
+    background: #fff;
+    padding: 32px 28px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(212, 83, 122, 0.08);
+    height: 100%;
+    position: relative;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid rgba(212, 83, 122, 0.06);
+    display: flex;
+    flex-direction: column;
+}
+.lc-lp-testimonial-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 32px rgba(212, 83, 122, 0.15);
+}
+.lc-lp-testimonial-quote {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 4em;
+    line-height: 0.6;
+    color: #ff8da1;
+    opacity: 0.4;
+    margin-bottom: 4px;
+    height: 30px;
+}
+.lc-lp-testimonial-text {
+    font-size: 0.96em;
+    line-height: 1.7;
+    color: #444;
+    font-style: italic;
+    margin: 0 0 22px;
+    flex-grow: 1;
+}
+.lc-lp-testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-top: 18px;
+    border-top: 1px dashed #f0c8d0;
+}
+.lc-lp-testimonial-avatar img {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff5f7;
+}
+.lc-lp-testimonial-meta {
+    flex: 1;
+}
+.lc-lp-testimonial-name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-weight: 700;
+    color: #2c2c2c;
+    font-size: 1.02em;
+    line-height: 1.2;
+    margin-bottom: 3px;
+}
+.lc-lp-testimonial-role {
+    font-size: 0.85em;
+    color: #d4537a;
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   17. RESPONSIVE — Toan bo @media (breakpoint giam dan)
+   ============================================================ */
+
+/* ---------- Tablet 849px ---------- */
+@media (max-width: 849px) {
+
+    /* Header button mobile */
+    .header-button-2 .button,
+    .header-button-2 a.button {
+        padding: 7px 12px !important;
+        font-size: 0.72em !important;
+        line-height: 1.4 !important;
+        letter-spacing: 0.04em !important;
+        white-space: nowrap !important;
+        border-radius: 6px !important;
+    }
+    .header-button-2 {
+        margin-left: 8px;
+    }
+
+    /* Landing Ca Nhan: bo scale card noi bat de khong tran */
+    .lc-lp-price-featured {
+        transform: none;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+    .lc-lp-price-featured:hover {
+        transform: translateY(-6px);
+    }
+}
+
+
+/* ---------- Mobile 768px ---------- */
+@media (max-width: 768px) {
+
+    /* Trang chu */
+    .section[data-label="Hero"] h1 { font-size: 2em !important; }
+    h2 { font-size: 1.6em !important; }
+    .course-card-row .img { min-height: 300px; }
+    .course-card-row .col { padding: 25px 20px !important; }
+    .faq-accordion-custom .accordion-title {
+        padding: 16px 20px 16px 55px !important;
+        font-size: 0.95em !important;
+    }
+    .faq-accordion-custom .accordion-title:after {
+        left: 15px;
+        width: 26px;
+        height: 26px;
+        line-height: 24px;
+    }
+    .faq-accordion-custom .accordion-inner {
+        padding: 5px 20px 20px 20px !important;
+    }
+
+    /* Trang khoa hoc */
+    .course-detail-row .img { min-height: 350px !important; }
+    .course-detail-row .col { padding: 35px 20px !important; }
+    .course-detail-row p[style*="2em"] { font-size: 1.6em !important; }
+    .course-detail-row h2 { font-size: 1.6em !important; }
+
+    /* Trang Gioi thieu */
+    .lc-about-hero-title { font-size: 2em; }
+    .lc-about-hero-sub { font-size: 1em; }
+    .lc-about-hero-meta { gap: 8px; font-size: 0.88em; }
+    .lc-about-story h2,
+    .lc-about-instructor h2,
+    .lc-about-philosophy h2,
+    .lc-about-numbers h2,
+    .lc-about-tdmu h2,
+    .lc-about-japan h2 { font-size: 1.7em; }
+    .lc-about-story p { text-align: left; }
+    .lc-philosophy-card { padding: 28px 22px; }
+    .lc-philosophy-num { font-size: 2em; }
+    .lc-number-value { font-size: 2.5em; }
+    .lc-cta-title { font-size: 1.7em !important; }
+    .lc-tdmu-quote { padding: 14px 18px; font-size: 1em; }
+
+    /* Trang Lien he + Dang ky */
+    .lc-page-title { font-size: 1.9em; }
+    .lc-page-sub { font-size: 0.98em; }
+    .lc-contact-block-title { font-size: 1.35em; }
+    .lc-cta-title-pink { font-size: 1.7em !important; }
+    .lc-trust-strip { gap: 10px; font-size: 0.85em; }
+    .lc-action-card { padding: 28px 20px; }
+    .lc-action-icon-wrap { width: 56px; height: 56px; }
+    .lc-action-icon-wrap img { width: 24px; height: 24px; }
+    .lc-map-container,
+    .lc-map-container iframe { min-height: 320px; }
+    .lc-register-form-wrap { padding: 30px 22px; }
+
+    /* FAB */
+    .lc-fab-wrapper { bottom: 16px; right: 16px; }
+    .lc-fab-toggle { width: 52px; height: 52px; font-size: 28px; }
+    .lc-fab-btn { width: 44px; height: 44px; }
+    .lc-fab-btn img { width: 20px; height: 20px; }
+    .lc-fab-btn::before { display: none; }
+
+    /* Footer */
+    #footer,
+    .footer-wrapper { padding-top: 40px !important; }
+    .lily-footer-row > .col {
+        margin-bottom: 35px !important;
+        padding-bottom: 0 !important;
+    }
+    .lily-footer-row > .col:last-child { margin-bottom: 0 !important; }
+    .lily-footer-logo { font-size: 1.8em !important; }
+    .lily-footer-logo-sub { font-size: 1em !important; }
+    .lily-footer-heading {
+        font-size: 1.05em !important;
+        margin-bottom: 18px !important;
+    }
+    .lily-footer-social { justify-content: flex-start; }
+    .lily-footer-map iframe { height: 200px !important; }
+    .lily-footer-copyright-inner {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    .lily-footer-legal { justify-content: center; }
+}
+
+
+/* ---------- Mobile nho 549px ---------- */
+@media (max-width: 549px) {
+
+    /* Landing hero */
+    .lc-lp-hero-textbox {
+        padding: 26px 22px;
+        background: rgba(255, 255, 255, 0.96);
+    }
+    .lc-lp-hero-textbox h1.lc-lp-hero-h1 {
+        font-size: 1.85em;
+    }
+    .lc-lp-hero-textbox .lc-lp-hero-sub {
+        font-size: 0.95em;
+    }
+
+    /* Landing section heading */
+    h2.lc-lp-section-h2 {
+        font-size: 1.65em;
+    }
+
+    /* Landing Chuyen Nghiep: pro pricing card */
+    .lc-lp-pro-pricing {
+        padding: 40px 24px 30px;
+    }
+    .lc-lp-pro-price-new {
+        font-size: 2.3em;
+    }
+    .lc-lp-pro-price-old {
+        font-size: 1.15em;
+    }
+    .lc-lp-pro-pay-value {
+        font-size: 1.5em;
+    }
+}
+
+
+/* ============================================================
+   END — LILY CHEN MAKEUP GLOBAL CUSTOM CSS v3 CLEAN
+   ============================================================ */
