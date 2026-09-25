@@ -9,3 +9,6 @@ Thumbs.db
 *.tar.gz
 *.zip
 *.rar
+
+# Internal reports & documentation
+TIEN_DO_CHUYEN_BAI_VIET.md
