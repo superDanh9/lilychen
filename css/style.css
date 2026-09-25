@@ -703,9 +703,20 @@ h1, h2, h3, h4, h5, h6 {
 .hero-title {
   font-size: clamp(2.1rem, 3.6vw, 3.2rem);
   font-weight: 700;
-  line-height: 1.18;
+  line-height: 1.2;
   color: var(--color-dark);
-  margin-bottom: 18px;
+  margin-bottom: 28px;
+}
+
+.hero-location {
+  display: block;
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.6vw, 1.25rem);
+  font-weight: 600;
+  color: var(--color-primary);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 14px;
 }
 
 .hero-title-highlight {
@@ -766,7 +777,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  margin-bottom: 40px;
+  margin-bottom: 0;
 }
 
 .hero-cta-note {
