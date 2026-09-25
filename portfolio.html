@@ -65,7 +65,6 @@
     <div class="container nav-container">
       <!-- Brand Logo -->
       <a href="index.html" class="brand-logo" title="Lily Chen Makeup Academy">
-        <img src="images/logo-lilychen.png" alt="Logo Lily Chen Makeup Academy" class="brand-logo-img" width="38" height="38">
         <div class="brand-logo-text">
           <span class="brand-logo-name">LILY CHEN</span>
           <span class="brand-logo-sub">MAKEUP ACADEMY</span>
@@ -75,32 +74,18 @@
       <!-- Desktop Nav Links -->
       <nav class="desktop-nav" aria-label="Menu chính">
         <a href="index.html#khoa-hoc" class="nav-link">Khóa Học</a>
-        <a href="portfolio.html" class="nav-link active">Tác Phẩm Học Viên</a>
-        <a href="index.html#giang-vien" class="nav-link">Giảng Viên</a>
-        <a href="index.html#cam-nhan" class="nav-link">Cảm Nhận</a>
+        <a href="portfolio.html" class="nav-link active">Tác Phẩm</a>
         <a href="blog.html" class="nav-link">Blog</a>
-        <a href="index.html#faq" class="nav-link">Hỏi Đáp</a>
       </nav>
 
       <!-- Right Header Actions -->
       <div class="header-actions">
-        <a href="https://zalo.me/0889979791" target="_blank" rel="noopener noreferrer" class="header-zalo-btn" title="Chat tư vấn qua Zalo">
-          <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg" alt="Zalo" width="16" height="16" onerror="this.src='images/logo-lilychen.png'">
-          <span>Zalo</span>
-        </a>
-
-        <a href="tel:0889979791" class="header-phone" title="Gọi tư vấn Hotline 088 997 97 91">
-          <svg viewBox="0 0 24 24"><path d="M20 15.5c-1.2 0-2.4-.2-3.6-.6-.3-.1-.7 0-1 .2l-2.2 2.2c-2.8-1.4-5.1-3.8-6.6-6.6l2.2-2.2c.3-.3.4-.7.2-1-.4-1.1-.6-2.3-.6-3.5 0-.6-.4-1-1-1H4c-.6 0-1 .4-1 1 0 9.4 7.6 17 17 17 .6 0 1-.4 1-1v-3.5c0-.6-.4-1-1-1zM19 12h2c0-4.97-4.03-9-9-9v2c3.87 0 7 3.13 7 7zm-4 0h2c0-2.76-2.24-5-5-5v2c1.66 0 3 1.34 3 3z"/></svg>
-          <span>088 997 97 91</span>
-        </a>
-
         <a href="index.html#dang-ky" class="btn btn-primary btn-sm header-cta-btn">
           <span>Đăng Ký Tư Vấn</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
         </a>
 
         <!-- Mobile Hamburger Button -->
-        <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Mở menu điều hướng" aria-expanded="false">
+        <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Mở menu điều hướng" aria-expanded="false" aria-controls="mobileDrawer">
           <span></span>
           <span></span>
           <span></span>
@@ -110,22 +95,16 @@
   </header>
 
   <!-- Mobile Navigation Drawer -->
-  <div class="mobile-drawer" id="mobileDrawer">
+  <div class="mobile-drawer" id="mobileDrawer" aria-label="Menu di động">
     <ul class="mobile-nav-list">
-      <li class="mobile-nav-item"><a href="index.html#khoa-hoc" class="mobile-nav-link">🌸 Khóa Học Tuyển Sinh</a></li>
-      <li class="mobile-nav-item"><a href="portfolio.html" class="mobile-nav-link active">💄 Tác Phẩm Học Viên</a></li>
-      <li class="mobile-nav-item"><a href="index.html#giang-vien" class="mobile-nav-link">👑 Master Lily Chen</a></li>
-      <li class="mobile-nav-item"><a href="index.html#cam-nhan" class="mobile-nav-link">💬 Cảm Nhận Học Viên</a></li>
-      <li class="mobile-nav-item"><a href="blog.html" class="mobile-nav-link">📖 Blog &amp; Kiến Thức</a></li>
-      <li class="mobile-nav-item"><a href="index.html#faq" class="mobile-nav-link">❓ Câu Hỏi Thường Gặp</a></li>
+      <li class="mobile-nav-item"><a href="index.html#khoa-hoc" class="mobile-nav-link">Khóa Học</a></li>
+      <li class="mobile-nav-item"><a href="portfolio.html" class="mobile-nav-link active">Tác Phẩm</a></li>
+      <li class="mobile-nav-item"><a href="blog.html" class="mobile-nav-link">Blog</a></li>
     </ul>
 
     <div class="mobile-drawer-bottom">
       <a href="index.html#dang-ky" class="btn btn-primary btn-lg mobile-nav-link">
-        <span>🎁 Nhận Tư Vấn &amp; Giữ Ưu Đãi 10%</span>
-      </a>
-      <a href="https://zalo.me/0889979791" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-        <span>Chat Zalo Lộ Trình Chi Tiết</span>
+        <span>Đăng Ký Tư Vấn</span>
       </a>
     </div>
   </div>

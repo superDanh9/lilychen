@@ -19,34 +19,36 @@ document.addEventListener('DOMContentLoaded', () => {
   // 2. Mobile Navigation Toggle
   const mobileToggle = document.getElementById('mobileToggle');
   const mobileDrawer = document.getElementById('mobileDrawer');
-  const mobileLinks = document.querySelectorAll('.mobile-nav-link');
 
   if (mobileToggle && mobileDrawer) {
+    const closeDrawer = () => {
+      mobileDrawer.classList.remove('open');
+      mobileToggle.classList.remove('active');
+      mobileToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+
+    const openDrawer = () => {
+      mobileDrawer.classList.add('open');
+      mobileToggle.classList.add('active');
+      mobileToggle.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+    };
+
     const toggleMenu = () => {
       const isOpen = mobileDrawer.classList.contains('open');
       if (isOpen) {
-        mobileDrawer.classList.remove('open');
-        mobileToggle.classList.remove('active');
-        mobileToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
+        closeDrawer();
       } else {
-        mobileDrawer.classList.add('open');
-        mobileToggle.classList.add('active');
-        mobileToggle.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
+        openDrawer();
       }
     };
 
     mobileToggle.addEventListener('click', toggleMenu);
 
-    // Close drawer when clicking any link
-    mobileLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        mobileDrawer.classList.remove('open');
-        mobileToggle.classList.remove('active');
-        mobileToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
-      });
+    // Close drawer when clicking any link inside drawer
+    mobileDrawer.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', closeDrawer);
     });
 
     // Close when clicking outside
@@ -56,10 +58,15 @@ document.addEventListener('DOMContentLoaded', () => {
         !mobileDrawer.contains(e.target) &&
         !mobileToggle.contains(e.target)
       ) {
-        mobileDrawer.classList.remove('open');
-        mobileToggle.classList.remove('active');
-        mobileToggle.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
+        closeDrawer();
+      }
+    });
+
+    // Close on Escape key press (Accessibility requirement)
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && mobileDrawer.classList.contains('open')) {
+        closeDrawer();
+        mobileToggle.focus();
       }
     });
   }

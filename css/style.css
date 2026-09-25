@@ -252,22 +252,14 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 
-/* Brand Logo - Compact & Non-bloating */
+/* Brand Logo - Pure Typography in Brand Pink */
 .brand-logo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 10px;
   text-decoration: none;
   flex-shrink: 0;
   white-space: nowrap !important;
-}
-
-.brand-logo-img {
-  width: 38px;
-  height: 38px;
-  object-fit: contain;
-  flex-shrink: 0;
-  display: block;
+  outline: none;
 }
 
 .brand-logo-text {
@@ -280,25 +272,31 @@ h1, h2, h3, h4, h5, h6 {
 
 .brand-logo-name {
   font-family: var(--font-heading);
-  font-size: 1.15rem;
+  font-size: 1.32rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  color: var(--color-dark);
-  line-height: 1;
+  letter-spacing: 0.05em;
+  color: var(--color-primary);
+  line-height: 1.1;
   margin: 0;
   white-space: nowrap !important;
+  transition: color var(--transition-fast);
+}
+
+.brand-logo:hover .brand-logo-name {
+  color: var(--color-primary-hover);
 }
 
 .brand-logo-sub {
   font-family: var(--font-body);
-  font-size: 0.58rem;
+  font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   color: var(--color-primary);
   line-height: 1;
   margin-top: 3px;
   white-space: nowrap !important;
+  opacity: 0.88;
 }
 
 /* Desktop Navigation Menu */
@@ -306,7 +304,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  gap: 36px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -315,12 +313,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .nav-link {
   font-family: var(--font-body); /* Nunito */
-  font-size: 0.95rem;
+  font-size: 0.98rem;
   font-weight: 600;
   color: #2D3139;
   text-decoration: none;
   white-space: nowrap !important;
-  padding: 8px 0;
+  padding: 8px 6px;
   position: relative;
   transition: color var(--transition-fast);
   display: inline-flex;
@@ -340,19 +338,32 @@ h1, h2, h3, h4, h5, h6 {
   transition: width var(--transition-normal);
 }
 
-.nav-link:hover {
+.nav-link:hover,
+.nav-link.active {
   color: var(--color-primary);
 }
 
-.nav-link:hover::after {
+.nav-link:hover::after,
+.nav-link.active::after {
   width: 100%;
+}
+
+/* Accessibility Focus States */
+.nav-link:focus-visible,
+.brand-logo:focus-visible,
+.header-cta-btn:focus-visible,
+.mobile-toggle:focus-visible,
+.mobile-nav-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
 }
 
 /* Header Action Right (CTA Group) */
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   flex-shrink: 0;
   white-space: nowrap !important;
 }
@@ -572,7 +583,8 @@ h1, h2, h3, h4, h5, h6 {
   padding: 25px var(--container-padding);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 24px;
   transform: translateX(100%);
   opacity: 0;
   visibility: hidden;
@@ -614,7 +626,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .mobile-drawer-bottom {
-  margin-top: 30px;
+  margin-top: 8px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -3083,51 +3095,10 @@ textarea.form-control {
 /* ------------------------------------------------------------
    17. RESPONSIVE DESIGN (MEDIA QUERIES)
    ------------------------------------------------------------ */
-/* Remove mobile drawer from desktop layout entirely */
-@media (min-width: 1025px) {
+/* Hide mobile drawer on desktop and tablet landscape */
+@media (min-width: 769px) {
   .mobile-drawer {
     display: none !important;
-  }
-}
-
-@media (max-width: 1380px) {
-  .desktop-nav {
-    gap: 16px;
-  }
-
-  .header-actions {
-    gap: 8px;
-  }
-
-  .header-cta-btn {
-    display: none !important;
-  }
-
-  .header-zalo-btn span {
-    display: none !important;
-  }
-
-  .header-zalo-btn {
-    padding: 7px 10px;
-  }
-}
-
-@media (max-width: 1180px) {
-  .desktop-nav {
-    gap: 11px;
-  }
-
-  .nav-link {
-    font-size: 0.88rem;
-    padding: 6px 0;
-  }
-
-  .header-phone span {
-    display: none !important;
-  }
-
-  .header-phone {
-    padding: 7px 10px;
   }
 }
 
@@ -3167,25 +3138,6 @@ textarea.form-control {
 
   .hero-visual {
     margin-top: 10px;
-  }
-
-  .desktop-nav {
-    display: none !important;
-  }
-
-  .mobile-toggle {
-    display: flex !important;
-  }
-
-  .header-phone span,
-  .header-zalo-btn span,
-  .header-cta-btn {
-    display: none !important;
-  }
-  
-  .header-phone,
-  .header-zalo-btn {
-    padding: 8px 10px;
   }
 
   /* Section 4, 5, 6 Responsive */
@@ -3308,17 +3260,20 @@ textarea.form-control {
     --header-height: 68px;
   }
 
-  .brand-logo-img {
-    width: 34px;
-    height: 34px;
+  .desktop-nav {
+    display: none !important;
+  }
+
+  .mobile-toggle {
+    display: flex !important;
   }
 
   .brand-logo-name {
-    font-size: 1.05rem;
+    font-size: 1.15rem;
   }
 
   .brand-logo-sub {
-    font-size: 0.52rem;
+    font-size: 0.54rem;
   }
 
   .header-actions {
