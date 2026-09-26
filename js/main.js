@@ -63,19 +63,23 @@
       this.isVisible = true;
       this.isTabActive = !document.hidden;
 
-      // Inertial Pointer Physics
+      // Antigravity Pointer & Respiratory Wave Configuration
+      this.config = {
+        magnetRadius: this.type === 'hero' ? 145 : (this.type === 'page' ? 120 : 95),
+        ringStrength: 0.85,    // Soft magnetic repulsion halo
+        swirlStrength: 0.48,   // Tangential vortex swirl around cursor halo
+        waveSpeed: 0.018,      // Living respiratory wave cadence
+        waveAmplitude: 14,     // Natural idle drift amplitude (px)
+        lerpSpeed: 0.075       // Smooth exponential decay inertia (LERP)
+      };
+
       this.mouse = {
         x: -9999,
         y: -9999,
-        smoothX: -9999,
-        smoothY: -9999,
-        vx: 0,
-        vy: 0,
-        active: false,
-        activeFactor: 0,
-        radius: this.type === 'hero' ? 170 : (this.type === 'page' ? 130 : 95)
+        active: false
       };
 
+      this.time = 0;
       this.init();
     }
 
@@ -91,39 +95,54 @@
 
     getParticleCount(w) {
       if (this.type === 'hero') {
-        if (w < 768) return 56;
-        if (w < 1200) return 110;
-        return 180;
+        if (w < 768) return 58;
+        if (w < 1200) return 115;
+        return 185;
       }
       if (this.type === 'page') {
-        if (w < 768) return 28;
-        if (w < 1200) return 48;
-        return 72;
+        if (w < 768) return 30;
+        if (w < 1200) return 52;
+        return 80;
       }
       // article header
-      if (w < 768) return 16;
-      if (w < 1200) return 28;
-      return 38;
+      if (w < 768) return 18;
+      if (w < 1200) return 30;
+      return 42;
     }
 
     createParticles() {
       const count = this.getParticleCount(this.width);
       this.particles = [];
+
+      // Color palettes tailored for high contrast and luxury elegance on light ivory background (#faf8f6)
+      const colorPalettes = [
+        { r: 214, g: 76,  b: 120 }, // Couture Rose
+        { r: 186, g: 134, b: 114 }, // Warm Tuscan Bronze
+        { r: 228, g: 142, b: 160 }  // Radiant Stardust Blush
+      ];
+
       for (let i = 0; i < count; i++) {
-        const isFocal = Math.random() < 0.07;
-        const isRose = Math.random() < 0.38;
+        const originX = Math.random() * this.width;
+        const originY = Math.random() * this.height;
+        const isFocal = Math.random() < 0.10;
+        const pal = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
+
         this.particles.push({
-          x: Math.random() * this.width,
-          y: Math.random() * this.height,
-          vx: (Math.random() - 0.5) * 12,
-          vy: (Math.random() - 0.5) * 12,
-          baseRadius: isFocal ? (2.2 + Math.random() * 0.8) : (1.1 + Math.random() * 1.3),
-          baseAlpha: isFocal ? (0.65 + Math.random() * 0.25) : (0.22 + Math.random() * 0.28),
+          originX: originX,
+          originY: originY,
+          x: originX,
+          y: originY,
+          baseRadius: isFocal ? (4.2 + Math.random() * 1.4) : (2.2 + Math.random() * 1.7),
+          baseAlpha: isFocal ? (0.75 + Math.random() * 0.18) : (0.48 + Math.random() * 0.24),
           phase: Math.random() * Math.PI * 2,
-          phaseSpeed: 0.0016 + Math.random() * 0.002,
+          speedOffset: 0.7 + Math.random() * 0.6,
+          pulseSpeed: 1.6 + Math.random() * 1.2,
+          waveAmp: this.config.waveAmplitude * (0.8 + Math.random() * 0.4),
+          swirlDir: Math.random() < 0.5 ? 1 : -1,
           isFocal: isFocal,
-          isRose: isRose,
-          flowSeed: Math.random() * 100
+          r: pal.r,
+          g: pal.g,
+          b: pal.b
         });
       }
     }
@@ -146,6 +165,8 @@
       this.ctx.setTransform(1, 0, 0, 1, 0, 0);
       this.ctx.scale(this.dpr, this.dpr);
 
+      this.config.magnetRadius = this.width < 768 ? 95 : (this.width < 1200 ? 120 : (this.type === 'hero' ? 145 : 120));
+
       this.createParticles();
       if (prefersReducedMotion) {
         this.drawStaticFrame();
@@ -161,22 +182,20 @@
           e.clientY >= rect.top &&
           e.clientY <= rect.bottom
         ) {
-          const targetX = e.clientX - rect.left;
-          const targetY = e.clientY - rect.top;
-          if (this.mouse.x < -5000) {
-            this.mouse.smoothX = targetX;
-            this.mouse.smoothY = targetY;
-          }
-          this.mouse.x = targetX;
-          this.mouse.y = targetY;
+          this.mouse.x = e.clientX - rect.left;
+          this.mouse.y = e.clientY - rect.top;
           this.mouse.active = true;
         } else {
           this.mouse.active = false;
+          this.mouse.x = -9999;
+          this.mouse.y = -9999;
         }
       };
 
       const onPointerLeave = () => {
         this.mouse.active = false;
+        this.mouse.x = -9999;
+        this.mouse.y = -9999;
       };
 
       window.addEventListener('mousemove', onPointerMove, { passive: true });
@@ -225,29 +244,16 @@
       this.ctx.clearRect(0, 0, this.width, this.height);
       for (let i = 0; i < this.particles.length; i++) {
         const p = this.particles[i];
-        this.drawParticle(p, p.baseAlpha);
-      }
-    }
-
-    drawParticle(p, alpha) {
-      if (alpha <= 0.01) return;
-      this.ctx.beginPath();
-      this.ctx.arc(p.x, p.y, p.baseRadius, 0, Math.PI * 2);
-      if (p.isRose) {
-        this.ctx.fillStyle = `rgba(212, 83, 122, ${alpha})`;
-      } else {
-        this.ctx.fillStyle = `rgba(224, 214, 210, ${alpha * 0.9})`;
-      }
-      this.ctx.fill();
-
-      if (p.isFocal) {
         this.ctx.beginPath();
-        this.ctx.arc(p.x, p.y, p.baseRadius * 2.8, 0, Math.PI * 2);
-        const glowColor = p.isRose
-          ? `rgba(212, 83, 122, ${alpha * 0.25})`
-          : `rgba(240, 225, 220, ${alpha * 0.3})`;
-        this.ctx.fillStyle = glowColor;
+        this.ctx.arc(p.originX, p.originY, p.baseRadius, 0, Math.PI * 2);
+        this.ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${p.baseAlpha})`;
         this.ctx.fill();
+        if (p.isFocal) {
+          this.ctx.beginPath();
+          this.ctx.arc(p.originX, p.originY, p.baseRadius * 2.5, 0, Math.PI * 2);
+          this.ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${p.baseAlpha * 0.22})`;
+          this.ctx.fill();
+        }
       }
     }
 
@@ -257,89 +263,66 @@
         return;
       }
 
-      const dt = Math.min((now - this.lastTime) / 1000, 0.05);
-      this.lastTime = now;
-      const time = now * 0.001;
-
-      if (this.mouse.active) {
-        this.mouse.activeFactor += (1 - this.mouse.activeFactor) * 0.085;
-      } else {
-        this.mouse.activeFactor *= 0.92;
-      }
-
-      if (this.mouse.x > -5000) {
-        const prevSmoothX = this.mouse.smoothX;
-        const prevSmoothY = this.mouse.smoothY;
-        this.mouse.smoothX += (this.mouse.x - this.mouse.smoothX) * 0.085;
-        this.mouse.smoothY += (this.mouse.y - this.mouse.smoothY) * 0.085;
-        this.mouse.vx = this.mouse.smoothX - prevSmoothX;
-        this.mouse.vy = this.mouse.smoothY - prevSmoothY;
-      }
-
       this.ctx.clearRect(0, 0, this.width, this.height);
+      this.time += this.config.waveSpeed;
+      const time = this.time;
 
-      const f1 = 0.0018;
-      const f2 = 0.0042;
-      const radSq = this.mouse.radius * this.mouse.radius;
-      const mouseSpeed = Math.hypot(this.mouse.vx, this.mouse.vy);
+      const magnetRadius = this.config.magnetRadius;
+      const ringStrength = this.config.ringStrength;
+      const swirlStrength = this.config.swirlStrength;
+      const lerpSpeed = this.config.lerpSpeed;
 
       for (let i = 0; i < this.particles.length; i++) {
         const p = this.particles[i];
 
-        // 1. Multi-harmonic Flow Stream (Ambient Motion)
-        const u1 = Math.sin(p.y * f1 + time * 0.4 + p.flowSeed) * Math.cos(p.x * f1 * 0.72 + time * 0.3);
-        const v1 = Math.cos(p.x * f1 + time * 0.4 + p.flowSeed) * Math.sin(p.y * f1 * 0.72 + time * 0.3);
-        const u2 = 0.35 * Math.sin(p.x * f2 - p.y * f2 + time * 0.55);
-        const v2 = 0.35 * Math.cos(p.y * f2 + p.x * f2 - time * 0.55);
+        // 1. Natural living wave oscillation around origin anchor
+        const floatX = Math.cos(time * p.speedOffset + p.phase) * p.waveAmp;
+        const floatY = Math.sin(time * p.speedOffset + p.phase) * p.waveAmp;
 
-        const flowVx = (u1 + u2) * 16;
-        const flowVy = (v1 + v2) * 16;
+        let targetX = p.originX + floatX;
+        let targetY = p.originY + floatY;
 
-        // 2. Fluid Pointer Disturbance with Momentum Transfer & Tangential Swirl
-        if (this.mouse.activeFactor > 0.01) {
-          const dx = p.x - this.mouse.smoothX;
-          const dy = p.y - this.mouse.smoothY;
-          const distSq = dx * dx + dy * dy;
+        // 2. Cursor repulsion & tangential swirl around cursor
+        if (this.mouse.active && this.mouse.x > -5000) {
+          const dx = targetX - this.mouse.x;
+          const dy = targetY - this.mouse.y;
+          const dist = Math.hypot(dx, dy);
 
-          if (distSq < radSq && distSq > 4) {
-            const dist = Math.sqrt(distSq);
-            const normDist = dist / this.mouse.radius;
-            const w = (1 - normDist) * (1 - normDist) * this.mouse.activeFactor;
+          if (dist < magnetRadius && dist > 0.001) {
+            const forceAngle = Math.atan2(dy, dx);
+            const pushDist = (magnetRadius - dist) * ringStrength;
+            targetX += Math.cos(forceAngle) * pushDist;
+            targetY += Math.sin(forceAngle) * pushDist;
 
-            // a) Radial soft push (breathing space)
-            const nx = dx / dist;
-            const ny = dy / dist;
-            p.vx += nx * w * 58;
-            p.vy += ny * w * 58;
-
-            // b) Drag momentum from cursor movement
-            p.vx += this.mouse.vx * w * 0.44;
-            p.vy += this.mouse.vy * w * 0.44;
-
-            // c) Tangential vortex swirl
-            if (mouseSpeed > 0.4) {
-              p.vx += (-ny) * w * mouseSpeed * 0.3;
-              p.vy += (nx) * w * mouseSpeed * 0.3;
-            }
+            // Swirl tangentially along the magnetic halo
+            const tangentAngle = forceAngle + (Math.PI / 2) * p.swirlDir;
+            const swirlFactor = Math.sin((1 - dist / magnetRadius) * Math.PI) * swirlStrength;
+            targetX += Math.cos(tangentAngle) * pushDist * swirlFactor;
+            targetY += Math.sin(tangentAngle) * pushDist * swirlFactor;
           }
         }
 
-        p.vx += (flowVx - p.vx) * 0.038;
-        p.vy += (flowVy - p.vy) * 0.038;
-        p.vx *= 0.935;
-        p.vy *= 0.935;
+        // 3. Smooth exponential decay interpolation (LERP)
+        p.x += (targetX - p.x) * lerpSpeed;
+        p.y += (targetY - p.y) * lerpSpeed;
 
-        p.x += p.vx * dt;
-        p.y += p.vy * dt;
+        // 4. Subtle respiratory pulse (co giãn nhẹ ngay cả khi không di chuột)
+        const pulse = 1 + Math.sin(time * p.pulseSpeed + p.phase) * 0.22;
+        const currentRadius = p.baseRadius * pulse;
+        const currentAlpha = Math.min(1, Math.max(0.18, p.baseAlpha * (0.85 + Math.sin(time * 1.5 + p.phase) * 0.2)));
 
-        const pad = 24;
-        if (p.x < -pad) p.x = this.width + pad;
-        else if (p.x > this.width + pad) p.x = -pad;
-        if (p.y < -pad) p.y = this.height + pad;
-        else if (p.y > this.height + pad) p.y = -pad;
+        // 5. Render circular particle (Hạt dạng tròn sắc nét)
+        this.ctx.beginPath();
+        this.ctx.arc(p.x, p.y, currentRadius, 0, Math.PI * 2);
+        this.ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${currentAlpha})`;
+        this.ctx.fill();
 
-        const alpha = p.baseAlpha * (0.8 + 0.2 * Math.sin(time * 1.8 + p.phase));
-        this.drawParticle(p, alpha);
+        if (p.isFocal) {
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, currentRadius * 2.5, 0, Math.PI * 2);
+          this.ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${currentAlpha * 0.22})`;
+          this.ctx.fill();
+        }
       }
 
       this.animId = requestAnimationFrame((n) => this.loop(n));
@@ -370,11 +353,12 @@
       this.isVisible = true;
       this.isTabActive = !document.hidden;
 
-      // Morphing Progress: 0 (ambient field) <-> 1 (organized sculpture)
+      // Morphing Progress: 0 (ambient field) <-> 1 (organized 3D sculpture)
       this.progress = 0;
       this.targetProgress = 0;
       this.isHovered = false;
 
+      this.time = 0;
       this.init();
     }
 
@@ -389,8 +373,8 @@
     }
 
     getParticleCount(w) {
-      if (w < 768) return 80;
-      if (w < 1200) return 150;
+      if (w < 768) return 85;
+      if (w < 1200) return 155;
       return 220;
     }
 
@@ -410,15 +394,17 @@
         this.particles.push({
           index: i,
           total: count,
-          baseX: baseX,
-          baseY: baseY,
+          originX: baseX,
+          originY: baseY,
           x: baseX,
           y: baseY,
           seed: Math.random() * 1000,
-          driftSpeed: 0.5 + Math.random() * 0.7,
+          phase: Math.random() * Math.PI * 2,
+          speedOffset: 0.7 + Math.random() * 0.6,
+          pulseSpeed: 1.5 + Math.random() * 1.0,
           turbX: (Math.random() - 0.5) * 2,
           turbY: (Math.random() - 0.5) * 2,
-          size: 1.3 + Math.random() * 1.5,
+          baseRadius: 2.2 + Math.random() * 1.6,
           colorShift: Math.random()
         });
       }
@@ -470,7 +456,7 @@
         const mobileObs = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
             if (entry.isIntersecting) {
-              this.targetProgress = 0.85;
+              this.targetProgress = 0.9;
             } else {
               this.targetProgress = 0;
             }
@@ -522,8 +508,8 @@
       for (let i = 0; i < this.particles.length; i++) {
         const p = this.particles[i];
         this.ctx.beginPath();
-        this.ctx.arc(p.baseX, p.baseY, p.size, 0, Math.PI * 2);
-        this.ctx.fillStyle = 'rgba(195, 180, 185, 0.22)';
+        this.ctx.arc(p.originX, p.originY, p.baseRadius, 0, Math.PI * 2);
+        this.ctx.fillStyle = 'rgba(195, 142, 126, 0.45)';
         this.ctx.fill();
       }
     }
@@ -554,14 +540,14 @@
         return;
       }
 
-      const dt = Math.min((now - this.lastTime) / 1000, 0.05);
       this.lastTime = now;
-      const time = now * 0.001;
+      this.time += 0.018;
+      const time = this.time;
 
       if (this.targetProgress > this.progress) {
         this.progress += (this.targetProgress - this.progress) * 0.065;
       } else {
-        this.progress += (this.targetProgress - this.progress) * 0.045;
+        this.progress += (this.targetProgress - this.progress) * 0.048;
       }
       if (this.progress < 0.001) this.progress = 0;
       if (this.progress > 0.999) this.progress = 1;
@@ -570,22 +556,25 @@
 
       const visual = this.getVisualCenter();
       const baseR = Math.min(visual.w * 0.46, visual.h * 0.46, 175);
-      const mu = this.progress;
-      const turbAmp = Math.sin(mu * Math.PI) * 16;
+      
+      // Smooth Hermite cubic interpolation for soft disperse -> converge -> disperse transition
+      const mu = this.progress * this.progress * (3 - 2 * this.progress);
+      const turbAmp = Math.sin(mu * Math.PI) * 26; // Stardust burst dispersion during transition
 
       for (let i = 0; i < this.particles.length; i++) {
         const p = this.particles[i];
 
-        // 1. Ambient Floating Position
-        const ambX = p.baseX + Math.sin(time * 0.55 + p.seed) * 14;
-        const ambY = p.baseY + Math.cos(time * 0.65 + p.seed * 1.3) * 14;
-        const ambAlpha = 0.22 + Math.sin(time * 1.2 + p.seed) * 0.06;
+        // 1. Living Ambient Floating Position around anchor
+        const ambX = p.originX + Math.cos(time * p.speedOffset + p.phase) * 15;
+        const ambY = p.originY + Math.sin(time * p.speedOffset + p.phase) * 15;
+        const ambAlpha = 0.35 + Math.sin(time * 1.3 + p.phase) * 0.12;
+        const ambRadius = p.baseRadius * (1 + Math.sin(time * p.pulseSpeed + p.phase) * 0.2);
 
         let targetX = ambX;
         let targetY = ambY;
         let targetAlpha = ambAlpha;
-        let pRadius = p.size;
-        let rCol = 195, gCol = 180, bCol = 185;
+        let pRadius = ambRadius;
+        let rCol = 195, gCol = 142, bCol = 126;
 
         if (this.shapeType === 'infinity-ribbon') {
           // --- SHAPE 1: HAUTE COUTURE ORBITAL INFINITY RIBBON (Mastery Knot) ---
@@ -601,10 +590,10 @@
           const yt = y0 + rTube * Math.sin(v) * 0.7;
           const zt = z0 + rTube * Math.sin(2 * v) * 0.5;
 
-          const rotY = time * 0.32;
-          const rotX = Math.sin(time * 0.22) * 0.24;
-          const rotZ = Math.cos(time * 0.18) * 0.14;
-          const breath = 1 + 0.045 * Math.sin(time * 1.6 + u * 2);
+          const rotY = time * 0.35;
+          const rotX = Math.sin(time * 0.25) * 0.25;
+          const rotZ = Math.cos(time * 0.2) * 0.15;
+          const breath = 1 + 0.05 * Math.sin(time * 1.6 + u * 2);
 
           const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
           const x1 = xt * cosY + zt * sinY;
@@ -625,13 +614,13 @@
           targetY = visual.cy + y3 * sProj * breath;
 
           const depthNorm = Math.max(0, Math.min(1, (z2 + baseR) / (2 * baseR)));
-          targetAlpha = 0.42 + depthNorm * 0.52;
-          pRadius = (1.2 + depthNorm * 1.5);
+          targetAlpha = 0.52 + depthNorm * 0.44;
+          pRadius = 2.8 + depthNorm * 2.2;
 
           if (p.colorShift > 0.4) {
-            rCol = 216; gCol = 88; bCol = 126;
+            rCol = 224; gCol = 82; bCol = 126; // Vibrant Couture Rose
           } else {
-            rCol = 242; gCol = 226; bCol = 215;
+            rCol = 246; gCol = 218; bCol = 185; // Warm Golden Champagne
           }
 
         } else {
@@ -669,7 +658,7 @@
             zt = baseR * 0.12 * (1 - rSpir / (baseR * 0.22 + 1));
           }
 
-          const rotZ = time * 0.15;
+          const rotZ = time * 0.16;
           const rotX = Math.sin(time * 0.24) * 0.18;
           const rotY = Math.cos(time * 0.2) * 0.15;
           const breath = 1 + 0.05 * Math.sin(time * 1.8 + tier * 0.7);
@@ -694,34 +683,36 @@
           targetY = visual.cy + y3 * sProj * breath;
 
           const depthNorm = Math.max(0, Math.min(1, (z3 + baseR) / (2 * baseR)));
-          targetAlpha = 0.44 + depthNorm * 0.5;
-          pRadius = (1.2 + depthNorm * 1.4);
+          targetAlpha = 0.52 + depthNorm * 0.44;
+          pRadius = 2.8 + depthNorm * 2.2;
 
           if (tier === 3) {
-            rCol = 248; gCol = 220; bCol = 190;
+            rCol = 250; gCol = 224; bCol = 195; // Golden Core Stardust
           } else if (p.colorShift > 0.35) {
-            rCol = 224; gCol = 96; bCol = 136;
+            rCol = 224; gCol = 82; bCol = 126; // Radiant Rose Petal
           } else {
-            rCol = 240; gCol = 215; bCol = 200;
+            rCol = 246; gCol = 218; bCol = 185; // Warm Golden Champagne
           }
         }
 
+        // Interpolate between ambient floating and 3D sculpture position with dispersion turbulence
         p.x = ambX * (1 - mu) + targetX * mu + p.turbX * turbAmp;
         p.y = ambY * (1 - mu) + targetY * mu + p.turbY * turbAmp;
 
         const curR = Math.round(195 * (1 - mu) + rCol * mu);
-        const curG = Math.round(180 * (1 - mu) + gCol * mu);
-        const curB = Math.round(185 * (1 - mu) + bCol * mu);
+        const curG = Math.round(142 * (1 - mu) + gCol * mu);
+        const curB = Math.round(126 * (1 - mu) + bCol * mu);
         const curAlpha = ambAlpha * (1 - mu) + targetAlpha * mu;
+        const curRadius = ambRadius * (1 - mu) + pRadius * mu;
 
         this.ctx.beginPath();
-        this.ctx.arc(p.x, p.y, pRadius, 0, Math.PI * 2);
+        this.ctx.arc(p.x, p.y, curRadius, 0, Math.PI * 2);
         this.ctx.fillStyle = `rgba(${curR}, ${curG}, ${curB}, ${curAlpha})`;
         this.ctx.fill();
 
         if (mu > 0.4 && (i % 5 === 0)) {
           this.ctx.beginPath();
-          this.ctx.arc(p.x, p.y, pRadius * 2.2, 0, Math.PI * 2);
+          this.ctx.arc(p.x, p.y, curRadius * 2.3, 0, Math.PI * 2);
           this.ctx.fillStyle = `rgba(${curR}, ${curG}, ${curB}, ${curAlpha * 0.22 * mu})`;
           this.ctx.fill();
         }
@@ -779,20 +770,40 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 5. Scroll Reveal Rhythm (Once per load, failsafe ensured)
+  // 5. Scroll Reveal Rhythm (Cascading Stagger & Section Dynamics)
   // ---------------------------------------------------------------------------
   function initScrollReveal() {
-    if (prefersReducedMotion) return;
-
-    const revealTargets = document.querySelectorAll(
-      '.course-open-section, .photo-mosaic, .gallery-grid, .activity-mosaic, .instructor-grid, .testimonials-grid, .blog-grid, .faq-accordion, .conversion-grid'
+    // 1. Identify and tag Section Headers with [data-reveal]
+    const headerTargets = document.querySelectorAll(
+      '.transition-header, .courses-cluster-header, .section-header, .instructor-content, .conversion-info, .activity-info'
     );
-
-    if (!revealTargets.length) return;
-
-    revealTargets.forEach(el => {
-      el.classList.add('reveal-group');
+    headerTargets.forEach(el => {
+      el.setAttribute('data-reveal', '');
     });
+
+    // 2. Identify and tag Staggered Grids with [data-reveal-stagger]
+    const staggerGrids = document.querySelectorAll(
+      '.photo-mosaic, .gallery-grid, .activity-mosaic, .testimonials-grid, .blog-grid, .faq-accordion'
+    );
+    staggerGrids.forEach(el => {
+      el.setAttribute('data-reveal-stagger', '');
+    });
+
+    // 3. Single Block Reveals
+    const singleBlocks = document.querySelectorAll(
+      '.course-open-section, .instructor-visual, .lead-form-card'
+    );
+    singleBlocks.forEach(el => {
+      el.setAttribute('data-reveal', '');
+    });
+
+    const allRevealElements = document.querySelectorAll('[data-reveal], [data-reveal-stagger], .reveal-group');
+    if (!allRevealElements.length) return;
+
+    if (prefersReducedMotion) {
+      allRevealElements.forEach(el => el.classList.add('is-revealed'));
+      return;
+    }
 
     if ('IntersectionObserver' in window) {
       const revealObserver = new IntersectionObserver((entries, observer) => {
@@ -803,19 +814,19 @@
           }
         });
       }, {
-        threshold: 0.12,
+        threshold: 0.08,
         rootMargin: '0px 0px -40px 0px'
       });
 
-      revealTargets.forEach(el => revealObserver.observe(el));
+      allRevealElements.forEach(el => revealObserver.observe(el));
     } else {
-      revealTargets.forEach(el => el.classList.add('is-revealed'));
+      allRevealElements.forEach(el => el.classList.add('is-revealed'));
     }
 
-    // Failsafe: reveal everything after 1.5s if not triggered
+    // Failsafe: reveal everything after 1.2s if not triggered
     setTimeout(() => {
-      revealTargets.forEach(el => el.classList.add('is-revealed'));
-    }, 1500);
+      allRevealElements.forEach(el => el.classList.add('is-revealed'));
+    }, 1200);
   }
 
   // ---------------------------------------------------------------------------
