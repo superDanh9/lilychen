@@ -172,8 +172,7 @@
             <span class="reveal-word" style="--i: 0;">Đào</span>
             <span class="reveal-word" style="--i: 1;">tạo</span>
             <span class="reveal-word" style="--i: 2;">Makeup</span>
-            <span class="reveal-word" style="--i: 3;">Chuyên</span>
-            <span class="reveal-word" style="--i: 4;">nghiệp</span>
+            <span class="word-group"><span class="reveal-word" style="--i: 3;">Chuyên</span> <span class="reveal-word" style="--i: 4;">nghiệp</span></span>
           </span>
           <span class="title-line title-line-2">
             <span class="reveal-word text-amp" style="--i: 5;">&amp;</span>
@@ -196,22 +195,6 @@
               <path d="M7 17l9.2-9.2M17 17V7H7"/>
             </svg>
           </a>
-        </div>
-
-        <!-- Accessible Motion Pause/Play Toggle Button -->
-        <div class="hero-motion-dock">
-          <button type="button" class="motion-toggle-btn" id="motionToggle" aria-pressed="false" aria-label="Tạm dừng hiệu ứng hạt chuyển động">
-            <span class="motion-icon" aria-hidden="true">
-              <svg class="icon-pause" width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="6" y="4" width="4" height="16" rx="1.5"/>
-                <rect x="14" y="4" width="4" height="16" rx="1.5"/>
-              </svg>
-              <svg class="icon-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
-                <polygon points="6,4 20,12 6,20"/>
-              </svg>
-            </span>
-            <span class="motion-label" id="motionLabel">Chuyển động: Bật</span>
-          </button>
         </div>
       </div>
     </section>
@@ -256,151 +239,174 @@
     </section>
 
     <!-- ========================================================
-         SECTION 5: KHÓA HỌC TUYỂN SINH & BẢNG GIÁ NEO
+         SECTION: CÁC KHÓA ĐÀO TẠO (BỐ CỤC MỞ & HẠT TƯƠNG TÁC)
          ======================================================== -->
-    <section class="section-padding courses-section" id="khoa-hoc">
-      <div class="container">
-        <!-- Section Header -->
-        <div class="section-header">
-          <h2 class="section-title">Khóa Học Tuyển Sinh</h2>
-        </div>
+    <div class="courses-interactive-cluster" id="coursesInteractiveCluster">
+      <!-- Shared Interactive Morphing Canvas (Behind Both Sections) -->
+      <canvas id="coursesMorphCanvas" class="courses-morph-canvas" aria-hidden="true"></canvas>
 
-        <!-- 2 Courses Comparison Grid -->
-        <div class="courses-grid">
-          <!-- Course Card 1: Cá Nhân -->
-          <div class="course-card">
-            <div>
-              <span class="course-target-pill">Dành cho cá nhân &amp; người đi làm</span>
-              <h3 class="course-name">Khóa Trang Điểm Cá Nhân</h3>
-              <p class="course-summary">
-                Tự tin trang điểm nhẹ nhàng, tôn nét tự nhiên chỉ sau 10–15 phút mỗi sáng và làm chủ layout dự tiệc thanh lịch, không phụ thuộc tiệm.
-              </p>
-
-              <!-- Price Box -->
-              <div class="course-price-box">
-                <div class="course-price-label">Học phí trọn gói</div>
-                <div class="course-price-row">
-                  <span class="price-main">Từ 1.500.000đ</span>
-                </div>
-                <div class="course-price-note">
-                  <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                  <span>Mỹ phẩm thực hành có sẵn tại lớp</span>
-                </div>
-              </div>
-
-              <!-- Specs Grid -->
-              <div class="course-specs-grid">
-                <div class="spec-chip">
-                  <span class="spec-chip-label">Thời lượng</span>
-                  <span class="spec-chip-value">4 buổi chuyên sâu</span>
-                </div>
-                <div class="spec-chip">
-                  <span class="spec-chip-label">Sĩ số lớp</span>
-                  <span class="spec-chip-value">Tối đa 5 người</span>
-                </div>
-                <div class="spec-chip">
-                  <span class="spec-chip-label">Lịch học</span>
-                  <span class="spec-chip-value">Linh hoạt T2–CN</span>
-                </div>
-              </div>
-
-              <!-- Key Highlights -->
-              <div class="course-benefits-list">
-                <div class="course-benefit-item">
-                  <span class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
-                  <span>Nhận diện đặc điểm khuôn mặt &amp; chọn mỹ phẩm đúng tone da</span>
-                </div>
-                <div class="course-benefit-item">
-                  <span class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
-                  <span>Kỹ thuật tán nền mỏng mịn "glass-skin", kiềm dầu, không mốc</span>
-                </div>
-                <div class="course-benefit-item">
-                  <span class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
-                  <span>Makeup đi làm nhẹ nhàng 10 phút &amp; layout dự tiệc sang trọng</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Card Action Footer -->
-            <div class="course-action-wrap">
-              <a href="#dang-ky" class="btn btn-secondary btn-lg">
-                <span>Đăng Ký Khóa Cá Nhân</span>
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </div>
-          </div>
-
-          <!-- Course Card 2: Chuyên Nghiệp - FEATURED -->
-          <div class="course-card featured">
-            <!-- Top Ribbon -->
-            <div class="course-featured-ribbon">
-              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-              <span>Khóa Học Tiêu Biểu</span>
-            </div>
-
-            <div>
-              <span class="course-target-pill">Dành cho bạn muốn học nghề &amp; tự chủ tài chính</span>
-              <h3 class="course-name">Khóa Makeup Chuyên Nghiệp</h3>
-              <p class="course-summary">
-                Đào tạo nghề toàn diện cho người muốn trở thành Makeup Artist tự do, làm việc tại bridal studio hoặc tự mở tiệm trang điểm. 90% thực hành mẫu thật.
-              </p>
-
-              <!-- Price Box -->
-              <div class="course-price-box">
-                <div class="course-price-label">Học phí trọn gói:</div>
-                <div class="course-price-row">
-                  <span class="price-main">25.000.000đ</span>
-                </div>
-                <div class="course-price-note">
-                  <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-                  <span>Hỗ trợ trả góp linh hoạt 2–3 đợt · Tặng bộ cọ chuyên nghiệp</span>
-                </div>
-              </div>
-
-              <!-- Specs Grid -->
-              <div class="course-specs-grid">
-                <div class="spec-chip">
-                  <span class="spec-chip-label">Thời lượng</span>
-                  <span class="spec-chip-value">3 tháng thực chiến</span>
-                </div>
-                <div class="spec-chip">
-                  <span class="spec-chip-label">Thực hành</span>
-                  <span class="spec-chip-value">90% trên mẫu thật</span>
-                </div>
-                <div class="spec-chip">
-                  <span class="spec-chip-label">Sĩ số lớp</span>
-                  <span class="spec-chip-value">Tối đa 5 học viên</span>
-                </div>
-              </div>
-
-              <!-- Key Highlights -->
-              <div class="course-benefits-list">
-                <div class="course-benefit-item">
-                  <span class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
-                  <span>Làm chủ toàn bộ layout: Cô dâu cao cấp, Dạ tiệc, Kỷ yếu &amp; Douyin</span>
-                </div>
-                <div class="course-benefit-item">
-                  <span class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
-                  <span>Xử lý chuyên sâu da khuyết điểm, tạo khối 3D &amp; làm tóc đồng bộ</span>
-                </div>
-                <div class="course-benefit-item">
-                  <span class="benefit-icon"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
-                  <span>Thi tốt nghiệp, cấp chứng chỉ &amp; hướng dẫn nhận khách 1:1</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Card Action Footer -->
-            <div class="course-action-wrap">
-              <a href="#dang-ky" class="btn btn-primary btn-lg">
-                <span>Đăng Ký Khóa Chuyên Nghiệp</span>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-              </a>
-            </div>
-          </div>
-        </div>
+      <!-- Section Header -->
+      <div class="container courses-cluster-header">
+        <span class="section-kicker">Chương Trình Đào Tạo Thực Chiến</span>
+        <h2 class="section-title">Khóa Học Tuyển Sinh</h2>
       </div>
-    </section>
+
+      <!-- COURSE 1: KHÓA MAKEUP CHUYÊN NGHIỆP (TOP) -->
+      <section class="course-open-section" id="khoa-hoc" data-course-id="pro" aria-labelledby="courseTitlePro">
+        <!-- Direct anchor alias for navigation -->
+        <span id="khoa-chuyen-nghiep" class="section-anchor" aria-hidden="true"></span>
+        <div class="container">
+          <div class="course-open-grid">
+            <!-- Content Column -->
+            <div class="course-open-content">
+              <div class="course-open-eyebrow">
+                <span class="course-pill-featured">Khóa Học Tiêu Biểu</span>
+                <span class="course-target-text">Dành cho bạn muốn học nghề &amp; tự chủ tài chính</span>
+              </div>
+              <h3 class="course-open-name" id="courseTitlePro">Khóa Makeup Chuyên Nghiệp</h3>
+              <p class="course-open-summary">
+                Đào tạo nghề toàn diện cho người muốn trở thành Makeup Artist tự do, làm việc tại bridal studio hoặc tự mở tiệm trang điểm. 90% thực hành mẫu thật dưới sự kèm cặp 1-1 trực tiếp của Master Lily Chen.
+              </p>
+
+              <!-- Tuition Info (Clean open typography with soft divider) -->
+              <div class="course-open-pricing">
+                <div class="price-figure">25.000.000đ</div>
+                <div class="price-context">
+                  <span class="price-title">Học phí trọn gói</span>
+                  <span class="price-sub">Hỗ trợ trả góp linh hoạt 2–3 đợt · Tặng bộ cọ chuyên nghiệp cao cấp</span>
+                </div>
+              </div>
+
+              <!-- Open Specs Row -->
+              <div class="course-open-specs-bar">
+                <div class="spec-unit">
+                  <span class="spec-unit-label">Thời lượng</span>
+                  <span class="spec-unit-val">3 tháng thực chiến</span>
+                </div>
+                <div class="spec-unit-divider"></div>
+                <div class="spec-unit">
+                  <span class="spec-unit-label">Thực hành</span>
+                  <span class="spec-unit-val">90% trên mẫu thật</span>
+                </div>
+                <div class="spec-unit-divider"></div>
+                <div class="spec-unit">
+                  <span class="spec-unit-label">Sĩ số lớp</span>
+                  <span class="spec-unit-val">Tối đa 5 học viên</span>
+                </div>
+              </div>
+
+              <!-- Highlights List -->
+              <ul class="course-open-highlights">
+                <li>
+                  <svg class="check-icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Làm chủ toàn bộ layout: Cô dâu cao cấp, Dạ tiệc, Kỷ yếu &amp; Douyin hot trend</span>
+                </li>
+                <li>
+                  <svg class="check-icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Xử lý chuyên sâu da khuyết điểm, tạo khối 3D &amp; làm tóc đồng bộ theo layout</span>
+                </li>
+                <li>
+                  <svg class="check-icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Thi tốt nghiệp, cấp chứng chỉ &amp; hướng dẫn chụp ảnh, set up ánh sáng nhận khách 1:1</span>
+                </li>
+              </ul>
+
+              <!-- Action Link -->
+              <div class="course-open-action">
+                <a href="#dang-ky" class="btn btn-primary btn-lg course-focus-link">
+                  <span>Đăng Ký Khóa Chuyên Nghiệp</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Authentic Media Column -->
+            <div class="course-open-visual">
+              <div class="course-open-photo-wrap">
+                <img src="images/lilychen-king-queen-collage-2025.webp" alt="Lớp đào tạo makeup chuyên nghiệp thực hành thực tế tại Lily Chen Academy" class="course-open-photo" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- COURSE 2: KHÓA TRANG ĐIỂM CÁ NHÂN (BOTTOM) -->
+      <section class="course-open-section" id="khoa-ca-nhan" data-course-id="personal" aria-labelledby="courseTitlePersonal">
+        <div class="container">
+          <div class="course-open-grid reverse">
+            <!-- Content Column -->
+            <div class="course-open-content">
+              <div class="course-open-eyebrow">
+                <span class="course-pill-personal">Làm Đẹp Cá Nhân</span>
+                <span class="course-target-text">Dành cho cá nhân, học sinh sinh viên &amp; người đi làm</span>
+              </div>
+              <h3 class="course-open-name" id="courseTitlePersonal">Khóa Trang Điểm Cá Nhân</h3>
+              <p class="course-open-summary">
+                Tự tin trang điểm nhẹ nhàng, tôn nét tự nhiên chỉ sau 10–15 phút mỗi sáng và làm chủ layout dự tiệc thanh lịch, không phụ thuộc tiệm. Giáo trình cá nhân hóa theo từng dáng mặt.
+              </p>
+
+              <!-- Tuition Info -->
+              <div class="course-open-pricing">
+                <div class="price-figure">Từ 1.500.000đ</div>
+                <div class="price-context">
+                  <span class="price-title">Học phí trọn gói</span>
+                  <span class="price-sub">Mỹ phẩm &amp; dụng cụ thực hành được chuẩn bị sẵn 100% tại lớp</span>
+                </div>
+              </div>
+
+              <!-- Open Specs Row -->
+              <div class="course-open-specs-bar">
+                <div class="spec-unit">
+                  <span class="spec-unit-label">Thời lượng</span>
+                  <span class="spec-unit-val">4 buổi chuyên sâu</span>
+                </div>
+                <div class="spec-unit-divider"></div>
+                <div class="spec-unit">
+                  <span class="spec-unit-label">Sĩ số lớp</span>
+                  <span class="spec-unit-val">Tối đa 5 người</span>
+                </div>
+                <div class="spec-unit-divider"></div>
+                <div class="spec-unit">
+                  <span class="spec-unit-label">Lịch học</span>
+                  <span class="spec-unit-val">Linh hoạt T2–CN</span>
+                </div>
+              </div>
+
+              <!-- Highlights List -->
+              <ul class="course-open-highlights">
+                <li>
+                  <svg class="check-icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Nhận diện đặc điểm khuôn mặt &amp; chọn mỹ phẩm đúng tone da, tránh lãng phí</span>
+                </li>
+                <li>
+                  <svg class="check-icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Kỹ thuật tán nền mỏng mịn "glass-skin", kiềm dầu và chống mốc cakey cả ngày</span>
+                </li>
+                <li>
+                  <svg class="check-icon" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Makeup đi làm nhẹ nhàng 10 phút &amp; layout dự tiệc sang trọng, cuốn hút</span>
+                </li>
+              </ul>
+
+              <!-- Action Link -->
+              <div class="course-open-action">
+                <a href="#dang-ky" class="btn btn-secondary btn-lg course-focus-link">
+                  <span>Đăng Ký Khóa Cá Nhân</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+              </div>
+            </div>
+
+            <!-- Authentic Media Column -->
+            <div class="course-open-visual">
+              <div class="course-open-photo-wrap">
+                <img src="images/IMG_1646.webp" alt="Layout trang điểm cá nhân tự nhiên thanh lịch tại Lily Chen Makeup Academy" class="course-open-photo" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
 
     <!-- ========================================================
          SECTION 7: TÁC PHẨM HỌC VIÊN & HOẠT ĐỘNG THỰC TẾ

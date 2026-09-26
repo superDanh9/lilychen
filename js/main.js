@@ -1,19 +1,31 @@
 /**
- * Lily Chen Makeup Academy - Interactive Logic
- * Features:
+ * Lily Chen Makeup Academy - Interactive Logic & Particle Morphing Engine
+ * Direction: High-fashion Editorial, Clean Open Space, Celestial Stardust Particles
+ * Pure Vanilla JavaScript - WCAG Accessible, Core Web Vitals & Performance Optimized
+ *
+ * Modules:
  * 1. Rhythmic Word Reveal (Progressive Enhancement)
- * 2. 2D Canvas Particle System (Only active on Homepage Hero, with physics & power-saving)
- * 3. Accessible Motion Pause/Play Toggle & prefers-reduced-motion support
- * 4. Sticky Header with Scroll Detection
- * 5. Mobile Navigation Drawer (A11y & Touch Safe)
- * 6. Smooth Anchor Scrolling with Header Offset
- * 7. Category Filter Tabs for Gallery & Blog
- * 8. FAQ Accordion Expanding Logic
- * 9. Lead Consultation Form Validation & Feedback
+ * 2. Homepage Hero Ambient Stardust Particle Field (No lines, pure floating nodes)
+ * 3. Dual Courses Morphing Particle System (Antigravity-inspired morphing shapes)
+ * 4. Ambient Header Canvases (Portfolio, Blog & Article Pages)
+ * 5. Scroll Reveal Rhythm (Staggered Content Flow)
+ * 6. Sticky Glassmorphism Header
+ * 7. Mobile Navigation Drawer
+ * 8. Smooth Anchor Scrolling with Header Offset
+ * 9. Category Filter Tabs for Gallery & Blog
+ * 10. FAQ Accordion Expanding Logic
+ * 11. Lead Consultation Form Validation & Feedback
  */
 
 (function () {
   'use strict';
+
+  // Clean up legacy localStorage motion disable flag from earlier iterations
+  try {
+    localStorage.removeItem('lily_motion_disabled');
+  } catch (e) {}
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // ---------------------------------------------------------------------------
   // 1. Rhythmic Staggered Word Reveal
@@ -22,22 +34,17 @@
     const hasRevealWords = document.querySelector('.reveal-word');
     if (!hasRevealWords) return;
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!prefersReducedMotion) {
       document.body.classList.add('js-reveal-ready');
     }
   }
 
   // ---------------------------------------------------------------------------
-  // 2. 2D Canvas Particle System (Scoped strictly to Hero with #particleCanvas)
+  // 2. Homepage Hero Ambient Stardust Canvas
   // ---------------------------------------------------------------------------
-  function initParticleCanvas() {
+  function initHeroParticleCanvas() {
     const canvas = document.getElementById('particleCanvas');
-    const heroSection = document.getElementById('hero') || document.getElementById('heroSection');
-    const motionToggleBtn = document.getElementById('motionToggle');
-    const motionLabel = document.getElementById('motionLabel');
-
-    // Only run on pages that have the particle canvas element (Homepage)
+    const heroSection = document.getElementById('hero') || document.querySelector('.hero-section');
     if (!canvas || !heroSection) return;
 
     const ctx = canvas.getContext('2d');
@@ -48,32 +55,23 @@
     let dpr = 1;
     let particles = [];
     let animationFrameId = null;
-    let isPaused = false;
-    let isHeroVisible = true;
-    let isTabVisible = true;
+    let isVisible = true;
+    let isTabActive = true;
 
-    // Mouse & Touch Tracking State
     const mouse = {
       x: -9999,
       y: -9999,
       active: false,
-      radius: 140
+      radius: 130
     };
 
-    // System reduced motion check
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReduced) {
-      isPaused = true;
-      updateToggleButtonUI();
+    function getCount(w) {
+      if (w < 768) return 24;
+      if (w < 1200) return 40;
+      return 56;
     }
 
-    function getParticleCount(w) {
-      if (w < 768) return 18;
-      if (w < 1200) return 32;
-      return 48;
-    }
-
-    class Particle {
+    class StardustParticle {
       constructor() {
         this.reset(true);
       }
@@ -83,25 +81,23 @@
         this.y = initial ? Math.random() * height : Math.random() * height;
 
         const angle = Math.random() * Math.PI * 2;
-        const speed = 0.15 + Math.random() * 0.25;
+        const speed = 0.18 + Math.random() * 0.28;
         this.baseVx = Math.cos(angle) * speed;
         this.baseVy = Math.sin(angle) * speed;
-
         this.vx = this.baseVx;
         this.vy = this.baseVy;
 
-        this.radius = 1.4 + Math.random() * 1.5;
-        this.isRose = Math.random() > 0.38;
-        this.alpha = 0.25 + Math.random() * 0.25;
-
+        this.radius = 1.3 + Math.random() * 1.5;
+        this.isRose = Math.random() > 0.35;
+        this.alpha = 0.22 + Math.random() * 0.32;
         this.phase = Math.random() * Math.PI * 2;
-        this.phaseSpeed = 0.012 + Math.random() * 0.018;
+        this.phaseSpeed = 0.012 + Math.random() * 0.016;
       }
 
       update() {
         this.phase += this.phaseSpeed;
-        const wobbleX = Math.cos(this.phase) * 0.15;
-        const wobbleY = Math.sin(this.phase) * 0.15;
+        const wobbleX = Math.cos(this.phase) * 0.16;
+        const wobbleY = Math.sin(this.phase) * 0.16;
 
         if (mouse.active) {
           const dx = this.x - mouse.x;
@@ -111,15 +107,14 @@
           if (dist < mouse.radius && dist > 1) {
             const nx = dx / dist;
             const ny = dy / dist;
-            const force = (1 - dist / mouse.radius) * 0.75;
-            this.vx += nx * force * 1.1;
-            this.vy += ny * force * 1.1;
+            const force = (1 - dist / mouse.radius) * 0.85;
+            this.vx += nx * force * 1.2;
+            this.vy += ny * force * 1.2;
           }
         }
 
         this.vx *= 0.94;
         this.vy *= 0.94;
-
         this.vx += (this.baseVx - this.vx) * 0.025;
         this.vy += (this.baseVy - this.vy) * 0.025;
 
@@ -139,7 +134,7 @@
         if (this.isRose) {
           ctx.fillStyle = `rgba(212, 83, 122, ${this.alpha})`;
         } else {
-          ctx.fillStyle = `rgba(185, 168, 155, ${this.alpha * 0.9})`;
+          ctx.fillStyle = `rgba(185, 168, 172, ${this.alpha * 0.9})`;
         }
         ctx.fill();
       }
@@ -158,55 +153,15 @@
 
       ctx.scale(dpr, dpr);
 
-      const targetCount = getParticleCount(width);
+      const targetCount = getCount(width);
       particles = [];
       for (let i = 0; i < targetCount; i++) {
-        particles.push(new Particle());
+        particles.push(new StardustParticle());
       }
 
-      if (isPaused) {
+      if (prefersReducedMotion) {
         drawFrame();
       }
-    }
-
-    function drawConnections() {
-      const maxDist = 85;
-      const count = particles.length;
-
-      for (let i = 0; i < count; i++) {
-        for (let j = i + 1; j < count; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const dist = Math.hypot(dx, dy);
-
-          if (dist < maxDist) {
-            const lineAlpha = (1 - dist / maxDist) * 0.11;
-            ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(212, 83, 122, ${lineAlpha})`;
-            ctx.lineWidth = 0.75;
-            ctx.stroke();
-          }
-        }
-      }
-    }
-
-    function loop() {
-      if (isPaused || !isHeroVisible || !isTabVisible) {
-        animationFrameId = null;
-        return;
-      }
-
-      ctx.clearRect(0, 0, width, height);
-
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-      }
-
-      drawConnections();
-      animationFrameId = requestAnimationFrame(loop);
     }
 
     function drawFrame() {
@@ -214,33 +169,40 @@
       for (let i = 0; i < particles.length; i++) {
         particles[i].draw();
       }
-      drawConnections();
     }
 
-    function startAnimation() {
-      if (!animationFrameId && !isPaused && isHeroVisible && isTabVisible) {
+    function loop() {
+      if (prefersReducedMotion || !isVisible || !isTabActive) {
+        animationFrameId = null;
+        return;
+      }
+
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+      }
+
+      animationFrameId = requestAnimationFrame(loop);
+    }
+
+    function startLoop() {
+      if (!animationFrameId && !prefersReducedMotion && isVisible && isTabActive) {
         animationFrameId = requestAnimationFrame(loop);
       }
     }
 
-    function stopAnimation() {
+    function stopLoop() {
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
         animationFrameId = null;
       }
     }
 
-    // Passive Mouse Interaction
+    // Passive interaction
     window.addEventListener('mousemove', e => {
       const rect = heroSection.getBoundingClientRect();
-      const inHero = (
-        e.clientX >= rect.left &&
-        e.clientX <= rect.right &&
-        e.clientY >= rect.top &&
-        e.clientY <= rect.bottom
-      );
-
-      if (inHero) {
+      if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
         mouse.x = e.clientX - rect.left;
         mouse.y = e.clientY - rect.top;
         mouse.active = true;
@@ -253,108 +215,540 @@
       mouse.active = false;
     });
 
-    // Passive Touch Interaction
-    window.addEventListener('touchmove', e => {
-      if (e.touches && e.touches[0]) {
-        const touch = e.touches[0];
-        const rect = heroSection.getBoundingClientRect();
-        const inHero = (
-          touch.clientX >= rect.left &&
-          touch.clientX <= rect.right &&
-          touch.clientY >= rect.top &&
-          touch.clientY <= rect.bottom
-        );
-
-        if (inHero) {
-          mouse.x = touch.clientX - rect.left;
-          mouse.y = touch.clientY - rect.top;
-          mouse.active = true;
-        } else {
-          mouse.active = false;
-        }
-      }
-    }, { passive: true });
-
-    window.addEventListener('touchend', () => {
-      mouse.active = false;
-    }, { passive: true });
-
-    function updateToggleButtonUI() {
-      if (!motionToggleBtn) return;
-      motionToggleBtn.setAttribute('aria-pressed', String(isPaused));
-      const iconPause = motionToggleBtn.querySelector('.icon-pause');
-      const iconPlay = motionToggleBtn.querySelector('.icon-play');
-
-      if (isPaused) {
-        if (iconPause) iconPause.style.display = 'none';
-        if (iconPlay) iconPlay.style.display = 'inline-block';
-        if (motionLabel) motionLabel.textContent = 'Chuyển động: Đã tắt';
-        motionToggleBtn.setAttribute('aria-label', 'Bật chuyển động hạt nền');
-      } else {
-        if (iconPause) iconPause.style.display = 'inline-block';
-        if (iconPlay) iconPlay.style.display = 'none';
-        if (motionLabel) motionLabel.textContent = 'Chuyển động: Bật';
-        motionToggleBtn.setAttribute('aria-label', 'Tạm dừng hiệu ứng hạt chuyển động');
-      }
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          isVisible = entry.isIntersecting;
+          if (isVisible) startLoop();
+          else stopLoop();
+        });
+      }, { threshold: 0.05 });
+      observer.observe(heroSection);
     }
 
-    if (motionToggleBtn) {
-      motionToggleBtn.addEventListener('click', () => {
-        isPaused = !isPaused;
-        updateToggleButtonUI();
-        if (isPaused) {
-          stopAnimation();
-          drawFrame();
-        } else {
-          startAnimation();
-        }
-      });
-    }
-
-    // IntersectionObserver: Pause when hero is not visible
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        isHeroVisible = entry.isIntersecting;
-        if (isHeroVisible) {
-          startAnimation();
-        } else {
-          stopAnimation();
-        }
-      });
-    }, { threshold: 0.05 });
-
-    observer.observe(heroSection);
-
-    // Tab visibility handling: Pause when tab is inactive
     document.addEventListener('visibilitychange', () => {
-      isTabVisible = !document.hidden;
-      if (isTabVisible) {
-        startAnimation();
-      } else {
-        stopAnimation();
-      }
+      isTabActive = !document.hidden;
+      if (isTabActive) startLoop();
+      else stopLoop();
     });
 
-    // Resize listener with debounce
     let resizeTimer = null;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        resize();
-      }, 150);
+      resizeTimer = setTimeout(resize, 150);
     }, { passive: true });
 
-    // Initialize
     resize();
-    if (!isPaused) {
-      startAnimation();
-    } else {
-      drawFrame();
+    if (!prefersReducedMotion) {
+      startLoop();
     }
   }
 
   // ---------------------------------------------------------------------------
-  // 3. Header Scroll Effect
+  // 3. Dual Courses Morphing Particle System (Antigravity-Inspired Engine)
+  // ---------------------------------------------------------------------------
+  function initCoursesMorphingParticles() {
+    const cluster = document.getElementById('coursesInteractiveCluster');
+    const canvas = document.getElementById('coursesMorphCanvas');
+    if (!cluster || !canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const sectionPro = document.getElementById('khoa-hoc') || document.querySelector('[data-course-id="pro"]');
+    const sectionPersonal = document.getElementById('khoa-ca-nhan') || document.querySelector('[data-course-id="personal"]');
+
+    let width = 0;
+    let height = 0;
+    let dpr = 1;
+    let particles = [];
+    let animationFrameId = null;
+    let isClusterVisible = true;
+    let isTabActive = true;
+    let currentState = 'idle'; // 'idle' | 'pro' | 'personal'
+    let time = 0;
+
+    function getParticleCount(w) {
+      if (w < 768) return 120;
+      if (w < 1200) return 200;
+      return 260;
+    }
+
+    class MorphParticle {
+      constructor(index, total) {
+        this.index = index;
+        this.total = total;
+        this.seed = Math.random() * 1000;
+        this.speed = 0.6 + Math.random() * 0.8;
+        this.size = 1.3 + Math.random() * 1.5;
+
+        // Base ambient coordinates (jittered grid)
+        this.baseX = Math.random() * (width || 800);
+        this.baseY = Math.random() * (height || 1200);
+
+        this.x = this.baseX;
+        this.y = this.baseY;
+        this.targetX = this.baseX;
+        this.targetY = this.baseY;
+
+        this.alpha = 0.25;
+        this.targetAlpha = 0.25;
+        this.r = 185;
+        this.g = 168;
+        this.b = 172;
+        this.targetR = 185;
+        this.targetG = 168;
+        this.targetB = 172;
+      }
+
+      repositionBase() {
+        const cols = Math.floor(Math.sqrt(this.total * (width / Math.max(height, 1))));
+        const col = this.index % Math.max(cols, 1);
+        const row = Math.floor(this.index / Math.max(cols, 1));
+        const cellW = width / Math.max(cols, 1);
+        const cellH = height / Math.max(Math.ceil(this.total / Math.max(cols, 1)), 1);
+
+        this.baseX = col * cellW + Math.random() * cellW;
+        this.baseY = row * cellH + Math.random() * cellH;
+      }
+
+      computeTargets(state, now) {
+        if (state === 'pro' && sectionPro) {
+          // Shape 1: Celestial Crown & Editorial Arch (Professional Course)
+          const clusterRect = cluster.getBoundingClientRect();
+          const proVisual = sectionPro.querySelector('.course-open-visual') || sectionPro;
+          const proRect = proVisual.getBoundingClientRect();
+
+          const cx = (proRect.left + proRect.width / 2) - clusterRect.left;
+          const cy = (proRect.top + proRect.height / 2) - clusterRect.top;
+          const halfW = proRect.width / 2;
+          const halfH = proRect.height / 2;
+
+          this.targetAlpha = 0.88;
+          this.targetR = 212;
+          this.targetG = 83;
+          this.targetB = 122;
+
+          if (this.index < this.total * 0.52) {
+            // Couture Flanking Arches framing the photo
+            const t = this.index / (this.total * 0.52);
+            const side = this.index % 2 === 0 ? 1 : -1;
+            const phi = (t - 0.5) * Math.PI * 0.92;
+            const archOffset = halfW + 28 + Math.sin(phi) * 22;
+            this.targetX = cx + side * archOffset + Math.cos(now * 0.002 + this.index * 0.15) * 3.5;
+            this.targetY = cy + Math.sin(phi) * (halfH * 0.95) + Math.sin(now * 0.002 + this.index * 0.15) * 3.5;
+          } else {
+            // Celestial Apex Crown hovering above the photo
+            const t = (this.index - this.total * 0.52) / (this.total * 0.48);
+            const theta = -Math.PI * 0.85 + t * (Math.PI * 0.7);
+            const crownCenterY = cy - halfH - 24;
+            const crownR = (halfW * 0.7) * (1 + 0.15 * Math.cos(5 * theta));
+            this.targetX = cx + Math.cos(theta) * crownR + Math.cos(now * 0.0025 + theta * 3) * 3;
+            this.targetY = crownCenterY + Math.sin(theta) * (crownR * 0.65) + Math.sin(now * 0.0025 + theta * 3) * 3;
+          }
+
+        } else if (state === 'personal' && sectionPersonal) {
+          // Shape 2: The Radiant Bloom / 5-Petal Lotus (Personal Course)
+          const clusterRect = cluster.getBoundingClientRect();
+          const persVisual = sectionPersonal.querySelector('.course-open-visual') || sectionPersonal;
+          const persRect = persVisual.getBoundingClientRect();
+
+          const cx = (persRect.left + persRect.width / 2) - clusterRect.left;
+          const cy = (persRect.top + persRect.height / 2) - clusterRect.top;
+          const baseRadius = Math.max(persRect.width, persRect.height) * 0.54 + 20;
+
+          this.targetAlpha = 0.86;
+          this.targetR = 224;
+          this.targetG = 102;
+          this.targetB = 140;
+
+          if (this.index < this.total * 0.72) {
+            // 5-Petal Rhodonea Curve unfurling around the portrait
+            const theta = (this.index / (this.total * 0.72)) * Math.PI * 2;
+            const r = baseRadius * (0.76 + 0.32 * Math.cos(5 * theta));
+            const breath = Math.sin(now * 0.002 + theta * 5) * 4.5;
+            this.targetX = cx + Math.cos(theta) * (r + breath);
+            this.targetY = cy + Math.sin(theta) * (r + breath);
+          } else {
+            // Inner Pistil Stardust Halo
+            const theta = ((this.index - this.total * 0.72) / (this.total * 0.28)) * Math.PI * 2;
+            const r = baseRadius * 0.44 * (1 + 0.12 * Math.sin(5 * theta));
+            const breath = Math.cos(now * 0.0025 + theta * 3) * 2.5;
+            this.targetX = cx + Math.cos(theta) * (r + breath);
+            this.targetY = cy + Math.sin(theta) * (r + breath);
+          }
+
+        } else {
+          // Ambient State (Natural Drift when mouse stationary or idle)
+          const driftX = Math.sin(now * 0.0009 + this.seed) * 14;
+          const driftY = Math.cos(now * 0.0011 + this.seed * 1.3) * 14;
+          this.targetX = this.baseX + driftX;
+          this.targetY = this.baseY + driftY;
+          this.targetAlpha = 0.24;
+          this.targetR = 185;
+          this.targetG = 168;
+          this.targetB = 172;
+        }
+      }
+
+      update(state, now) {
+        this.computeTargets(state, now);
+
+        // Smooth physics-based interpolation (lerp factor 0.055)
+        this.x += (this.targetX - this.x) * 0.055;
+        this.y += (this.targetY - this.y) * 0.055;
+        this.alpha += (this.targetAlpha - this.alpha) * 0.055;
+        this.r += (this.targetR - this.r) * 0.055;
+        this.g += (this.targetG - this.g) * 0.055;
+        this.b += (this.targetB - this.b) * 0.055;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${Math.round(this.r)}, ${Math.round(this.g)}, ${Math.round(this.b)}, ${this.alpha})`;
+        ctx.fill();
+
+        // If morphed, add subtle radiant shimmer to selected nodal particles
+        if (this.alpha > 0.5 && this.index % 4 === 0) {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size * 2.2, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${Math.round(this.r)}, ${Math.round(this.g)}, ${Math.round(this.b)}, ${this.alpha * 0.22})`;
+          ctx.fill();
+        }
+      }
+    }
+
+    function resize() {
+      const rect = cluster.getBoundingClientRect();
+      width = rect.width;
+      height = rect.height;
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      canvas.width = Math.floor(width * dpr);
+      canvas.height = Math.floor(height * dpr);
+      canvas.style.width = width + 'px';
+      canvas.style.height = height + 'px';
+
+      ctx.scale(dpr, dpr);
+
+      const targetCount = getParticleCount(width);
+      particles = [];
+      for (let i = 0; i < targetCount; i++) {
+        const p = new MorphParticle(i, targetCount);
+        p.repositionBase();
+        particles.push(p);
+      }
+
+      if (prefersReducedMotion) {
+        drawFrame();
+      }
+    }
+
+    function drawFrame() {
+      ctx.clearRect(0, 0, width, height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].draw();
+      }
+    }
+
+    function loop() {
+      if (prefersReducedMotion || !isClusterVisible || !isTabActive) {
+        animationFrameId = null;
+        return;
+      }
+
+      time = performance.now();
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update(currentState, time);
+        particles[i].draw();
+      }
+
+      animationFrameId = requestAnimationFrame(loop);
+    }
+
+    function startLoop() {
+      if (!animationFrameId && !prefersReducedMotion && isClusterVisible && isTabActive) {
+        animationFrameId = requestAnimationFrame(loop);
+      }
+    }
+
+    function stopLoop() {
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+      }
+    }
+
+    // Interaction Listeners on Course Sections
+    function handlePointer(e) {
+      if (!sectionPro || !sectionPersonal) return;
+      const proRect = sectionPro.getBoundingClientRect();
+      const persRect = sectionPersonal.getBoundingClientRect();
+
+      const inPro = e.clientY >= proRect.top && e.clientY <= proRect.bottom;
+      const inPers = e.clientY >= persRect.top && e.clientY <= persRect.bottom;
+
+      if (inPro) {
+        currentState = 'pro';
+      } else if (inPers) {
+        currentState = 'personal';
+      } else {
+        currentState = 'idle';
+      }
+    }
+
+    cluster.addEventListener('mousemove', handlePointer, { passive: true });
+    cluster.addEventListener('mouseleave', () => {
+      currentState = 'idle';
+    });
+
+    // Direct enter/move listeners on individual course sections
+    if (sectionPro) {
+      sectionPro.addEventListener('mouseenter', () => { currentState = 'pro'; });
+      sectionPro.addEventListener('mousemove', () => { currentState = 'pro'; }, { passive: true });
+      sectionPro.addEventListener('focusin', () => { currentState = 'pro'; });
+      sectionPro.addEventListener('focusout', () => { currentState = 'idle'; });
+    }
+    if (sectionPersonal) {
+      sectionPersonal.addEventListener('mouseenter', () => { currentState = 'personal'; });
+      sectionPersonal.addEventListener('mousemove', () => { currentState = 'personal'; }, { passive: true });
+      sectionPersonal.addEventListener('focusin', () => { currentState = 'personal'; });
+      sectionPersonal.addEventListener('focusout', () => { currentState = 'idle'; });
+    }
+
+    // Mobile Viewport Observer (Activates gentle shape when scrolled into view)
+    if ('IntersectionObserver' in window && window.innerWidth <= 768) {
+      const mobileObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            if (entry.target === sectionPro) currentState = 'pro';
+            else if (entry.target === sectionPersonal) currentState = 'personal';
+          }
+        });
+      }, { threshold: 0.45 });
+
+      if (sectionPro) mobileObserver.observe(sectionPro);
+      if (sectionPersonal) mobileObserver.observe(sectionPersonal);
+    }
+
+    // Visibility Observer for RAF loop pausing
+    if ('IntersectionObserver' in window) {
+      const clusterObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          isClusterVisible = entry.isIntersecting;
+          if (isClusterVisible) startLoop();
+          else stopLoop();
+        });
+      }, { threshold: 0.05 });
+      clusterObserver.observe(cluster);
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      isTabActive = !document.hidden;
+      if (isTabActive) startLoop();
+      else stopLoop();
+    });
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    }, { passive: true });
+
+    resize();
+    window.coursesMorphSystem = {
+      getActiveTarget: () => currentState,
+      getParticleCount: () => particles.length
+    };
+    if (!prefersReducedMotion) {
+      startLoop();
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 4. Ambient Header Stardust Canvases (Portfolio, Blog & 14 Articles)
+  // ---------------------------------------------------------------------------
+  function initAmbientHeaderCanvases() {
+    const headerCanvases = document.querySelectorAll('.page-hero-canvas, .article-hero-canvas');
+    if (!headerCanvases.length) return;
+
+    headerCanvases.forEach(canvas => {
+      const parent = canvas.parentElement;
+      if (!parent) return;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      let width = 0;
+      let height = 0;
+      let dpr = 1;
+      let particles = [];
+      let animationFrameId = null;
+      let isVisible = true;
+      let isTabActive = true;
+
+      function resize() {
+        const rect = parent.getBoundingClientRect();
+        width = rect.width;
+        height = rect.height;
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        canvas.width = Math.floor(width * dpr);
+        canvas.height = Math.floor(height * dpr);
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+
+        ctx.scale(dpr, dpr);
+
+        const count = width < 768 ? 16 : 28;
+        particles = [];
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: 1.2 + Math.random() * 1.4,
+            alpha: 0.2 + Math.random() * 0.25,
+            isRose: Math.random() > 0.4,
+            phase: Math.random() * Math.PI * 2,
+            phaseSpeed: 0.01 + Math.random() * 0.015,
+            vx: (Math.random() - 0.5) * 0.25,
+            vy: (Math.random() - 0.5) * 0.25
+          });
+        }
+
+        if (prefersReducedMotion) {
+          drawFrame();
+        }
+      }
+
+      function drawFrame() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.isRose
+            ? `rgba(212, 83, 122, ${p.alpha})`
+            : `rgba(185, 168, 172, ${p.alpha * 0.85})`;
+          ctx.fill();
+        });
+      }
+
+      function loop() {
+        if (prefersReducedMotion || !isVisible || !isTabActive) {
+          animationFrameId = null;
+          return;
+        }
+
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          p.phase += p.phaseSpeed;
+          p.x += p.vx + Math.cos(p.phase) * 0.15;
+          p.y += p.vy + Math.sin(p.phase) * 0.15;
+
+          if (p.x < -10) p.x = width + 10;
+          else if (p.x > width + 10) p.x = -10;
+          if (p.y < -10) p.y = height + 10;
+          else if (p.y > height + 10) p.y = -10;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.isRose
+            ? `rgba(212, 83, 122, ${p.alpha})`
+            : `rgba(185, 168, 172, ${p.alpha * 0.85})`;
+          ctx.fill();
+        });
+
+        animationFrameId = requestAnimationFrame(loop);
+      }
+
+      function startLoop() {
+        if (!animationFrameId && !prefersReducedMotion && isVisible && isTabActive) {
+          animationFrameId = requestAnimationFrame(loop);
+        }
+      }
+
+      function stopLoop() {
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+      }
+
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            isVisible = entry.isIntersecting;
+            if (isVisible) startLoop();
+            else stopLoop();
+          });
+        }, { threshold: 0.05 });
+        observer.observe(parent);
+      }
+
+      document.addEventListener('visibilitychange', () => {
+        isTabActive = !document.hidden;
+        if (isTabActive) startLoop();
+        else stopLoop();
+      });
+
+      let timer = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(timer);
+        timer = setTimeout(resize, 150);
+      }, { passive: true });
+
+      resize();
+      if (!prefersReducedMotion) {
+        startLoop();
+      }
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // 5. Scroll Reveal Rhythm (Once per load, failsafe ensured)
+  // ---------------------------------------------------------------------------
+  function initScrollReveal() {
+    if (prefersReducedMotion) return;
+
+    const revealTargets = document.querySelectorAll(
+      '.course-open-section, .photo-mosaic, .gallery-grid, .activity-mosaic, .instructor-grid, .testimonials-grid, .blog-grid, .faq-accordion, .conversion-grid'
+    );
+
+    if (!revealTargets.length) return;
+
+    revealTargets.forEach(el => {
+      el.classList.add('reveal-group');
+    });
+
+    if ('IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.12,
+        rootMargin: '0px 0px -40px 0px'
+      });
+
+      revealTargets.forEach(el => revealObserver.observe(el));
+    } else {
+      revealTargets.forEach(el => el.classList.add('is-revealed'));
+    }
+
+    // Failsafe: reveal everything after 1.5s if not triggered
+    setTimeout(() => {
+      revealTargets.forEach(el => el.classList.add('is-revealed'));
+    }, 1500);
+  }
+
+  // ---------------------------------------------------------------------------
+  // 6. Header Scroll Effect
   // ---------------------------------------------------------------------------
   function initHeaderScroll() {
     const header = document.getElementById('siteHeader') || document.querySelector('.site-header');
@@ -375,7 +769,7 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 4. Mobile Navigation Drawer
+  // 7. Mobile Navigation Drawer
   // ---------------------------------------------------------------------------
   function initMobileDrawer() {
     const toggleBtn = document.getElementById('mobileToggle');
@@ -419,186 +813,218 @@
 
     const drawerLinks = drawer.querySelectorAll('a');
     drawerLinks.forEach(link => {
-      link.addEventListener('click', closeDrawer);
+      link.addEventListener('click', () => {
+        closeDrawer();
+      });
     });
   }
 
   // ---------------------------------------------------------------------------
-  // 5. Smooth Anchor Scrolling with Header Offset
+  // 8. Smooth Anchor Scrolling with Header Offset
   // ---------------------------------------------------------------------------
-  function initSmoothScroll() {
+  function initSmoothAnchorScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
-        if (href && href !== '#' && href.startsWith('#')) {
-          const target = document.querySelector(href);
-          if (target) {
-            e.preventDefault();
-            const headerOffset = 80;
-            const elementPosition = target.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        if (href === '#' || !href) return;
 
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth'
-            });
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          const header = document.querySelector('.site-header') || document.querySelector('.proto-header');
+          const headerHeight = header ? header.offsetHeight : 72;
+          const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 16;
+
+          window.scrollTo({
+            top: targetPosition,
+            behavior: prefersReducedMotion ? 'instant' : 'smooth'
+          });
+
+          if (history.pushState) {
+            history.pushState(null, null, href);
           }
         }
       });
     });
-
-    if (window.location.hash) {
-      const hashTarget = document.querySelector(window.location.hash);
-      if (hashTarget) {
-        setTimeout(() => {
-          const headerOffset = 80;
-          const elementPosition = hashTarget.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-        }, 150);
-      }
-    }
   }
 
   // ---------------------------------------------------------------------------
-  // 6. Interactive Category Filter Tabs (Gallery & Blog)
+  // 9. Category Filter Tabs for Gallery & Blog
   // ---------------------------------------------------------------------------
-  function initFilters() {
-    const filterContainers = document.querySelectorAll('.gallery-filters');
-    filterContainers.forEach(container => {
-      const buttons = container.querySelectorAll('.gallery-filter-btn');
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const filter = btn.getAttribute('data-filter');
-          if (!filter) return;
+  function initCategoryFilters() {
+    // Gallery filter
+    const galleryButtons = document.querySelectorAll('.gallery-filter-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item');
 
-          buttons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
+    if (galleryButtons.length && galleryItems.length) {
+      galleryButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+          galleryButtons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
 
-          const targetItems = document.querySelectorAll('.gallery-item, .blog-card');
-          targetItems.forEach(item => {
-            const category = item.getAttribute('data-category');
-            if (!category) return;
-            if (filter === 'all' || category === filter) {
+          const filter = this.getAttribute('data-filter');
+          galleryItems.forEach(item => {
+            const cat = item.getAttribute('data-category');
+            if (filter === 'all' || cat === filter) {
               item.style.display = '';
-              setTimeout(() => {
-                item.style.opacity = '1';
-                item.style.transform = 'scale(1)';
-              }, 10);
+              item.style.opacity = '1';
             } else {
-              item.style.opacity = '0';
-              item.style.transform = 'scale(0.96)';
-              setTimeout(() => {
-                item.style.display = 'none';
-              }, 250);
+              item.style.display = 'none';
             }
           });
         });
       });
-    });
+    }
+
+    // Blog filter
+    const blogButtons = document.querySelectorAll('.blog-filter-btn');
+    const blogCards = document.querySelectorAll('.blog-grid .blog-card');
+
+    if (blogButtons.length && blogCards.length) {
+      blogButtons.forEach(btn => {
+        btn.addEventListener('click', function () {
+          blogButtons.forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+
+          const filter = this.getAttribute('data-filter');
+          blogCards.forEach(card => {
+            const cat = card.getAttribute('data-category');
+            if (filter === 'all' || cat === filter) {
+              card.style.display = '';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    }
   }
 
   // ---------------------------------------------------------------------------
-  // 7. FAQ Accordion Logic
+  // 10. FAQ Accordion Expanding Logic
   // ---------------------------------------------------------------------------
-  function initFaq() {
+  function initFaqAccordion() {
     const faqItems = document.querySelectorAll('.faq-item');
+    if (!faqItems.length) return;
+
     faqItems.forEach(item => {
       const questionBtn = item.querySelector('.faq-question');
       const answer = item.querySelector('.faq-answer');
+      if (!questionBtn || !answer) return;
 
-      if (questionBtn && answer) {
-        questionBtn.addEventListener('click', () => {
-          const isActive = item.classList.contains('active');
+      questionBtn.addEventListener('click', () => {
+        const isActive = item.classList.contains('active');
 
-          faqItems.forEach(otherItem => {
-            if (otherItem !== item && otherItem.classList.contains('active')) {
-              otherItem.classList.remove('active');
-              const otherBtn = otherItem.querySelector('.faq-question');
-              const otherAns = otherItem.querySelector('.faq-answer');
-              if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
-              if (otherAns) otherAns.style.maxHeight = null;
-            }
-          });
-
-          if (isActive) {
-            item.classList.remove('active');
-            questionBtn.setAttribute('aria-expanded', 'false');
-            answer.style.maxHeight = null;
-          } else {
-            item.classList.add('active');
-            questionBtn.setAttribute('aria-expanded', 'true');
-            answer.style.maxHeight = answer.scrollHeight + 30 + 'px';
+        // Close other items
+        faqItems.forEach(other => {
+          if (other !== item && other.classList.contains('active')) {
+            other.classList.remove('active');
+            const otherBtn = other.querySelector('.faq-question');
+            const otherAns = other.querySelector('.faq-answer');
+            if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+            if (otherAns) otherAns.style.maxHeight = null;
           }
         });
-      }
+
+        // Toggle current item
+        if (isActive) {
+          item.classList.remove('active');
+          questionBtn.setAttribute('aria-expanded', 'false');
+          answer.style.maxHeight = null;
+        } else {
+          item.classList.add('active');
+          questionBtn.setAttribute('aria-expanded', 'true');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
+      });
     });
   }
 
   // ---------------------------------------------------------------------------
-  // 8. Lead Consultation Form Validation & Feedback
+  // 11. Lead Consultation Form Validation & Feedback
   // ---------------------------------------------------------------------------
   function initLeadForm() {
-    const leadForm = document.getElementById('leadForm');
-    const formSuccessMsg = document.getElementById('formSuccessMsg');
-    const successUserName = document.getElementById('successUserName');
-    const successUserPhone = document.getElementById('successUserPhone');
+    const form = document.getElementById('leadForm');
+    if (!form) return;
 
-    if (leadForm && formSuccessMsg) {
-      leadForm.addEventListener('submit', e => {
-        e.preventDefault();
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
 
-        const nameInput = document.getElementById('leadName');
-        const phoneInput = document.getElementById('leadPhone');
+      const nameInput = document.getElementById('leadName');
+      const phoneInput = document.getElementById('leadPhone');
+      const courseSelect = document.getElementById('leadCourse');
+      let isValid = true;
 
-        const nameVal = nameInput ? nameInput.value.trim() : '';
-        const phoneVal = phoneInput ? phoneInput.value.trim() : '';
-
-        if (!nameVal) {
-          alert('Vui lòng nhập Họ và tên của bạn.');
-          nameInput?.focus();
-          return;
-        }
-
-        const phoneRegex = /^(0|\+84)[3|5|7|8|9][0-9]{8}$/;
-        const cleanedPhone = phoneVal.replace(/[\s.-]/g, '');
-        if (!cleanedPhone || !phoneRegex.test(cleanedPhone)) {
-          alert('Vui lòng nhập số điện thoại hợp lệ (10 số, ví dụ: 0987654321) để Lily Chen có thể liên hệ.');
-          phoneInput?.focus();
-          return;
-        }
-
-        if (successUserName) successUserName.textContent = nameVal;
-        if (successUserPhone) successUserPhone.textContent = phoneVal;
-
-        formSuccessMsg.style.display = 'block';
-        leadForm.reset();
-
-        formSuccessMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      // Reset errors
+      [nameInput, phoneInput, courseSelect].forEach(input => {
+        if (input) input.classList.remove('is-invalid');
       });
-    }
+
+      if (!nameInput || !nameInput.value.trim()) {
+        if (nameInput) nameInput.classList.add('is-invalid');
+        isValid = false;
+      }
+
+      const phoneRegex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
+      if (!phoneInput || !phoneRegex.test(phoneInput.value.trim().replace(/\s+/g, ''))) {
+        if (phoneInput) phoneInput.classList.add('is-invalid');
+        isValid = false;
+      }
+
+      if (!courseSelect || !courseSelect.value) {
+        if (courseSelect) courseSelect.classList.add('is-invalid');
+        isValid = false;
+      }
+
+      if (!isValid) return;
+
+      // Known project state: UI feedback provided, backend endpoint to be configured
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const originalText = submitBtn ? submitBtn.innerHTML : '';
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<span>Đang gửi thông tin...</span>';
+      }
+
+      setTimeout(() => {
+        form.innerHTML = `
+          <div class="form-success-message" style="text-align: center; padding: 32px 16px;">
+            <div style="width: 56px; height: 56px; border-radius: 50%; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+            </div>
+            <h4 style="font-size: 1.3rem; margin-bottom: 8px; color: var(--text-primary);">Đã Tiếp Nhận Thông Tin!</h4>
+            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 18px;">
+              Cảm ơn bạn. Master Lily Chen sẽ liên hệ qua số điện thoại/Zalo để tư vấn lộ trình học phù hợp nhất cho bạn trong vòng 24 giờ.
+            </p>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+              Cần trao đổi gấp? Gọi ngay hotline: <a href="tel:0889979791" style="color: var(--color-rose); font-weight: 700;">088 997 97 91</a>
+            </p>
+          </div>
+        `;
+      }, 700);
+    });
   }
 
   // ---------------------------------------------------------------------------
-  // 9. Bootstrap All Features on Load
+  // DOM Ready Orchestration
   // ---------------------------------------------------------------------------
-  function initApp() {
+  function onDomReady() {
     initTextReveal();
-    initParticleCanvas();
+    initHeroParticleCanvas();
+    initCoursesMorphingParticles();
+    initAmbientHeaderCanvases();
+    initScrollReveal();
     initHeaderScroll();
     initMobileDrawer();
-    initSmoothScroll();
-    initFilters();
-    initFaq();
+    initSmoothAnchorScroll();
+    initCategoryFilters();
+    initFaqAccordion();
     initLeadForm();
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
+    document.addEventListener('DOMContentLoaded', onDomReady);
   } else {
-    initApp();
+    onDomReady();
   }
 })();
