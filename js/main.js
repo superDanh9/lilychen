@@ -592,15 +592,16 @@
 
       function resize() {
         const rect = parent.getBoundingClientRect();
-        width = rect.width;
-        height = rect.height;
+        width = Math.floor(rect.width);
+        height = Math.floor(rect.height);
+        if (width <= 0 || height <= 0) return;
+
         dpr = Math.min(window.devicePixelRatio || 1, 2);
 
         canvas.width = Math.floor(width * dpr);
         canvas.height = Math.floor(height * dpr);
-        canvas.style.width = width + 'px';
-        canvas.style.height = height + 'px';
 
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.scale(dpr, dpr);
 
         const count = width < 768 ? 16 : 28;
