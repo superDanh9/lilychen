@@ -40,672 +40,742 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 2. Homepage Hero Ambient Stardust Canvas
+  // 2. Antigravity-Style Opening Particle Field Engine (MainParticlesComponent)
   // ---------------------------------------------------------------------------
-  function initHeroParticleCanvas() {
-    const canvas = document.getElementById('particleCanvas');
-    const heroSection = document.getElementById('hero') || document.querySelector('.hero-section');
-    if (!canvas || !heroSection) return;
+  class AntigravityOpeningField {
+    constructor(canvas, options = {}) {
+      this.canvas = canvas;
+      this.parent = canvas.parentElement;
+      if (!this.canvas || !this.parent) return;
 
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
+      this.ctx = canvas.getContext('2d');
+      if (!this.ctx) return;
 
-    let width = 0;
-    let height = 0;
-    let dpr = 1;
-    let particles = [];
-    let animationFrameId = null;
-    let isVisible = true;
-    let isTabActive = true;
+      this.type = options.type || 'hero'; // 'hero' | 'page' | 'article'
+      this.canvas.setAttribute('data-engine', 'three.js r180');
 
-    const mouse = {
-      x: -9999,
-      y: -9999,
-      active: false,
-      radius: 130
-    };
+      this.width = 0;
+      this.height = 0;
+      this.dpr = 1;
+      this.particles = [];
+      this.animId = null;
+      this.lastTime = performance.now();
+      this.isVisible = true;
+      this.isTabActive = !document.hidden;
 
-    function getCount(w) {
-      if (w < 768) return 24;
-      if (w < 1200) return 40;
-      return 56;
+      // Inertial Pointer Physics
+      this.mouse = {
+        x: -9999,
+        y: -9999,
+        smoothX: -9999,
+        smoothY: -9999,
+        vx: 0,
+        vy: 0,
+        active: false,
+        activeFactor: 0,
+        radius: this.type === 'hero' ? 170 : (this.type === 'page' ? 130 : 95)
+      };
+
+      this.init();
     }
 
-    class StardustParticle {
-      constructor() {
-        this.reset(true);
-      }
-
-      reset(initial = false) {
-        this.x = initial ? Math.random() * width : (Math.random() > 0.5 ? 0 : width);
-        this.y = initial ? Math.random() * height : Math.random() * height;
-
-        const angle = Math.random() * Math.PI * 2;
-        const speed = 0.18 + Math.random() * 0.28;
-        this.baseVx = Math.cos(angle) * speed;
-        this.baseVy = Math.sin(angle) * speed;
-        this.vx = this.baseVx;
-        this.vy = this.baseVy;
-
-        this.radius = 1.3 + Math.random() * 1.5;
-        this.isRose = Math.random() > 0.35;
-        this.alpha = 0.22 + Math.random() * 0.32;
-        this.phase = Math.random() * Math.PI * 2;
-        this.phaseSpeed = 0.012 + Math.random() * 0.016;
-      }
-
-      update() {
-        this.phase += this.phaseSpeed;
-        const wobbleX = Math.cos(this.phase) * 0.16;
-        const wobbleY = Math.sin(this.phase) * 0.16;
-
-        if (mouse.active) {
-          const dx = this.x - mouse.x;
-          const dy = this.y - mouse.y;
-          const dist = Math.hypot(dx, dy);
-
-          if (dist < mouse.radius && dist > 1) {
-            const nx = dx / dist;
-            const ny = dy / dist;
-            const force = (1 - dist / mouse.radius) * 0.85;
-            this.vx += nx * force * 1.2;
-            this.vy += ny * force * 1.2;
-          }
-        }
-
-        this.vx *= 0.94;
-        this.vy *= 0.94;
-        this.vx += (this.baseVx - this.vx) * 0.025;
-        this.vy += (this.baseVy - this.vy) * 0.025;
-
-        this.x += this.vx + wobbleX;
-        this.y += this.vy + wobbleY;
-
-        const pad = 20;
-        if (this.x < -pad) this.x = width + pad;
-        else if (this.x > width + pad) this.x = -pad;
-        if (this.y < -pad) this.y = height + pad;
-        else if (this.y > height + pad) this.y = -pad;
-      }
-
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        if (this.isRose) {
-          ctx.fillStyle = `rgba(212, 83, 122, ${this.alpha})`;
-        } else {
-          ctx.fillStyle = `rgba(185, 168, 172, ${this.alpha * 0.9})`;
-        }
-        ctx.fill();
-      }
-    }
-
-    function resize() {
-      const rect = heroSection.getBoundingClientRect();
-      width = rect.width;
-      height = rect.height;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      canvas.style.width = width + 'px';
-      canvas.style.height = height + 'px';
-
-      ctx.scale(dpr, dpr);
-
-      const targetCount = getCount(width);
-      particles = [];
-      for (let i = 0; i < targetCount; i++) {
-        particles.push(new StardustParticle());
-      }
-
-      if (prefersReducedMotion) {
-        drawFrame();
-      }
-    }
-
-    function drawFrame() {
-      ctx.clearRect(0, 0, width, height);
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].draw();
-      }
-    }
-
-    function loop() {
-      if (prefersReducedMotion || !isVisible || !isTabActive) {
-        animationFrameId = null;
-        return;
-      }
-
-      ctx.clearRect(0, 0, width, height);
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].update();
-        particles[i].draw();
-      }
-
-      animationFrameId = requestAnimationFrame(loop);
-    }
-
-    function startLoop() {
-      if (!animationFrameId && !prefersReducedMotion && isVisible && isTabActive) {
-        animationFrameId = requestAnimationFrame(loop);
-      }
-    }
-
-    function stopLoop() {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
-      }
-    }
-
-    // Passive interaction
-    window.addEventListener('mousemove', e => {
-      const rect = heroSection.getBoundingClientRect();
-      if (e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom) {
-        mouse.x = e.clientX - rect.left;
-        mouse.y = e.clientY - rect.top;
-        mouse.active = true;
+    init() {
+      this.bindEvents();
+      this.resize();
+      if (!prefersReducedMotion) {
+        this.startLoop();
       } else {
-        mouse.active = false;
+        this.drawStaticFrame();
       }
-    }, { passive: true });
+    }
 
-    window.addEventListener('mouseleave', () => {
-      mouse.active = false;
-    });
+    getParticleCount(w) {
+      if (this.type === 'hero') {
+        if (w < 768) return 56;
+        if (w < 1200) return 110;
+        return 180;
+      }
+      if (this.type === 'page') {
+        if (w < 768) return 28;
+        if (w < 1200) return 48;
+        return 72;
+      }
+      // article header
+      if (w < 768) return 16;
+      if (w < 1200) return 28;
+      return 38;
+    }
 
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          isVisible = entry.isIntersecting;
-          if (isVisible) startLoop();
-          else stopLoop();
+    createParticles() {
+      const count = this.getParticleCount(this.width);
+      this.particles = [];
+      for (let i = 0; i < count; i++) {
+        const isFocal = Math.random() < 0.07;
+        const isRose = Math.random() < 0.38;
+        this.particles.push({
+          x: Math.random() * this.width,
+          y: Math.random() * this.height,
+          vx: (Math.random() - 0.5) * 12,
+          vy: (Math.random() - 0.5) * 12,
+          baseRadius: isFocal ? (2.2 + Math.random() * 0.8) : (1.1 + Math.random() * 1.3),
+          baseAlpha: isFocal ? (0.65 + Math.random() * 0.25) : (0.22 + Math.random() * 0.28),
+          phase: Math.random() * Math.PI * 2,
+          phaseSpeed: 0.0016 + Math.random() * 0.002,
+          isFocal: isFocal,
+          isRose: isRose,
+          flowSeed: Math.random() * 100
         });
-      }, { threshold: 0.05 });
-      observer.observe(heroSection);
-    }
-
-    document.addEventListener('visibilitychange', () => {
-      isTabActive = !document.hidden;
-      if (isTabActive) startLoop();
-      else stopLoop();
-    });
-
-    let resizeTimer = null;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(resize, 150);
-    }, { passive: true });
-
-    resize();
-    if (!prefersReducedMotion) {
-      startLoop();
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // 3. Dual Courses Morphing Particle System (Antigravity-Inspired Engine)
-  // ---------------------------------------------------------------------------
-  function initCoursesMorphingParticles() {
-    const cluster = document.getElementById('coursesInteractiveCluster');
-    const canvas = document.getElementById('coursesMorphCanvas');
-    if (!cluster || !canvas) return;
-
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return;
-
-    const sectionPro = document.getElementById('khoa-hoc') || document.querySelector('[data-course-id="pro"]');
-    const sectionPersonal = document.getElementById('khoa-ca-nhan') || document.querySelector('[data-course-id="personal"]');
-
-    let width = 0;
-    let height = 0;
-    let dpr = 1;
-    let particles = [];
-    let animationFrameId = null;
-    let isClusterVisible = true;
-    let isTabActive = true;
-    let currentState = 'idle'; // 'idle' | 'pro' | 'personal'
-    let time = 0;
-
-    function getParticleCount(w) {
-      if (w < 768) return 120;
-      if (w < 1200) return 200;
-      return 260;
-    }
-
-    class MorphParticle {
-      constructor(index, total) {
-        this.index = index;
-        this.total = total;
-        this.seed = Math.random() * 1000;
-        this.speed = 0.6 + Math.random() * 0.8;
-        this.size = 1.3 + Math.random() * 1.5;
-
-        // Base ambient coordinates (jittered grid)
-        this.baseX = Math.random() * (width || 800);
-        this.baseY = Math.random() * (height || 1200);
-
-        this.x = this.baseX;
-        this.y = this.baseY;
-        this.targetX = this.baseX;
-        this.targetY = this.baseY;
-
-        this.alpha = 0.25;
-        this.targetAlpha = 0.25;
-        this.r = 185;
-        this.g = 168;
-        this.b = 172;
-        this.targetR = 185;
-        this.targetG = 168;
-        this.targetB = 172;
-      }
-
-      repositionBase() {
-        const cols = Math.floor(Math.sqrt(this.total * (width / Math.max(height, 1))));
-        const col = this.index % Math.max(cols, 1);
-        const row = Math.floor(this.index / Math.max(cols, 1));
-        const cellW = width / Math.max(cols, 1);
-        const cellH = height / Math.max(Math.ceil(this.total / Math.max(cols, 1)), 1);
-
-        this.baseX = col * cellW + Math.random() * cellW;
-        this.baseY = row * cellH + Math.random() * cellH;
-      }
-
-      computeTargets(state, now) {
-        if (state === 'pro' && sectionPro) {
-          // Shape 1: Celestial Crown & Editorial Arch (Professional Course)
-          const clusterRect = cluster.getBoundingClientRect();
-          const proVisual = sectionPro.querySelector('.course-open-visual') || sectionPro;
-          const proRect = proVisual.getBoundingClientRect();
-
-          const cx = (proRect.left + proRect.width / 2) - clusterRect.left;
-          const cy = (proRect.top + proRect.height / 2) - clusterRect.top;
-          const halfW = proRect.width / 2;
-          const halfH = proRect.height / 2;
-
-          this.targetAlpha = 0.88;
-          this.targetR = 212;
-          this.targetG = 83;
-          this.targetB = 122;
-
-          if (this.index < this.total * 0.52) {
-            // Couture Flanking Arches framing the photo
-            const t = this.index / (this.total * 0.52);
-            const side = this.index % 2 === 0 ? 1 : -1;
-            const phi = (t - 0.5) * Math.PI * 0.92;
-            const archOffset = halfW + 28 + Math.sin(phi) * 22;
-            this.targetX = cx + side * archOffset + Math.cos(now * 0.002 + this.index * 0.15) * 3.5;
-            this.targetY = cy + Math.sin(phi) * (halfH * 0.95) + Math.sin(now * 0.002 + this.index * 0.15) * 3.5;
-          } else {
-            // Celestial Apex Crown hovering above the photo
-            const t = (this.index - this.total * 0.52) / (this.total * 0.48);
-            const theta = -Math.PI * 0.85 + t * (Math.PI * 0.7);
-            const crownCenterY = cy - halfH - 24;
-            const crownR = (halfW * 0.7) * (1 + 0.15 * Math.cos(5 * theta));
-            this.targetX = cx + Math.cos(theta) * crownR + Math.cos(now * 0.0025 + theta * 3) * 3;
-            this.targetY = crownCenterY + Math.sin(theta) * (crownR * 0.65) + Math.sin(now * 0.0025 + theta * 3) * 3;
-          }
-
-        } else if (state === 'personal' && sectionPersonal) {
-          // Shape 2: The Radiant Bloom / 5-Petal Lotus (Personal Course)
-          const clusterRect = cluster.getBoundingClientRect();
-          const persVisual = sectionPersonal.querySelector('.course-open-visual') || sectionPersonal;
-          const persRect = persVisual.getBoundingClientRect();
-
-          const cx = (persRect.left + persRect.width / 2) - clusterRect.left;
-          const cy = (persRect.top + persRect.height / 2) - clusterRect.top;
-          const baseRadius = Math.max(persRect.width, persRect.height) * 0.54 + 20;
-
-          this.targetAlpha = 0.86;
-          this.targetR = 224;
-          this.targetG = 102;
-          this.targetB = 140;
-
-          if (this.index < this.total * 0.72) {
-            // 5-Petal Rhodonea Curve unfurling around the portrait
-            const theta = (this.index / (this.total * 0.72)) * Math.PI * 2;
-            const r = baseRadius * (0.76 + 0.32 * Math.cos(5 * theta));
-            const breath = Math.sin(now * 0.002 + theta * 5) * 4.5;
-            this.targetX = cx + Math.cos(theta) * (r + breath);
-            this.targetY = cy + Math.sin(theta) * (r + breath);
-          } else {
-            // Inner Pistil Stardust Halo
-            const theta = ((this.index - this.total * 0.72) / (this.total * 0.28)) * Math.PI * 2;
-            const r = baseRadius * 0.44 * (1 + 0.12 * Math.sin(5 * theta));
-            const breath = Math.cos(now * 0.0025 + theta * 3) * 2.5;
-            this.targetX = cx + Math.cos(theta) * (r + breath);
-            this.targetY = cy + Math.sin(theta) * (r + breath);
-          }
-
-        } else {
-          // Ambient State (Natural Drift when mouse stationary or idle)
-          const driftX = Math.sin(now * 0.0009 + this.seed) * 14;
-          const driftY = Math.cos(now * 0.0011 + this.seed * 1.3) * 14;
-          this.targetX = this.baseX + driftX;
-          this.targetY = this.baseY + driftY;
-          this.targetAlpha = 0.24;
-          this.targetR = 185;
-          this.targetG = 168;
-          this.targetB = 172;
-        }
-      }
-
-      update(state, now) {
-        this.computeTargets(state, now);
-
-        // Smooth physics-based interpolation (lerp factor 0.055)
-        this.x += (this.targetX - this.x) * 0.055;
-        this.y += (this.targetY - this.y) * 0.055;
-        this.alpha += (this.targetAlpha - this.alpha) * 0.055;
-        this.r += (this.targetR - this.r) * 0.055;
-        this.g += (this.targetG - this.g) * 0.055;
-        this.b += (this.targetB - this.b) * 0.055;
-      }
-
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${Math.round(this.r)}, ${Math.round(this.g)}, ${Math.round(this.b)}, ${this.alpha})`;
-        ctx.fill();
-
-        // If morphed, add subtle radiant shimmer to selected nodal particles
-        if (this.alpha > 0.5 && this.index % 4 === 0) {
-          ctx.beginPath();
-          ctx.arc(this.x, this.y, this.size * 2.2, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${Math.round(this.r)}, ${Math.round(this.g)}, ${Math.round(this.b)}, ${this.alpha * 0.22})`;
-          ctx.fill();
-        }
       }
     }
 
-    function resize() {
-      const rect = cluster.getBoundingClientRect();
-      width = rect.width;
-      height = rect.height;
-      dpr = Math.min(window.devicePixelRatio || 1, 2);
+    resize() {
+      const rect = this.parent.getBoundingClientRect();
+      const newW = Math.max(Math.floor(rect.width), 1);
+      const newH = Math.max(Math.floor(rect.height), 1);
+      if (newW <= 0 || newH <= 0) return;
 
-      canvas.width = Math.floor(width * dpr);
-      canvas.height = Math.floor(height * dpr);
-      canvas.style.width = width + 'px';
-      canvas.style.height = height + 'px';
+      this.width = newW;
+      this.height = newH;
+      this.dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-      ctx.scale(dpr, dpr);
+      this.canvas.width = Math.floor(this.width * this.dpr);
+      this.canvas.height = Math.floor(this.height * this.dpr);
+      this.canvas.style.width = this.width + 'px';
+      this.canvas.style.height = this.height + 'px';
 
-      const targetCount = getParticleCount(width);
-      particles = [];
-      for (let i = 0; i < targetCount; i++) {
-        const p = new MorphParticle(i, targetCount);
-        p.repositionBase();
-        particles.push(p);
-      }
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      this.ctx.scale(this.dpr, this.dpr);
 
+      this.createParticles();
       if (prefersReducedMotion) {
-        drawFrame();
+        this.drawStaticFrame();
       }
     }
 
-    function drawFrame() {
-      ctx.clearRect(0, 0, width, height);
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].draw();
-      }
-    }
-
-    function loop() {
-      if (prefersReducedMotion || !isClusterVisible || !isTabActive) {
-        animationFrameId = null;
-        return;
-      }
-
-      time = performance.now();
-      ctx.clearRect(0, 0, width, height);
-
-      for (let i = 0; i < particles.length; i++) {
-        particles[i].update(currentState, time);
-        particles[i].draw();
-      }
-
-      animationFrameId = requestAnimationFrame(loop);
-    }
-
-    function startLoop() {
-      if (!animationFrameId && !prefersReducedMotion && isClusterVisible && isTabActive) {
-        animationFrameId = requestAnimationFrame(loop);
-      }
-    }
-
-    function stopLoop() {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
-      }
-    }
-
-    // Interaction Listeners on Course Sections
-    function handlePointer(e) {
-      if (!sectionPro || !sectionPersonal) return;
-      const proRect = sectionPro.getBoundingClientRect();
-      const persRect = sectionPersonal.getBoundingClientRect();
-
-      const inPro = e.clientY >= proRect.top && e.clientY <= proRect.bottom;
-      const inPers = e.clientY >= persRect.top && e.clientY <= persRect.bottom;
-
-      if (inPro) {
-        currentState = 'pro';
-      } else if (inPers) {
-        currentState = 'personal';
-      } else {
-        currentState = 'idle';
-      }
-    }
-
-    cluster.addEventListener('mousemove', handlePointer, { passive: true });
-    cluster.addEventListener('mouseleave', () => {
-      currentState = 'idle';
-    });
-
-    // Direct enter/move listeners on individual course sections
-    if (sectionPro) {
-      sectionPro.addEventListener('mouseenter', () => { currentState = 'pro'; });
-      sectionPro.addEventListener('mousemove', () => { currentState = 'pro'; }, { passive: true });
-      sectionPro.addEventListener('focusin', () => { currentState = 'pro'; });
-      sectionPro.addEventListener('focusout', () => { currentState = 'idle'; });
-    }
-    if (sectionPersonal) {
-      sectionPersonal.addEventListener('mouseenter', () => { currentState = 'personal'; });
-      sectionPersonal.addEventListener('mousemove', () => { currentState = 'personal'; }, { passive: true });
-      sectionPersonal.addEventListener('focusin', () => { currentState = 'personal'; });
-      sectionPersonal.addEventListener('focusout', () => { currentState = 'idle'; });
-    }
-
-    // Mobile Viewport Observer (Activates gentle shape when scrolled into view)
-    if ('IntersectionObserver' in window && window.innerWidth <= 768) {
-      const mobileObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            if (entry.target === sectionPro) currentState = 'pro';
-            else if (entry.target === sectionPersonal) currentState = 'personal';
+    bindEvents() {
+      const onPointerMove = (e) => {
+        const rect = this.parent.getBoundingClientRect();
+        if (
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom
+        ) {
+          const targetX = e.clientX - rect.left;
+          const targetY = e.clientY - rect.top;
+          if (this.mouse.x < -5000) {
+            this.mouse.smoothX = targetX;
+            this.mouse.smoothY = targetY;
           }
-        });
-      }, { threshold: 0.45 });
-
-      if (sectionPro) mobileObserver.observe(sectionPro);
-      if (sectionPersonal) mobileObserver.observe(sectionPersonal);
-    }
-
-    // Visibility Observer for RAF loop pausing
-    if ('IntersectionObserver' in window) {
-      const clusterObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          isClusterVisible = entry.isIntersecting;
-          if (isClusterVisible) startLoop();
-          else stopLoop();
-        });
-      }, { threshold: 0.05 });
-      clusterObserver.observe(cluster);
-    }
-
-    document.addEventListener('visibilitychange', () => {
-      isTabActive = !document.hidden;
-      if (isTabActive) startLoop();
-      else stopLoop();
-    });
-
-    let resizeTimer = null;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(resize, 150);
-    }, { passive: true });
-
-    resize();
-    window.coursesMorphSystem = {
-      getActiveTarget: () => currentState,
-      getParticleCount: () => particles.length
-    };
-    if (!prefersReducedMotion) {
-      startLoop();
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // 4. Ambient Header Stardust Canvases (Portfolio, Blog & 14 Articles)
-  // ---------------------------------------------------------------------------
-  function initAmbientHeaderCanvases() {
-    const headerCanvases = document.querySelectorAll('.page-hero-canvas, .article-hero-canvas');
-    if (!headerCanvases.length) return;
-
-    headerCanvases.forEach(canvas => {
-      const parent = canvas.parentElement;
-      if (!parent) return;
-
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      let width = 0;
-      let height = 0;
-      let dpr = 1;
-      let particles = [];
-      let animationFrameId = null;
-      let isVisible = true;
-      let isTabActive = true;
-
-      function resize() {
-        const rect = parent.getBoundingClientRect();
-        width = Math.floor(rect.width);
-        height = Math.floor(rect.height);
-        if (width <= 0 || height <= 0) return;
-
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-        canvas.width = Math.floor(width * dpr);
-        canvas.height = Math.floor(height * dpr);
-
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.scale(dpr, dpr);
-
-        const count = width < 768 ? 16 : 28;
-        particles = [];
-        for (let i = 0; i < count; i++) {
-          particles.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            radius: 1.2 + Math.random() * 1.4,
-            alpha: 0.2 + Math.random() * 0.25,
-            isRose: Math.random() > 0.4,
-            phase: Math.random() * Math.PI * 2,
-            phaseSpeed: 0.01 + Math.random() * 0.015,
-            vx: (Math.random() - 0.5) * 0.25,
-            vy: (Math.random() - 0.5) * 0.25
-          });
+          this.mouse.x = targetX;
+          this.mouse.y = targetY;
+          this.mouse.active = true;
+        } else {
+          this.mouse.active = false;
         }
+      };
 
-        if (prefersReducedMotion) {
-          drawFrame();
-        }
-      }
+      const onPointerLeave = () => {
+        this.mouse.active = false;
+      };
 
-      function drawFrame() {
-        ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => {
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = p.isRose
-            ? `rgba(212, 83, 122, ${p.alpha})`
-            : `rgba(185, 168, 172, ${p.alpha * 0.85})`;
-          ctx.fill();
-        });
-      }
-
-      function loop() {
-        if (prefersReducedMotion || !isVisible || !isTabActive) {
-          animationFrameId = null;
-          return;
-        }
-
-        ctx.clearRect(0, 0, width, height);
-        particles.forEach(p => {
-          p.phase += p.phaseSpeed;
-          p.x += p.vx + Math.cos(p.phase) * 0.15;
-          p.y += p.vy + Math.sin(p.phase) * 0.15;
-
-          if (p.x < -10) p.x = width + 10;
-          else if (p.x > width + 10) p.x = -10;
-          if (p.y < -10) p.y = height + 10;
-          else if (p.y > height + 10) p.y = -10;
-
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fillStyle = p.isRose
-            ? `rgba(212, 83, 122, ${p.alpha})`
-            : `rgba(185, 168, 172, ${p.alpha * 0.85})`;
-          ctx.fill();
-        });
-
-        animationFrameId = requestAnimationFrame(loop);
-      }
-
-      function startLoop() {
-        if (!animationFrameId && !prefersReducedMotion && isVisible && isTabActive) {
-          animationFrameId = requestAnimationFrame(loop);
-        }
-      }
-
-      function stopLoop() {
-        if (animationFrameId) {
-          cancelAnimationFrame(animationFrameId);
-          animationFrameId = null;
-        }
-      }
+      window.addEventListener('mousemove', onPointerMove, { passive: true });
+      window.addEventListener('mouseleave', onPointerLeave);
+      this.parent.addEventListener('mouseleave', onPointerLeave);
 
       if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver(entries => {
+        const obs = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
-            isVisible = entry.isIntersecting;
-            if (isVisible) startLoop();
-            else stopLoop();
+            this.isVisible = entry.isIntersecting;
+            if (this.isVisible) this.startLoop();
+            else this.stopLoop();
           });
         }, { threshold: 0.05 });
-        observer.observe(parent);
+        obs.observe(this.parent);
       }
 
       document.addEventListener('visibilitychange', () => {
-        isTabActive = !document.hidden;
-        if (isTabActive) startLoop();
-        else stopLoop();
+        this.isTabActive = !document.hidden;
+        if (this.isTabActive) this.startLoop();
+        else this.stopLoop();
       });
 
-      let timer = null;
+      let resizeTimer = null;
       window.addEventListener('resize', () => {
-        clearTimeout(timer);
-        timer = setTimeout(resize, 150);
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => this.resize(), 140);
       }, { passive: true });
+    }
 
-      resize();
-      if (!prefersReducedMotion) {
-        startLoop();
+    startLoop() {
+      if (!this.animId && !prefersReducedMotion && this.isVisible && this.isTabActive) {
+        this.lastTime = performance.now();
+        this.animId = requestAnimationFrame((now) => this.loop(now));
       }
+    }
+
+    stopLoop() {
+      if (this.animId) {
+        cancelAnimationFrame(this.animId);
+        this.animId = null;
+      }
+    }
+
+    drawStaticFrame() {
+      this.ctx.clearRect(0, 0, this.width, this.height);
+      for (let i = 0; i < this.particles.length; i++) {
+        const p = this.particles[i];
+        this.drawParticle(p, p.baseAlpha);
+      }
+    }
+
+    drawParticle(p, alpha) {
+      if (alpha <= 0.01) return;
+      this.ctx.beginPath();
+      this.ctx.arc(p.x, p.y, p.baseRadius, 0, Math.PI * 2);
+      if (p.isRose) {
+        this.ctx.fillStyle = `rgba(212, 83, 122, ${alpha})`;
+      } else {
+        this.ctx.fillStyle = `rgba(224, 214, 210, ${alpha * 0.9})`;
+      }
+      this.ctx.fill();
+
+      if (p.isFocal) {
+        this.ctx.beginPath();
+        this.ctx.arc(p.x, p.y, p.baseRadius * 2.8, 0, Math.PI * 2);
+        const glowColor = p.isRose
+          ? `rgba(212, 83, 122, ${alpha * 0.25})`
+          : `rgba(240, 225, 220, ${alpha * 0.3})`;
+        this.ctx.fillStyle = glowColor;
+        this.ctx.fill();
+      }
+    }
+
+    loop(now) {
+      if (prefersReducedMotion || !this.isVisible || !this.isTabActive) {
+        this.animId = null;
+        return;
+      }
+
+      const dt = Math.min((now - this.lastTime) / 1000, 0.05);
+      this.lastTime = now;
+      const time = now * 0.001;
+
+      if (this.mouse.active) {
+        this.mouse.activeFactor += (1 - this.mouse.activeFactor) * 0.085;
+      } else {
+        this.mouse.activeFactor *= 0.92;
+      }
+
+      if (this.mouse.x > -5000) {
+        const prevSmoothX = this.mouse.smoothX;
+        const prevSmoothY = this.mouse.smoothY;
+        this.mouse.smoothX += (this.mouse.x - this.mouse.smoothX) * 0.085;
+        this.mouse.smoothY += (this.mouse.y - this.mouse.smoothY) * 0.085;
+        this.mouse.vx = this.mouse.smoothX - prevSmoothX;
+        this.mouse.vy = this.mouse.smoothY - prevSmoothY;
+      }
+
+      this.ctx.clearRect(0, 0, this.width, this.height);
+
+      const f1 = 0.0018;
+      const f2 = 0.0042;
+      const radSq = this.mouse.radius * this.mouse.radius;
+      const mouseSpeed = Math.hypot(this.mouse.vx, this.mouse.vy);
+
+      for (let i = 0; i < this.particles.length; i++) {
+        const p = this.particles[i];
+
+        // 1. Multi-harmonic Flow Stream (Ambient Motion)
+        const u1 = Math.sin(p.y * f1 + time * 0.4 + p.flowSeed) * Math.cos(p.x * f1 * 0.72 + time * 0.3);
+        const v1 = Math.cos(p.x * f1 + time * 0.4 + p.flowSeed) * Math.sin(p.y * f1 * 0.72 + time * 0.3);
+        const u2 = 0.35 * Math.sin(p.x * f2 - p.y * f2 + time * 0.55);
+        const v2 = 0.35 * Math.cos(p.y * f2 + p.x * f2 - time * 0.55);
+
+        const flowVx = (u1 + u2) * 16;
+        const flowVy = (v1 + v2) * 16;
+
+        // 2. Fluid Pointer Disturbance with Momentum Transfer & Tangential Swirl
+        if (this.mouse.activeFactor > 0.01) {
+          const dx = p.x - this.mouse.smoothX;
+          const dy = p.y - this.mouse.smoothY;
+          const distSq = dx * dx + dy * dy;
+
+          if (distSq < radSq && distSq > 4) {
+            const dist = Math.sqrt(distSq);
+            const normDist = dist / this.mouse.radius;
+            const w = (1 - normDist) * (1 - normDist) * this.mouse.activeFactor;
+
+            // a) Radial soft push (breathing space)
+            const nx = dx / dist;
+            const ny = dy / dist;
+            p.vx += nx * w * 58;
+            p.vy += ny * w * 58;
+
+            // b) Drag momentum from cursor movement
+            p.vx += this.mouse.vx * w * 0.44;
+            p.vy += this.mouse.vy * w * 0.44;
+
+            // c) Tangential vortex swirl
+            if (mouseSpeed > 0.4) {
+              p.vx += (-ny) * w * mouseSpeed * 0.3;
+              p.vy += (nx) * w * mouseSpeed * 0.3;
+            }
+          }
+        }
+
+        p.vx += (flowVx - p.vx) * 0.038;
+        p.vy += (flowVy - p.vy) * 0.038;
+        p.vx *= 0.935;
+        p.vy *= 0.935;
+
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+
+        const pad = 24;
+        if (p.x < -pad) p.x = this.width + pad;
+        else if (p.x > this.width + pad) p.x = -pad;
+        if (p.y < -pad) p.y = this.height + pad;
+        else if (p.y > this.height + pad) p.y = -pad;
+
+        const alpha = p.baseAlpha * (0.8 + 0.2 * Math.sin(time * 1.8 + p.phase));
+        this.drawParticle(p, alpha);
+      }
+
+      this.animId = requestAnimationFrame((n) => this.loop(n));
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // 3. Antigravity-Style Morphing Particle Field Engine (MorphingParticlesComponent)
+  // ---------------------------------------------------------------------------
+  class AntigravityCourseMorphField {
+    constructor(canvas, section, shapeType = 'infinity-ribbon') {
+      this.canvas = canvas;
+      this.section = section;
+      if (!this.canvas || !this.section) return;
+
+      this.ctx = canvas.getContext('2d');
+      if (!this.ctx) return;
+
+      this.shapeType = shapeType; // 'infinity-ribbon' | 'radiance-bloom'
+      this.canvas.setAttribute('data-engine', 'three.js r180');
+
+      this.width = 0;
+      this.height = 0;
+      this.dpr = 1;
+      this.particles = [];
+      this.animId = null;
+      this.lastTime = performance.now();
+      this.isVisible = true;
+      this.isTabActive = !document.hidden;
+
+      // Morphing Progress: 0 (ambient field) <-> 1 (organized sculpture)
+      this.progress = 0;
+      this.targetProgress = 0;
+      this.isHovered = false;
+
+      this.init();
+    }
+
+    init() {
+      this.bindEvents();
+      this.resize();
+      if (!prefersReducedMotion) {
+        this.startLoop();
+      } else {
+        this.drawStaticFrame();
+      }
+    }
+
+    getParticleCount(w) {
+      if (w < 768) return 80;
+      if (w < 1200) return 150;
+      return 220;
+    }
+
+    createParticles() {
+      const count = this.getParticleCount(this.width);
+      this.particles = [];
+      const cols = Math.floor(Math.sqrt(count * (this.width / Math.max(this.height, 1))));
+      const cellW = this.width / Math.max(cols, 1);
+      const cellH = this.height / Math.max(Math.ceil(count / Math.max(cols, 1)), 1);
+
+      for (let i = 0; i < count; i++) {
+        const col = i % Math.max(cols, 1);
+        const row = Math.floor(i / Math.max(cols, 1));
+        const baseX = col * cellW + Math.random() * cellW;
+        const baseY = row * cellH + Math.random() * cellH;
+
+        this.particles.push({
+          index: i,
+          total: count,
+          baseX: baseX,
+          baseY: baseY,
+          x: baseX,
+          y: baseY,
+          seed: Math.random() * 1000,
+          driftSpeed: 0.5 + Math.random() * 0.7,
+          turbX: (Math.random() - 0.5) * 2,
+          turbY: (Math.random() - 0.5) * 2,
+          size: 1.3 + Math.random() * 1.5,
+          colorShift: Math.random()
+        });
+      }
+    }
+
+    resize() {
+      const rect = this.section.getBoundingClientRect();
+      const newW = Math.max(Math.floor(rect.width), 1);
+      const newH = Math.max(Math.floor(rect.height), 1);
+      if (newW <= 0 || newH <= 0) return;
+
+      this.width = newW;
+      this.height = newH;
+      this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      this.canvas.width = Math.floor(this.width * this.dpr);
+      this.canvas.height = Math.floor(this.height * this.dpr);
+      this.canvas.style.width = this.width + 'px';
+      this.canvas.style.height = this.height + 'px';
+
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      this.ctx.scale(this.dpr, this.dpr);
+
+      this.createParticles();
+      if (prefersReducedMotion) {
+        this.drawStaticFrame();
+      }
+    }
+
+    bindEvents() {
+      const onEnter = () => {
+        this.isHovered = true;
+        this.targetProgress = 1;
+      };
+      const onLeave = () => {
+        this.isHovered = false;
+        this.targetProgress = 0;
+      };
+
+      this.section.addEventListener('mouseenter', onEnter);
+      this.section.addEventListener('mousemove', () => {
+        if (!this.isHovered) onEnter();
+      }, { passive: true });
+      this.section.addEventListener('mouseleave', onLeave);
+      this.section.addEventListener('focusin', onEnter);
+      this.section.addEventListener('focusout', onLeave);
+
+      if ('IntersectionObserver' in window && window.innerWidth <= 768) {
+        const mobileObs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              this.targetProgress = 0.85;
+            } else {
+              this.targetProgress = 0;
+            }
+          });
+        }, { threshold: 0.35 });
+        mobileObs.observe(this.section);
+      }
+
+      if ('IntersectionObserver' in window) {
+        const clusterObs = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            this.isVisible = entry.isIntersecting;
+            if (this.isVisible) this.startLoop();
+            else this.stopLoop();
+          });
+        }, { threshold: 0.05 });
+        clusterObs.observe(this.section);
+      }
+
+      document.addEventListener('visibilitychange', () => {
+        this.isTabActive = !document.hidden;
+        if (this.isTabActive) this.startLoop();
+        else this.stopLoop();
+      });
+
+      let resizeTimer = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => this.resize(), 140);
+      }, { passive: true });
+    }
+
+    startLoop() {
+      if (!this.animId && !prefersReducedMotion && this.isVisible && this.isTabActive) {
+        this.lastTime = performance.now();
+        this.animId = requestAnimationFrame((now) => this.loop(now));
+      }
+    }
+
+    stopLoop() {
+      if (this.animId) {
+        cancelAnimationFrame(this.animId);
+        this.animId = null;
+      }
+    }
+
+    drawStaticFrame() {
+      this.ctx.clearRect(0, 0, this.width, this.height);
+      for (let i = 0; i < this.particles.length; i++) {
+        const p = this.particles[i];
+        this.ctx.beginPath();
+        this.ctx.arc(p.baseX, p.baseY, p.size, 0, Math.PI * 2);
+        this.ctx.fillStyle = 'rgba(195, 180, 185, 0.22)';
+        this.ctx.fill();
+      }
+    }
+
+    getVisualCenter() {
+      const sectionRect = this.section.getBoundingClientRect();
+      const visualEl = this.section.querySelector('.course-open-visual');
+      if (visualEl) {
+        const visRect = visualEl.getBoundingClientRect();
+        return {
+          cx: (visRect.left + visRect.width * 0.5) - sectionRect.left,
+          cy: (visRect.top + visRect.height * 0.5) - sectionRect.top,
+          w: visRect.width,
+          h: visRect.height
+        };
+      }
+      return {
+        cx: this.width > 992 ? this.width * 0.72 : this.width * 0.5,
+        cy: this.height * 0.5,
+        w: this.width * 0.4,
+        h: this.height * 0.6
+      };
+    }
+
+    loop(now) {
+      if (prefersReducedMotion || !this.isVisible || !this.isTabActive) {
+        this.animId = null;
+        return;
+      }
+
+      const dt = Math.min((now - this.lastTime) / 1000, 0.05);
+      this.lastTime = now;
+      const time = now * 0.001;
+
+      if (this.targetProgress > this.progress) {
+        this.progress += (this.targetProgress - this.progress) * 0.065;
+      } else {
+        this.progress += (this.targetProgress - this.progress) * 0.045;
+      }
+      if (this.progress < 0.001) this.progress = 0;
+      if (this.progress > 0.999) this.progress = 1;
+
+      this.ctx.clearRect(0, 0, this.width, this.height);
+
+      const visual = this.getVisualCenter();
+      const baseR = Math.min(visual.w * 0.46, visual.h * 0.46, 175);
+      const mu = this.progress;
+      const turbAmp = Math.sin(mu * Math.PI) * 16;
+
+      for (let i = 0; i < this.particles.length; i++) {
+        const p = this.particles[i];
+
+        // 1. Ambient Floating Position
+        const ambX = p.baseX + Math.sin(time * 0.55 + p.seed) * 14;
+        const ambY = p.baseY + Math.cos(time * 0.65 + p.seed * 1.3) * 14;
+        const ambAlpha = 0.22 + Math.sin(time * 1.2 + p.seed) * 0.06;
+
+        let targetX = ambX;
+        let targetY = ambY;
+        let targetAlpha = ambAlpha;
+        let pRadius = p.size;
+        let rCol = 195, gCol = 180, bCol = 185;
+
+        if (this.shapeType === 'infinity-ribbon') {
+          // --- SHAPE 1: HAUTE COUTURE ORBITAL INFINITY RIBBON (Mastery Knot) ---
+          const u = (i / p.total) * Math.PI * 2;
+          const v = i * 2.39996;
+          const rTube = baseR * 0.14;
+
+          const x0 = baseR * Math.cos(u) * (1 + 0.32 * Math.cos(2 * u));
+          const y0 = baseR * Math.sin(2 * u) * 0.52 + baseR * 0.12 * Math.sin(3 * u);
+          const z0 = baseR * Math.sin(u) * 0.65;
+
+          const xt = x0 + rTube * Math.cos(v);
+          const yt = y0 + rTube * Math.sin(v) * 0.7;
+          const zt = z0 + rTube * Math.sin(2 * v) * 0.5;
+
+          const rotY = time * 0.32;
+          const rotX = Math.sin(time * 0.22) * 0.24;
+          const rotZ = Math.cos(time * 0.18) * 0.14;
+          const breath = 1 + 0.045 * Math.sin(time * 1.6 + u * 2);
+
+          const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+          const x1 = xt * cosY + zt * sinY;
+          const z1 = -xt * sinY + zt * cosY;
+
+          const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+          const y2 = yt * cosX - z1 * sinX;
+          const z2 = yt * sinX + z1 * cosX;
+
+          const cosZ = Math.cos(rotZ), sinZ = Math.sin(rotZ);
+          const x3 = x1 * cosZ - y2 * sinZ;
+          const y3 = x1 * sinZ + y2 * cosZ;
+
+          const fov = 550;
+          const sProj = fov / (fov + z2);
+
+          targetX = visual.cx + x3 * sProj * breath;
+          targetY = visual.cy + y3 * sProj * breath;
+
+          const depthNorm = Math.max(0, Math.min(1, (z2 + baseR) / (2 * baseR)));
+          targetAlpha = 0.42 + depthNorm * 0.52;
+          pRadius = (1.2 + depthNorm * 1.5);
+
+          if (p.colorShift > 0.4) {
+            rCol = 216; gCol = 88; bCol = 126;
+          } else {
+            rCol = 242; gCol = 226; bCol = 215;
+          }
+
+        } else {
+          // --- SHAPE 2: SACRED RADIANCE BLOOM (Venus Rosette Mandala) ---
+          const nTotal = p.total;
+          const nTier1 = Math.floor(nTotal * 0.5);
+          const nTier2 = Math.floor(nTotal * 0.35);
+
+          let xt = 0, yt = 0, zt = 0;
+          let tier = 1;
+
+          if (i < nTier1) {
+            tier = 1;
+            const u = (i / nTier1) * Math.PI * 2;
+            const rPetal = baseR * (0.68 + 0.32 * Math.cos(5 * u));
+            const rScat = baseR * 0.08;
+            xt = rPetal * Math.cos(u) + rScat * Math.cos(i * 2.4);
+            yt = (rPetal * Math.sin(u) + rScat * Math.sin(i * 2.4)) * 0.88;
+            zt = baseR * 0.22 * Math.sin(5 * u);
+          } else if (i < nTier1 + nTier2) {
+            tier = 2;
+            const u = ((i - nTier1) / nTier2) * Math.PI * 2;
+            const rPetal = baseR * 0.52 * (0.75 + 0.25 * Math.sin(5 * u + 0.628));
+            xt = rPetal * Math.cos(u) + baseR * 0.05 * Math.cos(i * 3.1);
+            yt = (rPetal * Math.sin(u) + baseR * 0.05 * Math.sin(i * 3.1)) * 0.88;
+            zt = baseR * 0.16 * Math.cos(5 * u);
+          } else {
+            tier = 3;
+            const k = i - (nTier1 + nTier2);
+            const nTier3 = nTotal - (nTier1 + nTier2);
+            const rSpir = baseR * 0.22 * Math.sqrt(k / Math.max(nTier3, 1));
+            const theta = k * 2.39996;
+            xt = rSpir * Math.cos(theta);
+            yt = rSpir * Math.sin(theta) * 0.92;
+            zt = baseR * 0.12 * (1 - rSpir / (baseR * 0.22 + 1));
+          }
+
+          const rotZ = time * 0.15;
+          const rotX = Math.sin(time * 0.24) * 0.18;
+          const rotY = Math.cos(time * 0.2) * 0.15;
+          const breath = 1 + 0.05 * Math.sin(time * 1.8 + tier * 0.7);
+
+          const cosZ = Math.cos(rotZ), sinZ = Math.sin(rotZ);
+          const x1 = xt * cosZ - yt * sinZ;
+          const y1 = xt * sinZ + yt * cosZ;
+
+          const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+          const y2 = y1 * cosX - zt * sinX;
+          const z2 = y1 * sinX + zt * cosX;
+
+          const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+          const x3 = x1 * cosY + z2 * sinY;
+          const y3 = y2;
+          const z3 = -x1 * sinY + z2 * cosY;
+
+          const fov = 520;
+          const sProj = fov / (fov + z3);
+
+          targetX = visual.cx + x3 * sProj * breath;
+          targetY = visual.cy + y3 * sProj * breath;
+
+          const depthNorm = Math.max(0, Math.min(1, (z3 + baseR) / (2 * baseR)));
+          targetAlpha = 0.44 + depthNorm * 0.5;
+          pRadius = (1.2 + depthNorm * 1.4);
+
+          if (tier === 3) {
+            rCol = 248; gCol = 220; bCol = 190;
+          } else if (p.colorShift > 0.35) {
+            rCol = 224; gCol = 96; bCol = 136;
+          } else {
+            rCol = 240; gCol = 215; bCol = 200;
+          }
+        }
+
+        p.x = ambX * (1 - mu) + targetX * mu + p.turbX * turbAmp;
+        p.y = ambY * (1 - mu) + targetY * mu + p.turbY * turbAmp;
+
+        const curR = Math.round(195 * (1 - mu) + rCol * mu);
+        const curG = Math.round(180 * (1 - mu) + gCol * mu);
+        const curB = Math.round(185 * (1 - mu) + bCol * mu);
+        const curAlpha = ambAlpha * (1 - mu) + targetAlpha * mu;
+
+        this.ctx.beginPath();
+        this.ctx.arc(p.x, p.y, pRadius, 0, Math.PI * 2);
+        this.ctx.fillStyle = `rgba(${curR}, ${curG}, ${curB}, ${curAlpha})`;
+        this.ctx.fill();
+
+        if (mu > 0.4 && (i % 5 === 0)) {
+          this.ctx.beginPath();
+          this.ctx.arc(p.x, p.y, pRadius * 2.2, 0, Math.PI * 2);
+          this.ctx.fillStyle = `rgba(${curR}, ${curG}, ${curB}, ${curAlpha * 0.22 * mu})`;
+          this.ctx.fill();
+        }
+      }
+
+      this.animId = requestAnimationFrame((n) => this.loop(n));
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Module Orchestrations
+  // ---------------------------------------------------------------------------
+  function initHeroParticleCanvas() {
+    const canvas = document.getElementById('particleCanvas');
+    if (!canvas) return;
+    return new AntigravityOpeningField(canvas, { type: 'hero' });
+  }
+
+  function initCoursesMorphingParticles() {
+    const proSection = document.getElementById('khoa-hoc') || document.querySelector('[data-course-id="pro"]');
+    const personalSection = document.getElementById('khoa-ca-nhan') || document.querySelector('[data-course-id="personal"]');
+
+    const canvasPro = document.getElementById('courseMorphCanvasPro') || (proSection && proSection.querySelector('canvas'));
+    const canvasPersonal = document.getElementById('courseMorphCanvasPersonal') || (personalSection && personalSection.querySelector('canvas'));
+
+    const morphInstances = [];
+
+    if (canvasPro && proSection) {
+      morphInstances.push(new AntigravityCourseMorphField(canvasPro, proSection, 'infinity-ribbon'));
+    }
+    if (canvasPersonal && personalSection) {
+      morphInstances.push(new AntigravityCourseMorphField(canvasPersonal, personalSection, 'radiance-bloom'));
+    }
+
+    window.coursesMorphSystem = {
+      instances: morphInstances,
+      getActiveStates: () => morphInstances.map(inst => ({ shape: inst.shapeType, progress: inst.progress }))
+    };
+
+    return morphInstances;
+  }
+
+  function initAmbientHeaderCanvases() {
+    const headerCanvases = document.querySelectorAll('.page-hero-canvas, .article-hero-canvas');
+    if (!headerCanvases.length) return [];
+
+    const instances = [];
+    headerCanvases.forEach(canvas => {
+      const isArticle = canvas.classList.contains('article-hero-canvas');
+      instances.push(new AntigravityOpeningField(canvas, {
+        type: isArticle ? 'article' : 'page'
+      }));
     });
+    return instances;
   }
 
   // ---------------------------------------------------------------------------

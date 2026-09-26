@@ -954,13 +954,14 @@ h1, h2, h3, h4, h5, h6 {
   padding: clamp(56px, 7vw, 96px) 0 clamp(40px, 5vw, 72px);
 }
 
-.courses-morph-canvas {
+.courses-morph-canvas,
+.course-morph-canvas {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 2;
+  z-index: 0;
 }
 
 .courses-cluster-header {
@@ -977,6 +978,12 @@ h1, h2, h3, h4, h5, h6 {
   padding: clamp(36px, 5vw, 64px) 0;
   border-bottom: 1px solid var(--border-hairline);
   scroll-margin-top: calc(var(--header-height) + 20px);
+  overflow: hidden;
+}
+
+.course-open-section .container {
+  position: relative;
+  z-index: 1;
 }
 
 .course-open-section:last-of-type {
