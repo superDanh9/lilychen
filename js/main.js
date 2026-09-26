@@ -514,23 +514,23 @@
       }
     }
 
-    getVisualCenter() {
+    getContentCenter() {
       const sectionRect = this.section.getBoundingClientRect();
-      const visualEl = this.section.querySelector('.course-open-visual');
-      if (visualEl) {
-        const visRect = visualEl.getBoundingClientRect();
+      const contentEl = this.section.querySelector('.course-open-content');
+      if (contentEl) {
+        const contRect = contentEl.getBoundingClientRect();
         return {
-          cx: (visRect.left + visRect.width * 0.5) - sectionRect.left,
-          cy: (visRect.top + visRect.height * 0.5) - sectionRect.top,
-          w: visRect.width,
-          h: visRect.height
+          cx: (contRect.left + contRect.width * 0.5) - sectionRect.left,
+          cy: (contRect.top + contRect.height * 0.5) - sectionRect.top,
+          w: contRect.width,
+          h: contRect.height
         };
       }
       return {
-        cx: this.width > 992 ? this.width * 0.72 : this.width * 0.5,
+        cx: this.width > 992 ? this.width * 0.32 : this.width * 0.5,
         cy: this.height * 0.5,
-        w: this.width * 0.4,
-        h: this.height * 0.6
+        w: this.width * 0.55,
+        h: this.height * 0.7
       };
     }
 
@@ -554,8 +554,13 @@
 
       this.ctx.clearRect(0, 0, this.width, this.height);
 
-      const visual = this.getVisualCenter();
-      const baseR = Math.min(visual.w * 0.46, visual.h * 0.46, 175);
+      const targetArea = this.getContentCenter();
+      // Calculate enclosing base radius to surround the information content block
+      const baseR = Math.min(
+        Math.max(targetArea.w * 0.48, 185),
+        Math.max(targetArea.h * 0.42, 185),
+        this.width < 768 ? 165 : 255
+      );
       
       // Smooth Hermite cubic interpolation for soft disperse -> converge -> disperse transition
       const mu = this.progress * this.progress * (3 - 2 * this.progress);
@@ -580,10 +585,11 @@
           // --- SHAPE 1: HAUTE COUTURE ORBITAL INFINITY RIBBON (Mastery Knot) ---
           const u = (i / p.total) * Math.PI * 2;
           const v = i * 2.39996;
-          const rTube = baseR * 0.14;
+          const rTube = baseR * 0.15;
 
-          const x0 = baseR * Math.cos(u) * (1 + 0.32 * Math.cos(2 * u));
-          const y0 = baseR * Math.sin(2 * u) * 0.52 + baseR * 0.12 * Math.sin(3 * u);
+          // Elongated framing to wrap around the course information column
+          const x0 = baseR * 1.12 * Math.cos(u) * (1 + 0.32 * Math.cos(2 * u));
+          const y0 = (baseR * 1.05 * Math.sin(2 * u) * 0.52 + baseR * 0.12 * Math.sin(3 * u));
           const z0 = baseR * Math.sin(u) * 0.65;
 
           const xt = x0 + rTube * Math.cos(v);
@@ -610,8 +616,8 @@
           const fov = 550;
           const sProj = fov / (fov + z2);
 
-          targetX = visual.cx + x3 * sProj * breath;
-          targetY = visual.cy + y3 * sProj * breath;
+          targetX = targetArea.cx + x3 * sProj * breath;
+          targetY = targetArea.cy + y3 * sProj * breath;
 
           const depthNorm = Math.max(0, Math.min(1, (z2 + baseR) / (2 * baseR)));
           targetAlpha = 0.52 + depthNorm * 0.44;
@@ -637,25 +643,25 @@
             const u = (i / nTier1) * Math.PI * 2;
             const rPetal = baseR * (0.68 + 0.32 * Math.cos(5 * u));
             const rScat = baseR * 0.08;
-            xt = rPetal * Math.cos(u) + rScat * Math.cos(i * 2.4);
-            yt = (rPetal * Math.sin(u) + rScat * Math.sin(i * 2.4)) * 0.88;
+            xt = (rPetal * Math.cos(u) + rScat * Math.cos(i * 2.4)) * 1.10;
+            yt = (rPetal * Math.sin(u) + rScat * Math.sin(i * 2.4)) * 1.05 * 0.88;
             zt = baseR * 0.22 * Math.sin(5 * u);
           } else if (i < nTier1 + nTier2) {
             tier = 2;
             const u = ((i - nTier1) / nTier2) * Math.PI * 2;
             const rPetal = baseR * 0.52 * (0.75 + 0.25 * Math.sin(5 * u + 0.628));
-            xt = rPetal * Math.cos(u) + baseR * 0.05 * Math.cos(i * 3.1);
-            yt = (rPetal * Math.sin(u) + baseR * 0.05 * Math.sin(i * 3.1)) * 0.88;
+            xt = (rPetal * Math.cos(u) + baseR * 0.05 * Math.cos(i * 3.1)) * 1.10;
+            yt = (rPetal * Math.sin(u) + baseR * 0.05 * Math.sin(i * 3.1)) * 1.05 * 0.88;
             zt = baseR * 0.16 * Math.cos(5 * u);
           } else {
             tier = 3;
             const k = i - (nTier1 + nTier2);
             const nTier3 = nTotal - (nTier1 + nTier2);
-            const rSpir = baseR * 0.22 * Math.sqrt(k / Math.max(nTier3, 1));
+            const rSpir = baseR * 0.24 * Math.sqrt(k / Math.max(nTier3, 1));
             const theta = k * 2.39996;
-            xt = rSpir * Math.cos(theta);
-            yt = rSpir * Math.sin(theta) * 0.92;
-            zt = baseR * 0.12 * (1 - rSpir / (baseR * 0.22 + 1));
+            xt = rSpir * Math.cos(theta) * 1.10;
+            yt = rSpir * Math.sin(theta) * 1.05 * 0.92;
+            zt = baseR * 0.12 * (1 - rSpir / (baseR * 0.24 + 1));
           }
 
           const rotZ = time * 0.16;
@@ -679,8 +685,8 @@
           const fov = 520;
           const sProj = fov / (fov + z3);
 
-          targetX = visual.cx + x3 * sProj * breath;
-          targetY = visual.cy + y3 * sProj * breath;
+          targetX = targetArea.cx + x3 * sProj * breath;
+          targetY = targetArea.cy + y3 * sProj * breath;
 
           const depthNorm = Math.max(0, Math.min(1, (z3 + baseR) / (2 * baseR)));
           targetAlpha = 0.52 + depthNorm * 0.44;
