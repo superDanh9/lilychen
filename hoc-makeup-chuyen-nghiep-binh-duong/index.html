@@ -21,7 +21,7 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 
   <!-- Main Stylesheet -->
   <link rel="stylesheet" href="../css/style.css">
@@ -62,38 +62,14 @@
 <body>
 
   <!-- ========================================================
-       TOP ANNOUNCEMENT BAR
-       ======================================================== -->
-  <div class="top-bar">
-    <div class="container top-bar-inner">
-      <div class="top-bar-offer">
-        <span class="top-bar-badge">Ưu đãi tháng này</span>
-        <span>🎁 Tặng trọn bộ cọ trang điểm cao cấp &amp; <strong>Giảm 10% học phí</strong> khi đăng ký sớm</span>
-      </div>
-      <div class="top-bar-contact">
-        <a href="tel:0889979791" class="top-bar-item" title="Gọi hotline">
-          <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57a1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>
-          <span>088 997 97 91</span>
-        </a>
-        <span class="top-bar-item">
-          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
-          <span>P. Hiệp Thành, TP. Thủ Dầu Một, Bình Dương</span>
-        </span>
-      </div>
-    </div>
-  </div>
-
-    <!-- ========================================================
-       STICKY NAVIGATION HEADER
+       STICKY NAVIGATION HEADER (APPROVED MINIMALIST NAVIGATION)
        ======================================================== -->
   <header class="site-header" id="siteHeader">
     <div class="container nav-container">
       <!-- Brand Logo -->
       <a href="../index.html" class="brand-logo" title="Lily Chen Makeup Academy">
-        <div class="brand-logo-text">
-          <span class="brand-logo-name">LILY CHEN</span>
-          <span class="brand-logo-sub">MAKEUP ACADEMY</span>
-        </div>
+        <span class="logo-primary">LILY CHEN</span>
+        <span class="logo-sub">MAKEUP ACADEMY</span>
       </a>
 
       <!-- Desktop Nav Links -->
@@ -105,15 +81,15 @@
 
       <!-- Right Header Actions -->
       <div class="header-actions">
-        <a href="../index.html#dang-ky" class="btn btn-primary btn-sm header-cta-btn">
+        <a href="../index.html#dang-ky" class="btn-consult">
           <span>Đăng Ký Tư Vấn</span>
         </a>
 
         <!-- Mobile Hamburger Button -->
         <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Mở menu điều hướng" aria-expanded="false" aria-controls="mobileDrawer">
-          <span></span>
-          <span></span>
-          <span></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
         </button>
       </div>
     </div>
@@ -121,23 +97,34 @@
 
   <!-- Mobile Navigation Drawer -->
   <div class="mobile-drawer" id="mobileDrawer" aria-label="Menu di động">
-    <ul class="mobile-nav-list">
-      <li class="mobile-nav-item"><a href="../index.html#khoa-hoc" class="mobile-nav-link">Khóa Học</a></li>
-      <li class="mobile-nav-item"><a href="../portfolio.html" class="mobile-nav-link">Tác Phẩm</a></li>
-      <li class="mobile-nav-item"><a href="../blog.html" class="mobile-nav-link active">Blog</a></li>
-    </ul>
-
-    <div class="mobile-drawer-bottom">
-      <a href="../index.html#dang-ky" class="btn btn-primary btn-lg mobile-nav-link">
-        <span>Đăng Ký Tư Vấn</span>
-      </a>
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <a href="../index.html" class="brand-logo">
+          <span class="logo-primary">LILY CHEN</span>
+          <span class="logo-sub">MAKEUP ACADEMY</span>
+        </a>
+        <button type="button" class="drawer-close" id="drawerClose" aria-label="Đóng menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <ul class="mobile-nav-list">
+        <li><a href="../index.html#khoa-hoc" class="mobile-nav-link">Khóa Học</a></li>
+        <li><a href="../portfolio.html" class="mobile-nav-link">Tác Phẩm</a></li>
+        <li><a href="../blog.html" class="mobile-nav-link active">Blog</a></li>
+      </ul>
+      <div class="drawer-footer">
+        <a href="../index.html#dang-ky" class="btn btn-primary btn-block">
+          <span>Đăng Ký Tư Vấn</span>
+        </a>
+      </div>
     </div>
   </div>
 
-<!-- ========================================================
-       ARTICLE MAIN CONTENT
-       ======================================================== -->
-  <main id="mainContent" class="single-article-view">
+<main id="mainContent" class="single-article-view">
     <div class="article-container">
       
       <!-- Breadcrumb Navigation -->
@@ -259,12 +246,9 @@
       <div class="footer-grid">
         <!-- Col 1: Brand & Bio -->
         <div class="footer-col">
-          <a href="../index.html" class="footer-logo" aria-label="Trang chủ Lily Chen Academy">
-            <img src="../images/logo-lilychen.png" alt="Logo Lily Chen Academy" class="footer-logo-img" width="44" height="44" loading="lazy">
-            <div>
-              <span class="footer-logo-name">Lily Chen</span>
-              <span class="footer-logo-sub">Makeup Academy</span>
-            </div>
+                    <a href="../index.html" class="footer-logo" aria-label="Trang chủ Lily Chen Academy">
+            <span class="footer-logo-name">LILY CHEN</span>
+            <span class="footer-logo-sub">MAKEUP ACADEMY</span>
           </a>
           <p class="footer-about-text">
             Học viện đào tạo trang điểm cá nhân &amp; chuyên nghiệp chuẩn Boutique tại Thủ Dầu Một, Bình Dương. Tôn vinh nét đẹp độc bản với triết lý đào tạo thực chiến "Cầm tay chỉ việc 1 kèm 1 - Tự nhiên là đỉnh cao".

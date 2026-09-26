@@ -1,27 +1,21 @@
 /**
- * Lily Chen Makeup Academy - Interactive Logic
+ * Lily Chen Makeup Academy - Prototype Logic
  * Features:
- * 1. Rhythmic Word Reveal (Progressive Enhancement)
- * 2. 2D Canvas Particle System (Only active on Homepage Hero, with physics & power-saving)
+ * 1. Rhythmic Staggered Word Reveal
+ * 2. High-Performance 2D Canvas Particle System (Idle Drift + Proximity Inertia)
  * 3. Accessible Motion Pause/Play Toggle & prefers-reduced-motion support
- * 4. Sticky Header with Scroll Detection
- * 5. Mobile Navigation Drawer (A11y & Touch Safe)
- * 6. Smooth Anchor Scrolling with Header Offset
- * 7. Category Filter Tabs for Gallery & Blog
- * 8. FAQ Accordion Expanding Logic
- * 9. Lead Consultation Form Validation & Feedback
+ * 4. IntersectionObserver & Tab Visibility Power-Saving
+ * 5. Mobile Navigation Drawer
  */
 
 (function () {
   'use strict';
 
   // ---------------------------------------------------------------------------
-  // 1. Rhythmic Staggered Word Reveal
+  // 1. Rhythmic Word Reveal on Page Load
   // ---------------------------------------------------------------------------
   function initTextReveal() {
-    const hasRevealWords = document.querySelector('.reveal-word');
-    if (!hasRevealWords) return;
-
+    // Only animate if user hasn't requested reduced motion
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (!prefersReducedMotion) {
       document.body.classList.add('js-reveal-ready');
@@ -29,15 +23,13 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 2. 2D Canvas Particle System (Scoped strictly to Hero with #particleCanvas)
+  // 2. 2D Canvas Particle System
   // ---------------------------------------------------------------------------
   function initParticleCanvas() {
     const canvas = document.getElementById('particleCanvas');
-    const heroSection = document.getElementById('hero') || document.getElementById('heroSection');
+    const heroSection = document.getElementById('heroSection');
     const motionToggleBtn = document.getElementById('motionToggle');
     const motionLabel = document.getElementById('motionLabel');
-
-    // Only run on pages that have the particle canvas element (Homepage)
     if (!canvas || !heroSection) return;
 
     const ctx = canvas.getContext('2d');
@@ -52,27 +44,29 @@
     let isHeroVisible = true;
     let isTabVisible = true;
 
-    // Mouse & Touch Tracking State
+    // Mouse tracking state
     const mouse = {
       x: -9999,
       y: -9999,
       active: false,
-      radius: 140
+      radius: 140 // Proximity interaction distance
     };
 
-    // System reduced motion check
+    // Check system preference
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     if (prefersReduced) {
       isPaused = true;
       updateToggleButtonUI();
     }
 
+    // Determine particle count based on viewport width
     function getParticleCount(w) {
       if (w < 768) return 18;
       if (w < 1200) return 32;
       return 48;
     }
 
+    // Particle Class
     class Particle {
       constructor() {
         this.reset(true);
@@ -81,51 +75,63 @@
       reset(initial = false) {
         this.x = initial ? Math.random() * width : (Math.random() > 0.5 ? 0 : width);
         this.y = initial ? Math.random() * height : Math.random() * height;
-
+        
+        // Base subtle drift velocity (smooth background motion when idle)
         const angle = Math.random() * Math.PI * 2;
         const speed = 0.15 + Math.random() * 0.25;
         this.baseVx = Math.cos(angle) * speed;
         this.baseVy = Math.sin(angle) * speed;
 
+        // Current velocity (reacts to mouse with inertia)
         this.vx = this.baseVx;
         this.vy = this.baseVy;
 
+        // Size & Color
         this.radius = 1.4 + Math.random() * 1.5;
         this.isRose = Math.random() > 0.38;
         this.alpha = 0.25 + Math.random() * 0.25;
 
+        // Subtle sinusoidal wobble
         this.phase = Math.random() * Math.PI * 2;
         this.phaseSpeed = 0.012 + Math.random() * 0.018;
       }
 
       update() {
+        // Natural ambient drift & oscillation
         this.phase += this.phaseSpeed;
         const wobbleX = Math.cos(this.phase) * 0.15;
         const wobbleY = Math.sin(this.phase) * 0.15;
 
+        // Cursor proximity physics (smooth repulsion + inertia)
         if (mouse.active) {
           const dx = this.x - mouse.x;
           const dy = this.y - mouse.y;
           const dist = Math.hypot(dx, dy);
 
           if (dist < mouse.radius && dist > 1) {
+            // Normalized direction away from mouse
             const nx = dx / dist;
             const ny = dy / dist;
+            // Eased force: stronger when closer, soft drop-off
             const force = (1 - dist / mouse.radius) * 0.75;
             this.vx += nx * force * 1.1;
             this.vy += ny * force * 1.1;
           }
         }
 
+        // Apply velocity with damping (friction for smooth return to idle)
         this.vx *= 0.94;
         this.vy *= 0.94;
 
+        // Smooth spring-back to ambient base drift
         this.vx += (this.baseVx - this.vx) * 0.025;
         this.vy += (this.baseVy - this.vy) * 0.025;
 
+        // Integrate position
         this.x += this.vx + wobbleX;
         this.y += this.vy + wobbleY;
 
+        // Screen wrap-around with padding
         const pad = 20;
         if (this.x < -pad) this.x = width + pad;
         else if (this.x > width + pad) this.x = -pad;
@@ -145,6 +151,7 @@
       }
     }
 
+    // Resize canvas respecting devicePixelRatio
     function resize() {
       const rect = heroSection.getBoundingClientRect();
       width = rect.width;
@@ -158,17 +165,20 @@
 
       ctx.scale(dpr, dpr);
 
+      // Re-populate particles based on screen size
       const targetCount = getParticleCount(width);
       particles = [];
       for (let i = 0; i < targetCount; i++) {
         particles.push(new Particle());
       }
 
+      // Draw single frame if paused
       if (isPaused) {
         drawFrame();
       }
     }
 
+    // Draw connecting filaments between close particles (delicate constellation aura)
     function drawConnections() {
       const maxDist = 85;
       const count = particles.length;
@@ -192,6 +202,7 @@
       }
     }
 
+    // Main animation loop
     function loop() {
       if (isPaused || !isHeroVisible || !isTabVisible) {
         animationFrameId = null;
@@ -200,12 +211,15 @@
 
       ctx.clearRect(0, 0, width, height);
 
+      // Update & render particles
       for (let i = 0; i < particles.length; i++) {
         particles[i].update();
         particles[i].draw();
       }
 
+      // Render subtle connections
       drawConnections();
+
       animationFrameId = requestAnimationFrame(loop);
     }
 
@@ -230,7 +244,7 @@
       }
     }
 
-    // Passive Mouse Interaction
+    // Mouse & Touch Tracking (Non-blocking: passive listeners on window)
     window.addEventListener('mousemove', e => {
       const rect = heroSection.getBoundingClientRect();
       const inHero = (
@@ -253,7 +267,7 @@
       mouse.active = false;
     });
 
-    // Passive Touch Interaction
+    // Touch support for mobile interaction
     window.addEventListener('touchmove', e => {
       if (e.touches && e.touches[0]) {
         const touch = e.touches[0];
@@ -279,6 +293,7 @@
       mouse.active = false;
     }, { passive: true });
 
+    // UI state updater for motion pause/play toggle
     function updateToggleButtonUI() {
       if (!motionToggleBtn) return;
       motionToggleBtn.setAttribute('aria-pressed', String(isPaused));
@@ -311,7 +326,7 @@
       });
     }
 
-    // IntersectionObserver: Pause when hero is not visible
+    // IntersectionObserver: Pause when hero is scrolled out of view
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         isHeroVisible = entry.isIntersecting;
@@ -325,7 +340,7 @@
 
     observer.observe(heroSection);
 
-    // Tab visibility handling: Pause when tab is inactive
+    // Tab visibility handling: Pause when browser tab is inactive
     document.addEventListener('visibilitychange', () => {
       isTabVisible = !document.hidden;
       if (isTabVisible) {
@@ -335,7 +350,7 @@
       }
     });
 
-    // Resize listener with debounce
+    // Handle resize
     let resizeTimer = null;
     window.addEventListener('resize', () => {
       clearTimeout(resizeTimer);
@@ -354,19 +369,17 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 3. Header Scroll Effect
+  // 3. Header Scroll Shadow & Sticky Styling
   // ---------------------------------------------------------------------------
   function initHeaderScroll() {
-    const header = document.getElementById('siteHeader') || document.querySelector('.site-header');
+    const header = document.getElementById('siteHeader');
     if (!header) return;
 
     function handleScroll() {
       if (window.scrollY > 24) {
         header.classList.add('is-scrolled');
-        header.classList.add('scrolled');
       } else {
         header.classList.remove('is-scrolled');
-        header.classList.remove('scrolled');
       }
     }
 
@@ -386,8 +399,6 @@
 
     function openDrawer() {
       drawer.classList.add('is-open');
-      drawer.classList.add('open');
-      toggleBtn.classList.add('active');
       toggleBtn.setAttribute('aria-expanded', 'true');
       document.body.style.overflow = 'hidden';
       if (closeBtn) closeBtn.focus();
@@ -395,15 +406,13 @@
 
     function closeDrawer() {
       drawer.classList.remove('is-open');
-      drawer.classList.remove('open');
-      toggleBtn.classList.remove('active');
       toggleBtn.setAttribute('aria-expanded', 'false');
       document.body.style.overflow = '';
       toggleBtn.focus();
     }
 
     toggleBtn.addEventListener('click', () => {
-      const isOpen = drawer.classList.contains('is-open') || drawer.classList.contains('open');
+      const isOpen = drawer.classList.contains('is-open');
       if (isOpen) closeDrawer();
       else openDrawer();
     });
@@ -411,194 +420,37 @@
     if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
     if (backdrop) backdrop.addEventListener('click', closeDrawer);
 
+    // Close on Escape key
     window.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && (drawer.classList.contains('is-open') || drawer.classList.contains('open'))) {
+      if (e.key === 'Escape' && drawer.classList.contains('is-open')) {
         closeDrawer();
       }
     });
 
+    // Close drawer when any link inside is clicked
     const drawerLinks = drawer.querySelectorAll('a');
     drawerLinks.forEach(link => {
-      link.addEventListener('click', closeDrawer);
-    });
-  }
-
-  // ---------------------------------------------------------------------------
-  // 5. Smooth Anchor Scrolling with Header Offset
-  // ---------------------------------------------------------------------------
-  function initSmoothScroll() {
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function (e) {
-        const href = this.getAttribute('href');
-        if (href && href !== '#' && href.startsWith('#')) {
-          const target = document.querySelector(href);
-          if (target) {
-            e.preventDefault();
-            const headerOffset = 80;
-            const elementPosition = target.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-            window.scrollTo({
-              top: offsetPosition,
-              behavior: 'smooth'
-            });
-          }
-        }
-      });
-    });
-
-    if (window.location.hash) {
-      const hashTarget = document.querySelector(window.location.hash);
-      if (hashTarget) {
-        setTimeout(() => {
-          const headerOffset = 80;
-          const elementPosition = hashTarget.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-          window.scrollTo({
-            top: offsetPosition,
-            behavior: 'smooth'
-          });
-        }, 150);
-      }
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // 6. Interactive Category Filter Tabs (Gallery & Blog)
-  // ---------------------------------------------------------------------------
-  function initFilters() {
-    const filterContainers = document.querySelectorAll('.gallery-filters');
-    filterContainers.forEach(container => {
-      const buttons = container.querySelectorAll('.gallery-filter-btn');
-      buttons.forEach(btn => {
-        btn.addEventListener('click', () => {
-          const filter = btn.getAttribute('data-filter');
-          if (!filter) return;
-
-          buttons.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-
-          const targetItems = document.querySelectorAll('.gallery-item, .blog-card');
-          targetItems.forEach(item => {
-            const category = item.getAttribute('data-category');
-            if (!category) return;
-            if (filter === 'all' || category === filter) {
-              item.style.display = '';
-              setTimeout(() => {
-                item.style.opacity = '1';
-                item.style.transform = 'scale(1)';
-              }, 10);
-            } else {
-              item.style.opacity = '0';
-              item.style.transform = 'scale(0.96)';
-              setTimeout(() => {
-                item.style.display = 'none';
-              }, 250);
-            }
-          });
-        });
+      link.addEventListener('click', () => {
+        closeDrawer();
       });
     });
   }
 
   // ---------------------------------------------------------------------------
-  // 7. FAQ Accordion Logic
+  // 5. Initialize All Components
   // ---------------------------------------------------------------------------
-  function initFaq() {
-    const faqItems = document.querySelectorAll('.faq-item');
-    faqItems.forEach(item => {
-      const questionBtn = item.querySelector('.faq-question');
-      const answer = item.querySelector('.faq-answer');
-
-      if (questionBtn && answer) {
-        questionBtn.addEventListener('click', () => {
-          const isActive = item.classList.contains('active');
-
-          faqItems.forEach(otherItem => {
-            if (otherItem !== item && otherItem.classList.contains('active')) {
-              otherItem.classList.remove('active');
-              const otherBtn = otherItem.querySelector('.faq-question');
-              const otherAns = otherItem.querySelector('.faq-answer');
-              if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
-              if (otherAns) otherAns.style.maxHeight = null;
-            }
-          });
-
-          if (isActive) {
-            item.classList.remove('active');
-            questionBtn.setAttribute('aria-expanded', 'false');
-            answer.style.maxHeight = null;
-          } else {
-            item.classList.add('active');
-            questionBtn.setAttribute('aria-expanded', 'true');
-            answer.style.maxHeight = answer.scrollHeight + 30 + 'px';
-          }
-        });
-      }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      initTextReveal();
+      initParticleCanvas();
+      initHeaderScroll();
+      initMobileDrawer();
     });
-  }
-
-  // ---------------------------------------------------------------------------
-  // 8. Lead Consultation Form Validation & Feedback
-  // ---------------------------------------------------------------------------
-  function initLeadForm() {
-    const leadForm = document.getElementById('leadForm');
-    const formSuccessMsg = document.getElementById('formSuccessMsg');
-    const successUserName = document.getElementById('successUserName');
-    const successUserPhone = document.getElementById('successUserPhone');
-
-    if (leadForm && formSuccessMsg) {
-      leadForm.addEventListener('submit', e => {
-        e.preventDefault();
-
-        const nameInput = document.getElementById('leadName');
-        const phoneInput = document.getElementById('leadPhone');
-
-        const nameVal = nameInput ? nameInput.value.trim() : '';
-        const phoneVal = phoneInput ? phoneInput.value.trim() : '';
-
-        if (!nameVal) {
-          alert('Vui lòng nhập Họ và tên của bạn.');
-          nameInput?.focus();
-          return;
-        }
-
-        const phoneRegex = /^(0|\+84)[3|5|7|8|9][0-9]{8}$/;
-        const cleanedPhone = phoneVal.replace(/[\s.-]/g, '');
-        if (!cleanedPhone || !phoneRegex.test(cleanedPhone)) {
-          alert('Vui lòng nhập số điện thoại hợp lệ (10 số, ví dụ: 0987654321) để Lily Chen có thể liên hệ.');
-          phoneInput?.focus();
-          return;
-        }
-
-        if (successUserName) successUserName.textContent = nameVal;
-        if (successUserPhone) successUserPhone.textContent = phoneVal;
-
-        formSuccessMsg.style.display = 'block';
-        leadForm.reset();
-
-        formSuccessMsg.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      });
-    }
-  }
-
-  // ---------------------------------------------------------------------------
-  // 9. Bootstrap All Features on Load
-  // ---------------------------------------------------------------------------
-  function initApp() {
+  } else {
     initTextReveal();
     initParticleCanvas();
     initHeaderScroll();
     initMobileDrawer();
-    initSmoothScroll();
-    initFilters();
-    initFaq();
-    initLeadForm();
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initApp);
-  } else {
-    initApp();
-  }
 })();

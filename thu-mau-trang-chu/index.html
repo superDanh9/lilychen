@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Bản Thử Thiết Kế Mới (Prototype) | Lily Chen Makeup Academy</title>
+  <meta name="description" content="Bản thử nghiệm ý tưởng thiết kế lột xác cho Lily Chen Makeup Academy: phong cách tinh gọn, chuyển động hạt tự nhiên, typography sắc nét và ảnh tác phẩm thật.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../images/logo-lilychen.png">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Playfair Display with full Vietnamese glyphs -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Dedicated Prototype Stylesheet -->
+  <link rel="stylesheet" href="prototype.css">
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP BANNER: PROTOTYPE NOTICE
+       ======================================================== -->
+  <div class="prototype-banner" role="status">
+    <div class="proto-container proto-banner-content">
+      <span class="proto-tag">Bản thử nghiệm giao diện (Prototype)</span>
+      <span class="proto-text">Khám phá ý tưởng thiết kế mới: chuyển động hạt tương tác, nhịp chữ &amp; không gian thoáng</span>
+      <a href="../index.html" class="proto-link">Quay lại trang chính &rarr;</a>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       HEADER NAVIGATION
+       ======================================================== -->
+  <header class="proto-header" id="siteHeader">
+    <div class="proto-container nav-row">
+      <!-- Text Logo -->
+      <a href="../index.html" class="brand-logo" title="Lily Chen Makeup Academy - Về trang chủ">
+        <span class="logo-primary">LILY CHEN</span>
+        <span class="logo-sub">MAKEUP ACADEMY</span>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="desktop-nav" aria-label="Menu chính">
+        <a href="../index.html#khoa-hoc" class="nav-item">Khóa Học</a>
+        <a href="../portfolio.html" class="nav-item">Tác Phẩm</a>
+        <a href="../blog.html" class="nav-item">Blog</a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="nav-actions">
+        <a href="../index.html#dang-ky" class="btn-consult">
+          <span>Đăng Ký Tư Vấn</span>
+        </a>
+
+        <!-- Mobile Hamburger Button -->
+        <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Mở menu điều hướng di động" aria-expanded="false" aria-controls="mobileDrawer">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Navigation Drawer -->
+  <div class="mobile-drawer" id="mobileDrawer" aria-label="Menu điều hướng di động">
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <div class="brand-logo">
+          <span class="logo-primary">LILY CHEN</span>
+          <span class="logo-sub">MAKEUP ACADEMY</span>
+        </div>
+        <button type="button" class="drawer-close" id="drawerClose" aria-label="Đóng menu">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <ul class="mobile-nav-list">
+        <li><a href="../index.html#khoa-hoc" class="mobile-nav-link">Khóa Học</a></li>
+        <li><a href="../portfolio.html" class="mobile-nav-link">Tác Phẩm</a></li>
+        <li><a href="../blog.html" class="mobile-nav-link">Blog</a></li>
+      </ul>
+
+      <div class="drawer-footer">
+        <a href="../index.html#dang-ky" class="btn-consult btn-block">
+          <span>Đăng Ký Tư Vấn Ngay</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       HERO SECTION
+       ======================================================== -->
+  <main id="mainContent">
+    <section class="proto-hero" id="heroSection">
+      <!-- 2D Canvas Particle System -->
+      <canvas id="particleCanvas" class="particle-canvas" aria-hidden="true"></canvas>
+
+      <div class="proto-container hero-inner">
+        <!-- Location / Origin Tag -->
+        <div class="hero-location" aria-label="Địa chỉ học viện">
+          <span class="location-pulse" aria-hidden="true"></span>
+          <span class="location-text">Thủ Dầu Một, Bình Dương</span>
+        </div>
+
+        <!-- Main Headline with Rhythmic Word Stagger -->
+        <h1 class="hero-title" aria-label="Đào Tạo Makeup Chuyên Nghiệp &amp; Cá Nhân">
+          <span class="title-line title-line-1">
+            <span class="reveal-word" style="--i: 0;">Đào</span>
+            <span class="reveal-word" style="--i: 1;">Tạo</span>
+            <span class="reveal-word" style="--i: 2;">Makeup</span>
+          </span>
+          <span class="title-line title-line-2">
+            <span class="reveal-word text-gradient-rose" style="--i: 3;">Chuyên&nbsp;Nghiệp</span>
+            <span class="reveal-word text-amp" style="--i: 4;">&amp;</span>
+            <span class="reveal-word" style="--i: 5;">Cá&nbsp;Nhân</span>
+          </span>
+        </h1>
+
+        <!-- Primary Action Links -->
+        <div class="hero-actions" style="--i: 6;">
+          <a href="../index.html#khoa-hoc" class="btn-hero-primary" id="btnExploreCourses">
+            <span>Xem Khóa Học</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="../portfolio.html" class="btn-hero-secondary" id="btnViewPortfolio">
+            <span>Xem Tác Phẩm</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"></path></svg>
+          </a>
+        </div>
+
+        <!-- Subtle Motion Control (Accessible Toggle) -->
+        <div class="hero-motion-dock">
+          <button type="button" id="motionToggle" class="motion-toggle-btn" aria-label="Tạm dừng hiệu ứng hạt chuyển động" aria-pressed="false" title="Nhấn để tạm dừng / tiếp tục chuyển động hạt nền">
+            <span class="motion-icon" aria-hidden="true">
+              <svg class="icon-pause" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16" rx="1"></rect><rect x="14" y="4" width="4" height="16" rx="1"></rect></svg>
+              <svg class="icon-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+            </span>
+            <span class="motion-label" id="motionLabel">Chuyển động: Bật</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         TRANSITION SECTION (REAL PHOTO SHOWCASE)
+         Demonstrating how the Hero flows into real authentic work
+         ======================================================== -->
+    <section class="proto-transition" id="transitionSection">
+      <div class="proto-container">
+        <!-- Transition Section Header -->
+        <div class="transition-header">
+          <div class="transition-meta">
+            <span class="section-kicker">Bộ Sưu Tập Tác Phẩm Thực Tế</span>
+            <h2 class="transition-title">Kỹ Thuật Nền Mỏng Trong Veo &amp; Layout Tự Nhiên</h2>
+          </div>
+          <div class="transition-aside">
+            <a href="../portfolio.html" class="transition-link">
+              <span>Xem tất cả 12 tác phẩm</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Clean Real Photos Mosaic (Zero text overlay, true makeup colors) -->
+        <div class="photo-mosaic" role="region" aria-label="Ảnh tác phẩm tiêu biểu của học viên">
+          <!-- Photo 1: Cô dâu cam đào -->
+          <article class="photo-card" data-category="codau">
+            <img src="../images/tacpham6.webp" alt="Tác phẩm makeup cô dâu tone cam đào trong trẻo của học viên Lily Chen" class="photo-asset" loading="lazy">
+          </article>
+
+          <!-- Photo 2: Dạ tiệc nâu tây -->
+          <article class="photo-card" data-category="tiec">
+            <img src="../images/tacpham7.webp" alt="Tác phẩm trang điểm dạ tiệc tone nâu tây sang trọng của học viên Lily Chen" class="photo-asset" loading="lazy">
+          </article>
+
+          <!-- Photo 3: Douyin thanh thuần -->
+          <article class="photo-card" data-category="douyin">
+            <img src="../images/IMG_1644.webp" alt="Layout trang điểm phong cách Douyin nhẹ nhàng thanh thuần bọng mắt tự nhiên" class="photo-asset" loading="lazy">
+          </article>
+
+          <!-- Photo 4: Cô dâu áo dài đỏ truyền thống -->
+          <article class="photo-card" data-category="codau">
+            <img src="../images/IMG_1680.webp" alt="Layout cô dâu truyền thống áo dài đỏ ngày vu quy bài thi tốt nghiệp" class="photo-asset" loading="lazy">
+          </article>
+
+          <!-- Photo 5: Glamour hiện đại -->
+          <article class="photo-card" data-category="codau">
+            <img src="../images/IMG_1683.webp" alt="Layout makeup cô dâu phong cách Glamour hiện đại quý phái" class="photo-asset" loading="lazy">
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================
+       MINIMAL PROTOTYPE FOOTER
+       ======================================================== -->
+  <footer class="proto-footer">
+    <div class="proto-container footer-row">
+      <div class="footer-brand">
+        <span class="footer-name">Lily Chen Makeup Academy</span>
+        <span class="footer-sub">Học viện trang điểm chuyên nghiệp &amp; cá nhân Thủ Dầu Một, Bình Dương</span>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html">Trang Chủ Chính</a>
+        <span class="dot-sep">&bull;</span>
+        <a href="../portfolio.html">Tác Phẩm</a>
+        <span class="dot-sep">&bull;</span>
+        <a href="../blog.html">Blog</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Dedicated Prototype Logic -->
+  <script src="prototype.js"></script>
+</body>
+</html>

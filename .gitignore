@@ -13,3 +13,5 @@ Thumbs.db
 # Internal reports & documentation
 TIEN_DO_CHUYEN_BAI_VIET.md
 scratch/
+node_modules/
+

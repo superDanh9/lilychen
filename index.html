@@ -33,12 +33,10 @@
   <link rel="icon" type="image/png" href="images/logo-lilychen.png">
   <link rel="apple-touch-icon" href="images/logo-lilychen.png">
 
-  <!-- Performance: Preconnect & Preload Fonts & Hero Image for Fast LCP -->
+  <!-- Performance: Preconnect & Preload Fonts for Fast LCP -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap">
-  <link rel="preload" as="image" href="images/hoc-makeup-binh-duong-lilychen-hero.webp" fetchpriority="high">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/style.css">
@@ -91,38 +89,14 @@
 <body>
 
   <!-- ========================================================
-       TOP ANNOUNCEMENT BAR
-       ======================================================== -->
-  <div class="top-bar">
-    <div class="container top-bar-inner">
-      <div class="top-bar-offer">
-        <span class="top-bar-badge">Ưu đãi tháng này</span>
-        <span>🎁 Tặng trọn bộ cọ trang điểm cao cấp &amp; <strong>Giảm 10% học phí</strong> khi đăng ký sớm</span>
-      </div>
-      <div class="top-bar-contact">
-        <a href="tel:0889979791" class="top-bar-item" title="Gọi hotline">
-          <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57a1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>
-          <span>088 997 97 91</span>
-        </a>
-        <span class="top-bar-item">
-          <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/></svg>
-          <span>P. Hiệp Thành, TP. Thủ Dầu Một, Bình Dương</span>
-        </span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========================================================
-       STICKY NAVIGATION HEADER
+       STICKY NAVIGATION HEADER (APPROVED MINIMALIST NAVIGATION)
        ======================================================== -->
   <header class="site-header" id="siteHeader">
     <div class="container nav-container">
       <!-- Brand Logo -->
       <a href="index.html" class="brand-logo" title="Lily Chen Makeup Academy">
-        <div class="brand-logo-text">
-          <span class="brand-logo-name">LILY CHEN</span>
-          <span class="brand-logo-sub">MAKEUP ACADEMY</span>
-        </div>
+        <span class="logo-primary">LILY CHEN</span>
+        <span class="logo-sub">MAKEUP ACADEMY</span>
       </a>
 
       <!-- Desktop Nav Links -->
@@ -134,15 +108,15 @@
 
       <!-- Right Header Actions -->
       <div class="header-actions">
-        <a href="#dang-ky" class="btn btn-primary btn-sm header-cta-btn">
+        <a href="#dang-ky" class="btn-consult">
           <span>Đăng Ký Tư Vấn</span>
         </a>
 
         <!-- Mobile Hamburger Button -->
         <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Mở menu điều hướng" aria-expanded="false" aria-controls="mobileDrawer">
-          <span></span>
-          <span></span>
-          <span></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
         </button>
       </div>
     </div>
@@ -150,61 +124,132 @@
 
   <!-- Mobile Navigation Drawer -->
   <div class="mobile-drawer" id="mobileDrawer" aria-label="Menu di động">
-    <ul class="mobile-nav-list">
-      <li class="mobile-nav-item"><a href="#khoa-hoc" class="mobile-nav-link">Khóa Học</a></li>
-      <li class="mobile-nav-item"><a href="portfolio.html" class="mobile-nav-link">Tác Phẩm</a></li>
-      <li class="mobile-nav-item"><a href="blog.html" class="mobile-nav-link">Blog</a></li>
-    </ul>
-
-    <div class="mobile-drawer-bottom">
-      <a href="#dang-ky" class="btn btn-primary btn-lg mobile-nav-link">
-        <span>Đăng Ký Tư Vấn</span>
-      </a>
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <a href="index.html" class="brand-logo">
+          <span class="logo-primary">LILY CHEN</span>
+          <span class="logo-sub">MAKEUP ACADEMY</span>
+        </a>
+        <button type="button" class="drawer-close" id="drawerClose" aria-label="Đóng menu">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <ul class="mobile-nav-list">
+        <li><a href="#khoa-hoc" class="mobile-nav-link">Khóa Học</a></li>
+        <li><a href="portfolio.html" class="mobile-nav-link">Tác Phẩm</a></li>
+        <li><a href="blog.html" class="mobile-nav-link">Blog</a></li>
+      </ul>
+      <div class="drawer-footer">
+        <a href="#dang-ky" class="btn btn-primary btn-block">
+          <span>Đăng Ký Tư Vấn</span>
+        </a>
+      </div>
     </div>
   </div>
 
   <!-- ========================================================
-       SECTION 3: HERO SECTION (FIRST FOLD - CONVERSION ENGINE)
+       SECTION: HERO WITH AMBIENT 2D CANVAS & RHYTHMIC REVEAL
        ======================================================== -->
   <main id="mainContent">
-    <section class="hero-section" id="hero">
-      <div class="hero-glow-1"></div>
-      <div class="hero-glow-2"></div>
+    <section class="hero-section proto-hero" id="hero">
+      <!-- Fullscreen 2D Canvas Particle Field -->
+      <canvas id="particleCanvas" class="particle-canvas" aria-hidden="true"></canvas>
 
+      <div class="container hero-inner">
+        <!-- Location Eyebrow -->
+        <div class="hero-location">
+          <span class="location-pulse" aria-hidden="true"></span>
+          <span class="location-text">Thủ Dầu Một · Bình Dương</span>
+        </div>
+
+        <!-- Headline with Rhythmic Word Reveal -->
+        <h1 class="hero-title" id="heroTitle">
+          <span class="title-line title-line-1">
+            <span class="reveal-word" style="--i: 0;">Đào</span>
+            <span class="reveal-word" style="--i: 1;">tạo</span>
+            <span class="reveal-word" style="--i: 2;">Makeup</span>
+            <span class="reveal-word" style="--i: 3;">Chuyên</span>
+            <span class="reveal-word" style="--i: 4;">nghiệp</span>
+          </span>
+          <span class="title-line title-line-2">
+            <span class="reveal-word text-amp" style="--i: 5;">&amp;</span>
+            <span class="reveal-word text-gradient-rose" style="--i: 6;">Cá</span>
+            <span class="reveal-word text-gradient-rose" style="--i: 7;">nhân</span>
+          </span>
+        </h1>
+
+        <!-- Direct Actions -->
+        <div class="hero-actions">
+          <a href="#khoa-hoc" class="btn-hero-primary" id="heroCtaPrimary">
+            <span>Xem khóa học</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="portfolio.html" class="btn-hero-secondary" id="heroCtaSecondary">
+            <span>Xem tác phẩm</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 17l9.2-9.2M17 17V7H7"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Accessible Motion Pause/Play Toggle Button -->
+        <div class="hero-motion-dock">
+          <button type="button" class="motion-toggle-btn" id="motionToggle" aria-pressed="false" aria-label="Tạm dừng hiệu ứng hạt chuyển động">
+            <span class="motion-icon" aria-hidden="true">
+              <svg class="icon-pause" width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <rect x="6" y="4" width="4" height="16" rx="1.5"/>
+                <rect x="14" y="4" width="4" height="16" rx="1.5"/>
+              </svg>
+              <svg class="icon-play" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="display: none;">
+                <polygon points="6,4 20,12 6,20"/>
+              </svg>
+            </span>
+            <span class="motion-label" id="motionLabel">Chuyển động: Bật</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION: REAL PHOTO SHOWCASE MOSAIC (CLEAN REAL PHOTOS)
+         ======================================================== -->
+    <section class="proto-transition">
       <div class="container">
-        <div class="hero-grid">
-          <!-- Left Column: Clear Focus Title & Direct Actions -->
-          <div class="hero-content">
-            <h1 class="hero-title">
-              Đào Tạo Makeup Chuyên Nghiệp &amp; Cá Nhân
-              <span class="hero-location">Thủ Dầu Một, Bình Dương</span>
-            </h1>
-
-            <div class="hero-cta-group">
-              <a href="#khoa-hoc" class="btn btn-primary btn-lg" id="heroCtaPrimary">
-                <span>Xem khóa học</span>
-              </a>
-              <a href="portfolio.html" class="btn btn-secondary btn-lg" id="heroCtaSecondary">
-                <span>Xem tác phẩm</span>
-              </a>
-            </div>
+        <div class="transition-header">
+          <div>
+            <span class="section-kicker">Tác phẩm thực tế 100%</span>
+            <h2 class="transition-title">Vẻ Đẹp Độc Bản Qua Từng Nét Cọ</h2>
           </div>
+          <a href="portfolio.html" class="transition-link">
+            <span>Khám phá bộ sưu tập tác phẩm</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </div>
 
-          <!-- Right Column: Real Photo Showcase -->
-          <div class="hero-visual">
-            <div class="hero-image-wrapper">
-              <picture>
-                <source media="(max-width: 768px)" srcset="images/hoc-makeup-binh-duong-lilychen-hero-mb.webp">
-                <img 
-                  src="images/hoc-makeup-binh-duong-lilychen-hero.webp" 
-                  alt="Lớp học makeup chuyên nghiệp và thực hành tại Lily Chen Makeup Academy Bình Dương" 
-                  class="hero-main-img" 
-                  width="470" 
-                  height="520"
-                  fetchpriority="high"
-                >
-              </picture>
-            </div>
+        <!-- Clean Photos Mosaic: Zero Text on Photos -->
+        <div class="photo-mosaic">
+          <div class="photo-card">
+            <img src="images/tacpham6.webp" alt="Tác phẩm makeup cô dâu tone cam đào trong trẻo của học viên Lily Chen" class="photo-asset" loading="lazy">
+          </div>
+          <div class="photo-card">
+            <img src="images/IMG_1644.webp" alt="Layout makeup Douyin bọng mắt tự nhiên" class="photo-asset" loading="lazy">
+          </div>
+          <div class="photo-card">
+            <img src="images/IMG_1680.webp" alt="Layout cô dâu phong cách truyền thống sang trọng" class="photo-asset" loading="lazy">
+          </div>
+          <div class="photo-card">
+            <img src="images/tacpham7.webp" alt="Tác phẩm trang điểm dự tiệc thanh lịch" class="photo-asset" loading="lazy">
+          </div>
+          <div class="photo-card">
+            <img src="images/IMG_1646.webp" alt="Layout makeup cá nhân tự nhiên 10 phút" class="photo-asset" loading="lazy">
           </div>
         </div>
       </div>
@@ -214,7 +259,6 @@
          SECTION 5: KHÓA HỌC TUYỂN SINH & BẢNG GIÁ NEO
          ======================================================== -->
     <section class="section-padding courses-section" id="khoa-hoc">
-      <div class="courses-glow"></div>
       <div class="container">
         <!-- Section Header -->
         <div class="section-header">
@@ -867,12 +911,9 @@
       <div class="footer-grid">
         <!-- Col 1: Brand & Bio -->
         <div class="footer-col">
-          <a href="#" class="footer-logo" aria-label="Trang chủ Lily Chen Academy">
-            <img src="images/logo-lilychen.png" alt="Logo Lily Chen Academy" class="footer-logo-img" width="44" height="44" loading="lazy">
-            <div>
-              <span class="footer-logo-name">Lily Chen</span>
-              <span class="footer-logo-sub">Makeup Academy</span>
-            </div>
+          <a href="index.html" class="footer-logo" aria-label="Trang chủ Lily Chen Academy">
+            <span class="footer-logo-name">LILY CHEN</span>
+            <span class="footer-logo-sub">MAKEUP ACADEMY</span>
           </a>
           <p class="footer-about-text">
             Học viện đào tạo trang điểm cá nhân &amp; chuyên nghiệp chuẩn Boutique tại Thủ Dầu Một, Bình Dương. Tôn vinh nét đẹp độc bản với triết lý đào tạo thực chiến "Cầm tay chỉ việc 1 kèm 1 - Tự nhiên là đỉnh cao".
