@@ -373,9 +373,9 @@
     }
 
     getParticleCount(w) {
-      if (w < 768) return 85;
-      if (w < 1200) return 155;
-      return 220;
+      if (w < 768) return 40;
+      if (w < 1200) return 75;
+      return 115;
     }
 
     createParticles() {
@@ -404,7 +404,7 @@
           pulseSpeed: 1.5 + Math.random() * 1.0,
           turbX: (Math.random() - 0.5) * 2,
           turbY: (Math.random() - 0.5) * 2,
-          baseRadius: 2.2 + Math.random() * 1.6,
+          baseRadius: 1.6 + Math.random() * 1.1,
           colorShift: Math.random()
         });
       }
@@ -509,7 +509,7 @@
         const p = this.particles[i];
         this.ctx.beginPath();
         this.ctx.arc(p.originX, p.originY, p.baseRadius, 0, Math.PI * 2);
-        this.ctx.fillStyle = 'rgba(195, 142, 126, 0.45)';
+        this.ctx.fillStyle = 'rgba(195, 142, 126, 0.18)';
         this.ctx.fill();
       }
     }
@@ -517,20 +517,38 @@
     getContentCenter() {
       const sectionRect = this.section.getBoundingClientRect();
       const contentEl = this.section.querySelector('.course-open-content');
+      const pricingEl = this.section.querySelector('.course-open-pricing');
+      let pricingBox = null;
+      if (pricingEl) {
+        const pRect = pricingEl.getBoundingClientRect();
+        pricingBox = {
+          left: pRect.left - sectionRect.left,
+          right: pRect.right - sectionRect.left,
+          top: pRect.top - sectionRect.top,
+          bottom: pRect.bottom - sectionRect.top
+        };
+      }
       if (contentEl) {
         const contRect = contentEl.getBoundingClientRect();
         return {
           cx: (contRect.left + contRect.width * 0.5) - sectionRect.left,
           cy: (contRect.top + contRect.height * 0.5) - sectionRect.top,
           w: contRect.width,
-          h: contRect.height
+          h: contRect.height,
+          left: contRect.left - sectionRect.left,
+          right: contRect.right - sectionRect.left,
+          top: contRect.top - sectionRect.top,
+          bottom: contRect.bottom - sectionRect.top,
+          pricingBox: pricingBox
         };
       }
       return {
         cx: this.width > 992 ? this.width * 0.32 : this.width * 0.5,
         cy: this.height * 0.5,
         w: this.width * 0.55,
-        h: this.height * 0.7
+        h: this.height * 0.7,
+        left: 0, right: 0, top: 0, bottom: 0,
+        pricingBox: null
       };
     }
 
@@ -541,7 +559,7 @@
       }
 
       this.lastTime = now;
-      this.time += 0.018;
+      this.time += 0.016;
       const time = this.time;
 
       if (this.targetProgress > this.progress) {
@@ -564,16 +582,16 @@
       
       // Smooth Hermite cubic interpolation for soft disperse -> converge -> disperse transition
       const mu = this.progress * this.progress * (3 - 2 * this.progress);
-      const turbAmp = Math.sin(mu * Math.PI) * 26; // Stardust burst dispersion during transition
+      const turbAmp = Math.sin(mu * Math.PI) * 22; // Stardust burst dispersion during transition
 
       for (let i = 0; i < this.particles.length; i++) {
         const p = this.particles[i];
 
-        // 1. Living Ambient Floating Position around anchor
-        const ambX = p.originX + Math.cos(time * p.speedOffset + p.phase) * 15;
-        const ambY = p.originY + Math.sin(time * p.speedOffset + p.phase) * 15;
-        const ambAlpha = 0.35 + Math.sin(time * 1.3 + p.phase) * 0.12;
-        const ambRadius = p.baseRadius * (1 + Math.sin(time * p.pulseSpeed + p.phase) * 0.2);
+        // 1. Living Ambient Floating Position around anchor (subtle background glow)
+        const ambX = p.originX + Math.cos(time * p.speedOffset + p.phase) * 12;
+        const ambY = p.originY + Math.sin(time * p.speedOffset + p.phase) * 12;
+        const ambAlpha = 0.12 + Math.sin(time * 1.3 + p.phase) * 0.05;
+        const ambRadius = p.baseRadius * (1 + Math.sin(time * p.pulseSpeed + p.phase) * 0.15);
 
         let targetX = ambX;
         let targetY = ambY;
@@ -620,8 +638,8 @@
           targetY = targetArea.cy + y3 * sProj * breath;
 
           const depthNorm = Math.max(0, Math.min(1, (z2 + baseR) / (2 * baseR)));
-          targetAlpha = 0.52 + depthNorm * 0.44;
-          pRadius = 2.8 + depthNorm * 2.2;
+          targetAlpha = 0.18 + depthNorm * 0.18;
+          pRadius = 1.8 + depthNorm * 1.3;
 
           if (p.colorShift > 0.4) {
             rCol = 224; gCol = 82; bCol = 126; // Vibrant Couture Rose
@@ -689,8 +707,8 @@
           targetY = targetArea.cy + y3 * sProj * breath;
 
           const depthNorm = Math.max(0, Math.min(1, (z3 + baseR) / (2 * baseR)));
-          targetAlpha = 0.52 + depthNorm * 0.44;
-          pRadius = 2.8 + depthNorm * 2.2;
+          targetAlpha = 0.18 + depthNorm * 0.18;
+          pRadius = 1.8 + depthNorm * 1.3;
 
           if (tier === 3) {
             rCol = 250; gCol = 224; bCol = 195; // Golden Core Stardust
@@ -711,15 +729,39 @@
         const curAlpha = ambAlpha * (1 - mu) + targetAlpha * mu;
         const curRadius = ambRadius * (1 - mu) + pRadius * mu;
 
+        // Dynamic Text & Pricing Exclusion Zone: soften opacity behind text & tuition
+        let textMask = 1.0;
+        if (targetArea.left !== undefined) {
+          const dxContent = Math.max(targetArea.left - p.x, 0, p.x - targetArea.right);
+          const dyContent = Math.max(targetArea.top - p.y, 0, p.y - targetArea.bottom);
+          const distContent = Math.sqrt(dxContent * dxContent + dyContent * dyContent);
+
+          if (distContent < 45) {
+            textMask = Math.max(0.22, distContent / 45);
+          }
+
+          if (targetArea.pricingBox) {
+            const pb = targetArea.pricingBox;
+            const dxPrice = Math.max(pb.left - 24 - p.x, 0, p.x - (pb.right + 24));
+            const dyPrice = Math.max(pb.top - 14 - p.y, 0, p.y - (pb.bottom + 14));
+            const distPrice = Math.sqrt(dxPrice * dxPrice + dyPrice * dyPrice);
+            if (distPrice < 35) {
+              textMask = Math.min(textMask, Math.max(0.10, distPrice / 35));
+            }
+          }
+        }
+
+        const finalAlpha = curAlpha * textMask;
+
         this.ctx.beginPath();
         this.ctx.arc(p.x, p.y, curRadius, 0, Math.PI * 2);
-        this.ctx.fillStyle = `rgba(${curR}, ${curG}, ${curB}, ${curAlpha})`;
+        this.ctx.fillStyle = `rgba(${curR}, ${curG}, ${curB}, ${finalAlpha})`;
         this.ctx.fill();
 
-        if (mu > 0.4 && (i % 5 === 0)) {
+        if (mu > 0.6 && (i % 8 === 0) && textMask > 0.6) {
           this.ctx.beginPath();
-          this.ctx.arc(p.x, p.y, curRadius * 2.3, 0, Math.PI * 2);
-          this.ctx.fillStyle = `rgba(${curR}, ${curG}, ${curB}, ${curAlpha * 0.22 * mu})`;
+          this.ctx.arc(p.x, p.y, curRadius * 1.8, 0, Math.PI * 2);
+          this.ctx.fillStyle = `rgba(${curR}, ${curG}, ${curB}, ${finalAlpha * 0.14 * mu})`;
           this.ctx.fill();
         }
       }

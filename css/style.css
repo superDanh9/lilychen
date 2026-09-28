@@ -1030,6 +1030,8 @@ h1, h2, h3, h4, h5, h6 {
 .course-open-content {
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 2;
 }
 
 .course-open-eyebrow {
@@ -1099,6 +1101,8 @@ h1, h2, h3, h4, h5, h6 {
   gap: 16px;
   margin-bottom: 20px;
   flex-wrap: wrap;
+  position: relative;
+  z-index: 2;
 }
 
 .price-figure {
@@ -4044,11 +4048,23 @@ textarea.form-control {
 
 .about-hero-title {
   font-family: var(--font-serif);
-  font-size: clamp(2.3rem, 4.3vw, 3.7rem);
+  font-size: clamp(2.15rem, 3.6vw, 3.3rem);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -0.025em;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
   color: var(--color-dark);
+  text-wrap: balance;
+  max-width: 660px;
+}
+
+.hero-title-break {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .hero-title-break {
+    display: inline;
+  }
 }
 
 .about-hero-title em {
@@ -4293,6 +4309,22 @@ textarea.form-control {
   object-position: center;
 }
 
+.story-slide[data-slide-index="0"] img {
+  object-position: center 15%;
+}
+
+.story-slide[data-slide-index="1"] img {
+  object-position: center 8%;
+}
+
+.story-slide[data-slide-index="2"] img {
+  object-position: center 15%;
+}
+
+.story-slide[data-slide-index="3"] img {
+  object-position: center center;
+}
+
 .story-slide-overlay {
   position: absolute;
   bottom: 0;
@@ -4462,6 +4494,22 @@ textarea.form-control {
   border-radius: var(--radius-md);
   object-fit: cover;
   margin-bottom: 18px;
+}
+
+.story-chapter[data-chapter-index="0"] .chapter-mobile-image {
+  object-position: center 15%;
+}
+
+.story-chapter[data-chapter-index="1"] .chapter-mobile-image {
+  object-position: center 8%;
+}
+
+.story-chapter[data-chapter-index="2"] .chapter-mobile-image {
+  object-position: center 15%;
+}
+
+.story-chapter[data-chapter-index="3"] .chapter-mobile-image {
+  object-position: center center;
 }
 
 /* ==========================================================================
