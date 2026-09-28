@@ -916,7 +916,13 @@
         const href = this.getAttribute('href');
         if (href === '#' || !href) return;
 
-        const target = document.querySelector(href);
+        let target = null;
+        try {
+          target = document.querySelector(href);
+        } catch (err) {
+          return;
+        }
+
         if (target) {
           e.preventDefault();
           const header = document.querySelector('.site-header') || document.querySelector('.proto-header');
@@ -940,51 +946,71 @@
   // 9. Category Filter Tabs for Gallery & Blog
   // ---------------------------------------------------------------------------
   function initCategoryFilters() {
-    // Gallery filter
-    const galleryButtons = document.querySelectorAll('.gallery-filter-btn');
-    const galleryItems = document.querySelectorAll('.gallery-item');
+    // 9.1 Gallery filter (Portfolio & Home pages)
+    const galleryGrid = document.querySelector('.gallery-grid');
+    if (galleryGrid) {
+      const gallerySection = galleryGrid.closest('section') || galleryGrid.parentElement;
+      const galleryButtons = gallerySection ? gallerySection.querySelectorAll('.gallery-filter-btn') : document.querySelectorAll('.gallery-filter-btn');
+      const galleryItems = galleryGrid.querySelectorAll('.gallery-item');
 
-    if (galleryButtons.length && galleryItems.length) {
-      galleryButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-          galleryButtons.forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
+      if (galleryButtons.length && galleryItems.length) {
+        galleryButtons.forEach(btn => {
+          btn.addEventListener('click', function () {
+            galleryButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
 
-          const filter = this.getAttribute('data-filter');
-          galleryItems.forEach(item => {
-            const cat = item.getAttribute('data-category');
-            if (filter === 'all' || cat === filter) {
-              item.style.display = '';
-              item.style.opacity = '1';
-            } else {
-              item.style.display = 'none';
-            }
+            const filter = this.getAttribute('data-filter');
+            galleryItems.forEach(item => {
+              const cat = item.getAttribute('data-category');
+              if (filter === 'all' || cat === filter) {
+                item.style.display = '';
+                item.style.opacity = '1';
+              } else {
+                item.style.display = 'none';
+              }
+            });
           });
         });
-      });
+      }
     }
 
-    // Blog filter
-    const blogButtons = document.querySelectorAll('.blog-filter-btn');
-    const blogCards = document.querySelectorAll('.blog-grid .blog-card');
+    // 9.2 Blog filter (Blog listing page)
+    const blogGrid = document.querySelector('.blog-grid');
+    if (blogGrid) {
+      const blogSection = blogGrid.closest('section') || blogGrid.parentElement;
+      const blogButtons = blogSection ? blogSection.querySelectorAll('.blog-filter-btn, .gallery-filter-btn') : document.querySelectorAll('.blog-filter-btn');
+      const blogCards = blogGrid.querySelectorAll('.blog-card');
+      const featuredCard = document.querySelector('.featured-blog-card');
 
-    if (blogButtons.length && blogCards.length) {
-      blogButtons.forEach(btn => {
-        btn.addEventListener('click', function () {
-          blogButtons.forEach(b => b.classList.remove('active'));
-          this.classList.add('active');
+      if (blogButtons.length && blogCards.length) {
+        blogButtons.forEach(btn => {
+          btn.addEventListener('click', function () {
+            blogButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
 
-          const filter = this.getAttribute('data-filter');
-          blogCards.forEach(card => {
-            const cat = card.getAttribute('data-category');
-            if (filter === 'all' || cat === filter) {
-              card.style.display = '';
-            } else {
-              card.style.display = 'none';
+            const filter = this.getAttribute('data-filter');
+            blogCards.forEach(card => {
+              const cat = card.getAttribute('data-category');
+              if (filter === 'all' || cat === filter) {
+                card.style.display = '';
+                card.style.opacity = '1';
+              } else {
+                card.style.display = 'none';
+              }
+            });
+
+            if (featuredCard) {
+              const featCat = featuredCard.getAttribute('data-category') || 'dinh-huong';
+              if (filter === 'all' || featCat === filter) {
+                featuredCard.style.display = '';
+                featuredCard.style.opacity = '1';
+              } else {
+                featuredCard.style.display = 'none';
+              }
             }
           });
         });
-      });
+      }
     }
   }
 
@@ -1029,67 +1055,242 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 11. Lead Consultation Form Validation & Feedback
+  // 11. Lead Consultation Form Validation, Anti-Spam & Delivery to Server/Email
   // ---------------------------------------------------------------------------
   function initLeadForm() {
-    const form = document.getElementById('leadForm');
-    if (!form) return;
+    const allForms = document.querySelectorAll('#leadForm, .lead-form, form[data-lead-form]');
+    if (!allForms.length) return;
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+    allForms.forEach(form => {
+      // 1. Anti-spam honeypot injection (hidden from visual & accessibility tree)
+      if (!form.querySelector('input[name="_hp_company"]')) {
+        const hpInput = document.createElement('input');
+        hpInput.type = 'text';
+        hpInput.name = '_hp_company';
+        hpInput.className = 'hp-field';
+        hpInput.tabIndex = -1;
+        hpInput.autocomplete = 'off';
+        hpInput.setAttribute('aria-hidden', 'true');
+        form.appendChild(hpInput);
+      }
 
-      const nameInput = document.getElementById('leadName');
-      const phoneInput = document.getElementById('leadPhone');
-      const courseSelect = document.getElementById('leadCourse');
-      let isValid = true;
+      // 2. Anti-spam timestamp injection
+      let timeInput = form.querySelector('input[name="_form_load_time"]');
+      if (!timeInput) {
+        timeInput = document.createElement('input');
+        timeInput.type = 'hidden';
+        timeInput.name = '_form_load_time';
+        timeInput.value = String(Date.now());
+        form.appendChild(timeInput);
+      } else {
+        timeInput.value = String(Date.now());
+      }
 
-      // Reset errors
+      // 3. Source Page tracking
+      let sourceInput = form.querySelector('input[name="source_page"]');
+      if (!sourceInput) {
+        sourceInput = document.createElement('input');
+        sourceInput.type = 'hidden';
+        sourceInput.name = 'source_page';
+        sourceInput.value = window.location.pathname || document.title;
+        form.appendChild(sourceInput);
+      }
+
+      // Ensure error box exists
+      let errorBox = form.querySelector('.form-error-msg');
+      if (!errorBox) {
+        errorBox = document.createElement('div');
+        errorBox.className = 'form-error-msg';
+        errorBox.setAttribute('role', 'alert');
+        errorBox.setAttribute('aria-live', 'assertive');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn && submitBtn.parentNode) {
+          submitBtn.parentNode.insertBefore(errorBox, submitBtn);
+        } else {
+          form.appendChild(errorBox);
+        }
+      }
+
+      const nameInput = form.querySelector('input[name="name"], #leadName');
+      const phoneInput = form.querySelector('input[name="phone"], #leadPhone');
+      const courseSelect = form.querySelector('select[name="course"], #leadCourse');
+      const timeSelect = form.querySelector('select[name="time"], #leadTime');
+      const messageInput = form.querySelector('textarea[name="message"], #leadMessage');
+      const submitBtn = form.querySelector('button[type="submit"]');
+
+      // Auto clear error on typing
       [nameInput, phoneInput, courseSelect].forEach(input => {
-        if (input) input.classList.remove('is-invalid');
+        if (!input) return;
+        input.addEventListener('input', () => {
+          input.classList.remove('is-invalid');
+          if (errorBox) errorBox.classList.remove('is-visible');
+        });
+        input.addEventListener('change', () => {
+          input.classList.remove('is-invalid');
+          if (errorBox) errorBox.classList.remove('is-visible');
+        });
       });
 
-      if (!nameInput || !nameInput.value.trim()) {
-        if (nameInput) nameInput.classList.add('is-invalid');
-        isValid = false;
-      }
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-      const phoneRegex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/;
-      if (!phoneInput || !phoneRegex.test(phoneInput.value.trim().replace(/\s+/g, ''))) {
-        if (phoneInput) phoneInput.classList.add('is-invalid');
-        isValid = false;
-      }
+        // Clear previous error message
+        if (errorBox) {
+          errorBox.classList.remove('is-visible');
+          errorBox.innerHTML = '';
+        }
 
-      if (!courseSelect || !courseSelect.value) {
-        if (courseSelect) courseSelect.classList.add('is-invalid');
-        isValid = false;
-      }
+        let isValid = true;
+        let firstInvalid = null;
 
-      if (!isValid) return;
+        // Reset errors
+        [nameInput, phoneInput, courseSelect].forEach(input => {
+          if (input) input.classList.remove('is-invalid');
+        });
 
-      // Known project state: UI feedback provided, backend endpoint to be configured
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const originalText = submitBtn ? submitBtn.innerHTML : '';
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = '<span>Đang gửi thông tin...</span>';
-      }
+        // Validate Name
+        if (!nameInput || !nameInput.value.trim() || nameInput.value.trim().length < 2) {
+          if (nameInput) {
+            nameInput.classList.add('is-invalid');
+            if (!firstInvalid) firstInvalid = nameInput;
+          }
+          isValid = false;
+        }
 
-      setTimeout(() => {
-        form.innerHTML = `
-          <div class="form-success-message" style="text-align: center; padding: 32px 16px;">
-            <div style="width: 56px; height: 56px; border-radius: 50%; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-            </div>
-            <h4 style="font-size: 1.3rem; margin-bottom: 8px; color: var(--text-primary);">Đã Tiếp Nhận Thông Tin!</h4>
-            <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 18px;">
-              Cảm ơn bạn. Master Lily Chen sẽ liên hệ qua số điện thoại/Zalo để tư vấn lộ trình học phù hợp nhất cho bạn trong vòng 24 giờ.
-            </p>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">
-              Cần trao đổi gấp? Gọi ngay hotline: <a href="tel:0889979791" style="color: var(--color-rose); font-weight: 700;">088 997 97 91</a>
-            </p>
-          </div>
-        `;
-      }, 700);
+        // Validate Vietnamese Phone Number
+        const phoneRegex = /^(?:\+?84|0)(?:3|5|7|8|9)\d{8}$/;
+        const cleanedPhone = phoneInput ? phoneInput.value.trim().replace(/[\s.-]+/g, '') : '';
+        if (!phoneInput || !phoneRegex.test(cleanedPhone)) {
+          if (phoneInput) {
+            phoneInput.classList.add('is-invalid');
+            if (!firstInvalid) firstInvalid = phoneInput;
+          }
+          isValid = false;
+        }
+
+        // Validate Course (if select exists)
+        if (courseSelect && !courseSelect.value) {
+          courseSelect.classList.add('is-invalid');
+          if (!firstInvalid) firstInvalid = courseSelect;
+          isValid = false;
+        }
+
+        if (!isValid) {
+          if (firstInvalid) firstInvalid.focus();
+          return;
+        }
+
+        const submittedName = nameInput ? nameInput.value.trim() : 'bạn';
+        const submittedPhone = cleanedPhone;
+        const submittedCourse = courseSelect && courseSelect.value ? courseSelect.value : 'Tư vấn khóa học phù hợp';
+        const submittedTime = timeSelect && timeSelect.value ? timeSelect.value : 'Linh hoạt';
+        const submittedMessage = messageInput ? messageInput.value.trim() : '';
+        const hpVal = form.querySelector('input[name="_hp_company"]')?.value || '';
+        const formLoadTime = form.querySelector('input[name="_form_load_time"]')?.value || String(Date.now());
+        const sourcePage = form.querySelector('input[name="source_page"]')?.value || window.location.pathname;
+
+        // 1. Sending State
+        const originalBtnHtml = submitBtn ? submitBtn.innerHTML : 'GỬI ĐĂNG KÝ TƯ VẤN';
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.classList.add('is-loading');
+          submitBtn.innerHTML = '<span>Đang gửi thông tin... ⏳</span>';
+        }
+
+        try {
+          const response = await fetch('/api/contact', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              name: submittedName,
+              phone: submittedPhone,
+              course: submittedCourse,
+              time: submittedTime,
+              message: submittedMessage,
+              source_page: sourcePage,
+              _hp_company: hpVal,
+              _form_load_time: formLoadTime
+            })
+          });
+
+          const data = await response.json().catch(() => ({}));
+
+          if (response.ok && data.success) {
+            // 2. Success State
+            const successMsgBox = form.querySelector('#formSuccessMsg, .form-success-msg');
+            const nameEl = form.querySelector('#successUserName');
+            const phoneEl = form.querySelector('#successUserPhone');
+
+            if (successMsgBox && nameEl && phoneEl) {
+              nameEl.textContent = submittedName;
+              phoneEl.textContent = submittedPhone;
+              successMsgBox.classList.add('is-visible');
+              successMsgBox.style.display = 'block';
+
+              // Hide all input groups & submit button for clean confirmation
+              form.querySelectorAll('.form-group, .form-submit-btn, .form-privacy-note').forEach(el => {
+                el.style.display = 'none';
+              });
+            } else {
+              // Standalone Course Page Form Success Replacement
+              form.innerHTML = `
+                <div class="form-success-card" style="text-align: center; padding: 36px 20px; animation: fadeIn 0.4s ease-out;">
+                  <div style="width: 60px; height: 60px; border-radius: 50%; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                  </div>
+                  <h4 style="font-size: 1.35rem; margin-bottom: 10px; color: var(--text-primary); font-family: var(--font-heading);">Đăng Ký Thành Công!</h4>
+                  <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
+                    Cảm ơn <strong>${submittedName}</strong>! Master Lily Chen đã nhận được thông tin đăng ký tư vấn <strong>${submittedCourse}</strong>. Học viện sẽ liên hệ với bạn qua số điện thoại <strong>${submittedPhone}</strong> trong vòng 24 giờ.
+                  </p>
+                  <div style="background: var(--bg-subtle); padding: 14px 18px; border-radius: 8px; font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">
+                    📞 Cần hỗ trợ gấp? Gọi Hotline / Zalo: <a href="tel:0889979791" style="color: var(--color-rose-deep); font-weight: 700;">088 997 97 91</a>
+                  </div>
+                </div>
+              `;
+            }
+          } else {
+            throw new Error(data.error || 'Dịch vụ tạm thời không phản hồi.');
+          }
+
+        } catch (err) {
+          // 3. Failure State
+          console.error('[Lead Form Submission Error]', err);
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('is-loading');
+            submitBtn.innerHTML = originalBtnHtml;
+          }
+
+          if (errorBox) {
+            errorBox.classList.add('is-visible');
+            errorBox.innerHTML = `
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div>
+                  <strong>⚠️ Chưa thể gửi thông tin:</strong> ${err.message || 'Lỗi gián đoạn kết nối máy chủ.'}
+                </div>
+                <div style="font-size: 0.85rem; color: #7f1d1d;">
+                  Vui lòng bấm <strong>Thử gửi lại</strong> hoặc liên hệ trực tiếp qua Hotline/Zalo: <a href="tel:0889979791" style="color: #991b1b; text-decoration: underline; font-weight: 700;">088 997 97 91</a>.
+                </div>
+                <div>
+                  <button type="button" class="form-error-retry-btn" id="retrySubmitBtn">
+                    🔄 Thử gửi lại
+                  </button>
+                </div>
+              </div>
+            `;
+
+            const retryBtn = errorBox.querySelector('#retrySubmitBtn');
+            if (retryBtn) {
+              retryBtn.addEventListener('click', () => {
+                form.requestSubmit();
+              });
+            }
+          }
+        }
+      });
     });
   }
 
