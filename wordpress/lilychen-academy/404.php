@@ -33,7 +33,7 @@ get_header();
       <a href="<?php echo esc_url(home_url('/khoa-hoc/')); ?>" class="btn btn-secondary btn-lg">
         <span>Xem Khóa Học</span>
       </a>
-      <a href="<?php echo esc_url(home_url('/portfolio/')); ?>" class="btn btn-secondary btn-lg">
+      <a href="<?php echo esc_url(home_url('/tac-pham-hoc-vien/')); ?>" class="btn btn-secondary btn-lg">
         <span>Xem Tác Phẩm</span>
       </a>
     </div>

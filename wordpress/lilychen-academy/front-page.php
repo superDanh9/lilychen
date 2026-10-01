@@ -19,7 +19,10 @@ $hero_title_2   = lilychen_get_content('hero_title_2', '& Cá nhân');
 $hero_cta1_text = lilychen_get_content('hero_cta1_text', 'Xem khóa học');
 $hero_cta1_url  = lilychen_get_content('hero_cta1_url', '#khoa-hoc');
 $hero_cta2_text = lilychen_get_content('hero_cta2_text', 'Xem tác phẩm');
-$hero_cta2_url  = lilychen_get_content('hero_cta2_url', home_url('/portfolio/'));
+$hero_cta2_url  = lilychen_get_content('hero_cta2_url', home_url('/tac-pham-hoc-vien/'));
+if (empty($hero_cta2_url) || strpos($hero_cta2_url, '/portfolio') !== false) {
+    $hero_cta2_url = home_url('/tac-pham-hoc-vien/');
+}
 
 // Mosaic images (editable via Media Library)
 $mosaic_1 = lilychen_get_content('mosaic_img_1', lilychen_image_url('tacpham6.webp'));
@@ -133,7 +136,7 @@ $faqs         = lilychen_default_faqs();
             <span class="section-kicker">Tác phẩm thực tế 100%</span>
             <h2 class="transition-title">Vẻ Đẹp Độc Bản Qua Từng Nét Cọ</h2>
           </div>
-          <a href="<?php echo esc_url(home_url('/portfolio/')); ?>" class="transition-link">
+          <a href="<?php echo esc_url(home_url('/tac-pham-hoc-vien/')); ?>" class="transition-link">
             <span>Khám phá bộ sưu tập tác phẩm</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -354,7 +357,7 @@ $faqs         = lilychen_default_faqs();
 
         <!-- Section CTA: Link to Portfolio Page -->
         <div class="gallery-cta-wrap" style="text-align: center; margin: 36px 0 52px;">
-          <a href="<?php echo esc_url(home_url('/portfolio/')); ?>" class="btn btn-secondary btn-lg" style="box-shadow: 0 4px 18px rgba(212, 83, 122, 0.15);">
+          <a href="<?php echo esc_url(home_url('/tac-pham-hoc-vien/')); ?>" class="btn btn-secondary btn-lg" style="box-shadow: 0 4px 18px rgba(212, 83, 122, 0.15);">
             <span>Xem Thêm Tác Phẩm Học Viên</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </a>

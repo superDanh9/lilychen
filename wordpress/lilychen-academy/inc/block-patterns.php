@@ -42,7 +42,7 @@ function lilychen_register_block_patterns() {
     <div class="wp-block-button btn-hero-primary"><a class="wp-block-button__link wp-element-button" href="' . esc_url(home_url('/#khoa-hoc')) . '">Xem khóa học</a></div>
     <!-- /wp:button -->
     <!-- wp:button {"className":"btn-hero-secondary"} -->
-    <div class="wp-block-button btn-hero-secondary"><a class="wp-block-button__link wp-element-button" href="' . esc_url(home_url('/portfolio/')) . '">Xem tác phẩm</a></div>
+    <div class="wp-block-button btn-hero-secondary"><a class="wp-block-button__link wp-element-button" href="' . esc_url(home_url('/tac-pham-hoc-vien/')) . '">Xem tác phẩm</a></div>
     <!-- /wp:button -->
   </div>
   <!-- /wp:buttons -->
@@ -254,7 +254,7 @@ function lilychen_register_block_patterns() {
   <h2 class="wp-block-heading transition-title">Vẻ Đẹp Độc Bản Qua Từng Nét Cọ (Tác phẩm thực tế 100%)</h2>
   <!-- /wp:heading -->
   <!-- wp:paragraph -->
-  <p><a href="' . esc_url(home_url('/portfolio/')) . '" class="transition-link">Khám phá bộ sưu tập tác phẩm học viên &rarr;</a></p>
+  <p><a href="' . esc_url(home_url('/tac-pham-hoc-vien/')) . '" class="transition-link">Khám phá bộ sưu tập tác phẩm học viên &rarr;</a></p>
   <!-- /wp:paragraph -->
   <!-- wp:columns {"columns":5,"className":"photo-mosaic"} -->
   <div class="wp-block-columns photo-mosaic">

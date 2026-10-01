@@ -343,3 +343,39 @@ a img.aligncenter {
   font-size: 0.88rem;
   color: var(--text-muted);
 }
+
+/* --------------------------------------------------------------------------
+   Single Post Article Header Scoped Styles
+   Fix: Sửa lỗi nhãn chuyên mục chồng lên tiêu đề bài viết
+   Giới hạn trong phần đầu bài viết (.article-header), bảo toàn nhãn trên thẻ Blog
+   -------------------------------------------------------------------------- */
+.article-header .blog-cat-badge,
+.single-article .article-header .blog-cat-badge {
+  position: static;
+  display: inline-block;
+  top: auto;
+  left: auto;
+  margin: 0 auto;
+  padding: 5px 14px;
+  background: var(--color-rose-soft, #fcf1f4);
+  color: var(--color-rose-deep, #b93b62);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-pill, 9999px);
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  line-height: 1.4;
+  vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+  .article-header .blog-cat-badge,
+  .single-article .article-header .blog-cat-badge {
+    font-size: 0.74rem;
+    padding: 4px 12px;
+  }
+}
+

@@ -142,7 +142,7 @@ function lilychen_render_home_content_page() {
               <label class="lily-label"><?php esc_html_e('Nút CTA 2: Chữ', 'lilychen-academy'); ?></label>
               <input type="text" name="lilychen_content[hero_cta2_text]" class="lily-input" value="<?php echo esc_attr(lilychen_get_content('hero_cta2_text', 'Xem tác phẩm')); ?>">
               <label class="lily-label" style="margin-top: 6px;"><?php esc_html_e('Nút CTA 2: Đường dẫn (URL/Anchor)', 'lilychen-academy'); ?></label>
-              <input type="text" name="lilychen_content[hero_cta2_url]" class="lily-input" value="<?php echo esc_attr(lilychen_get_content('hero_cta2_url', home_url('/portfolio/'))); ?>">
+              <input type="text" name="lilychen_content[hero_cta2_url]" class="lily-input" value="<?php echo esc_attr(lilychen_get_content('hero_cta2_url', home_url('/tac-pham-hoc-vien/'))); ?>">
             </div>
           </div>
         </div>
