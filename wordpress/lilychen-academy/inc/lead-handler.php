@@ -71,8 +71,18 @@ function lilychen_register_lead_cpt() {
         'show_in_menu'        => true,
         'query_var'           => false,
         'rewrite'             => false,
-        'capability_type'     => 'post',
+        'capability_type'     => array('dang_ky_tu_van', 'dang_ky_tu_vans'),
         'map_meta_cap'        => true,
+        'capabilities'        => array(
+            'edit_post'          => 'manage_options',
+            'read_post'          => 'manage_options',
+            'delete_post'        => 'manage_options',
+            'edit_posts'         => 'manage_options',
+            'edit_others_posts'  => 'manage_options',
+            'publish_posts'      => 'manage_options',
+            'read_private_posts' => 'manage_options',
+            'create_posts'       => 'do_not_allow',
+        ),
         'has_archive'         => false,
         'hierarchical'        => false,
         'menu_position'       => 26,
@@ -85,12 +95,44 @@ function lilychen_register_lead_cpt() {
 add_action('init', 'lilychen_register_lead_cpt');
 
 /**
- * 2. Phân quyền: Chỉ Administrator (manage_options) mới được xem và quản trị
+ * 2. Phân quyền cấp Capabilities: Chỉ Administrator (manage_options) mới được xem, sửa, xóa
+ */
+function lilychen_lead_map_meta_cap($caps, $cap, $user_id, $args) {
+    $lead_caps = array(
+        'edit_dang_ky_tu_van',
+        'read_dang_ky_tu_van',
+        'delete_dang_ky_tu_van',
+        'edit_post',
+        'read_post',
+        'delete_post'
+    );
+    if (in_array($cap, $lead_caps, true) && !empty($args[0])) {
+        $post = get_post($args[0]);
+        if ($post && $post->post_type === 'dang_ky_tu_van') {
+            return array('manage_options');
+        }
+    }
+    return $caps;
+}
+add_filter('map_meta_cap', 'lilychen_lead_map_meta_cap', 10, 4);
+
+/**
+ * 2.1. Phân quyền cấp UI: Chặn toàn diện các truy cập admin trực tiếp tới CPT từ tài khoản không phải Admin
  */
 function lilychen_lead_cpt_access_check() {
     global $pagenow, $typenow;
-    if ($typenow === 'dang_ky_tu_van' && !current_user_can('manage_options')) {
-        wp_die(esc_html__('Bạn không có quyền truy cập trang danh sách đăng ký này.', 'lilychen-academy'));
+    $post_type = $typenow;
+    if (empty($post_type) && isset($_GET['post_type'])) {
+        $post_type = sanitize_key($_GET['post_type']);
+    }
+    if (empty($post_type) && isset($_GET['post'])) {
+        $post = get_post((int)$_GET['post']);
+        if ($post) {
+            $post_type = $post->post_type;
+        }
+    }
+    if ($post_type === 'dang_ky_tu_van' && !current_user_can('manage_options')) {
+        wp_die(esc_html__('Bạn không có quyền truy cập dữ liệu đăng ký tư vấn.', 'lilychen-academy'), 403);
     }
 }
 add_action('admin_init', 'lilychen_lead_cpt_access_check');
@@ -263,6 +305,51 @@ function lilychen_lead_save_meta_box($post_id) {
 add_action('save_post_dang_ky_tu_van', 'lilychen_lead_save_meta_box');
 
 /**
+ * Lấy địa chỉ IP kết nối an toàn chống giả mạo header (Anti-IP Spoofing)
+ *
+ * CHỈ tin cậy HTTP_X_FORWARDED_FOR hoặc HTTP_CF_CONNECTING_IP khi kết nối
+ * TCP thực tế ($_SERVER['REMOTE_ADDR']) đến từ một Reverse Proxy đã được xác minh tin cậy.
+ * Mọi kết nối trực tiếp hoặc từ proxy chưa xác minh BẮT BUỘC dùng $_SERVER['REMOTE_ADDR'].
+ *
+ * @return string Địa chỉ IP an toàn
+ */
+function lilychen_get_client_ip() {
+    $remote_addr = isset($_SERVER['REMOTE_ADDR']) ? trim((string)$_SERVER['REMOTE_ADDR']) : '';
+
+    // Danh sách địa chỉ / dải IP Reverse Proxy tin cậy (mặc định chỉ loopback nếu có proxy nội bộ)
+    $trusted_proxies = apply_filters('lilychen_trusted_proxies', array(
+        '127.0.0.1',
+        '::1',
+    ));
+
+    $is_trusted = false;
+    if (!empty($remote_addr) && in_array($remote_addr, $trusted_proxies, true)) {
+        $is_trusted = true;
+    }
+
+    // Chỉ khi kết nối thực tế đến từ Proxy tin cậy mới đọc header chuyển tiếp
+    if ($is_trusted) {
+        if (!empty($_SERVER['HTTP_CF_CONNECTING_IP']) && filter_var($_SERVER['HTTP_CF_CONNECTING_IP'], FILTER_VALIDATE_IP)) {
+            return sanitize_text_field($_SERVER['HTTP_CF_CONNECTING_IP']);
+        }
+        if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip_parts = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+            $client_candidate = trim($ip_parts[0]);
+            if (filter_var($client_candidate, FILTER_VALIDATE_IP)) {
+                return sanitize_text_field($client_candidate);
+            }
+        }
+    }
+
+    // Kết nối thông thường / không qua proxy tin cậy: Bắt buộc dùng REMOTE_ADDR hợp lệ
+    if (!empty($remote_addr) && filter_var($remote_addr, FILTER_VALIDATE_IP)) {
+        return sanitize_text_field($remote_addr);
+    }
+
+    return '0.0.0.0';
+}
+
+/**
  * 5. Bộ xử lý nghiệp vụ chung (Validation, Anti-spam, Lưu Database, Gửi Email)
  */
 function lilychen_process_lead_submission($data) {
@@ -293,16 +380,8 @@ function lilychen_process_lead_submission($data) {
         }
     }
 
-    // 5.3. Anti-spam: Rate limiting theo IP (Tối đa 5 lần gửi / 10 phút)
-    $client_ip = '';
-    if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
-        $client_ip = sanitize_text_field($_SERVER['HTTP_CF_CONNECTING_IP']);
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-        $ip_list   = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
-        $client_ip = sanitize_text_field(trim($ip_list[0]));
-    } else {
-        $client_ip = sanitize_text_field($_SERVER['REMOTE_ADDR'] ?? '');
-    }
+    // 5.3. Anti-spam: Rate limiting theo IP an toàn (Tối đa 5 lần gửi / 10 phút)
+    $client_ip = lilychen_get_client_ip();
 
     $rate_limit_key   = 'lilychen_lead_limit_' . md5($client_ip);
     $submission_count = intval(get_transient($rate_limit_key));
