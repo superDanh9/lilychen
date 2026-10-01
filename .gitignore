@@ -14,4 +14,8 @@ Thumbs.db
 TIEN_DO_CHUYEN_BAI_VIET.md
 scratch/
 node_modules/
+theme_backups/
+theme-backup-2026-09-29/
+*backup*/
+*.bak
 
