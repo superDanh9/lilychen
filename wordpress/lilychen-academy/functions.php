@@ -103,7 +103,10 @@ function lilychen_scripts() {
         'homeUrl'      => home_url('/'),
         'templateUri'  => get_template_directory_uri(),
         'isStaging'    => (strpos(home_url(), '/staging') !== false),
-        'formTestMode' => true,
+        'restUrl'      => esc_url_raw(rest_url('lilychen/v1/lead')),
+        'ajaxUrl'      => admin_url('admin-ajax.php'),
+        'nonce'        => wp_create_nonce('wp_rest'),
+        'formTestMode' => false,
     ));
 }
 add_action('wp_enqueue_scripts', 'lilychen_scripts');
@@ -168,4 +171,5 @@ require_once get_template_directory() . '/inc/template-tags.php';
 require_once get_template_directory() . '/inc/customizer.php';
 require_once get_template_directory() . '/inc/admin-editor.php';
 require_once get_template_directory() . '/inc/block-patterns.php';
+require_once get_template_directory() . '/inc/lead-handler.php';
 

@@ -1232,92 +1232,106 @@
         const formLoadTime = form.querySelector('input[name="_form_load_time"]')?.value || String(Date.now());
         const sourcePage = form.querySelector('input[name="source_page"]')?.value || window.location.pathname;
 
-        // 1. Prototype Simulation State (Test Mode: No external API, no email, no tracking)
+        // Real Lead Submission to Server (WordPress REST API with AJAX fallback)
         const originalBtnHtml = submitBtn ? submitBtn.innerHTML : 'GỬI ĐĂNG KÝ TƯ VẤN';
         if (submitBtn) {
           submitBtn.disabled = true;
           submitBtn.classList.add('is-loading');
-          submitBtn.innerHTML = '<span>Đang kiểm tra form mẫu... ⏳</span>';
+          submitBtn.innerHTML = '<span>Đang gửi thông tin... ⏳</span>';
         }
 
-        console.info('[Lily Chen Academy Theme] Lead form test mode: Submission validated client-side. No data sent to server/API.');
+        const payload = {
+          name: submittedName,
+          phone: submittedPhone,
+          course: submittedCourse,
+          time: submittedTime,
+          message: submittedMessage,
+          source_page: sourcePage,
+          _hp_company: hpVal,
+          _form_load_time: formLoadTime,
+        };
 
-        // Simulate safe local response for theme review
-        setTimeout(() => {
+        const targetEndpoint = (window.lilychenVars && window.lilychenVars.restUrl)
+          ? window.lilychenVars.restUrl
+          : '/wp-json/lilychen/v1/lead';
+
+        const reqHeaders = {
+          'Content-Type': 'application/json',
+        };
+        if (window.lilychenVars && window.lilychenVars.nonce) {
+          reqHeaders['X-WP-Nonce'] = window.lilychenVars.nonce;
+        }
+
+        try {
+          const response = await fetch(targetEndpoint, {
+            method: 'POST',
+            headers: reqHeaders,
+            body: JSON.stringify(payload),
+          });
+
+          const resData = await response.json();
+
           if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.classList.remove('is-loading');
             submitBtn.innerHTML = originalBtnHtml;
           }
 
-          // 2. Safe DOM update for Prototype Review (Test Mode)
-          const successMsgBox = form.querySelector('#formSuccessMsg, .form-success-msg');
+          if (response.ok && resData && resData.success) {
+            const successMsgBox = form.querySelector('#formSuccessMsg, .form-success-msg');
+            if (successMsgBox) {
+              while (successMsgBox.firstChild) {
+                successMsgBox.removeChild(successMsgBox.firstChild);
+              }
 
-          if (successMsgBox) {
-            // Clear content safely without innerHTML
-            while (successMsgBox.firstChild) {
-              successMsgBox.removeChild(successMsgBox.firstChild);
+              const iconWrap = document.createElement('div');
+              iconWrap.style.cssText = 'width: 44px; height: 44px; border-radius: 50%; background: #d1e7dd; color: #0f5132; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; margin: 0 auto 10px;';
+              iconWrap.textContent = '✓';
+
+              const titlePara = document.createElement('div');
+              titlePara.style.cssText = 'font-weight: 700; color: #0f5132; font-size: 1.05rem; margin-bottom: 6px; text-align: center;';
+              titlePara.textContent = 'Gửi Yêu Cầu Tư Vấn Thành Công!';
+
+              const descPara = document.createElement('p');
+              descPara.style.cssText = 'font-size: 0.92rem; color: #4b5563; line-height: 1.6; margin: 0; text-align: center;';
+              descPara.textContent = resData.message || ('Cảm ơn ' + submittedName + '! Lily Chen Academy đã nhận được thông tin và sẽ liên hệ qua số ' + submittedPhone + ' trong 24 giờ tới.');
+
+              successMsgBox.appendChild(iconWrap);
+              successMsgBox.appendChild(titlePara);
+              successMsgBox.appendChild(descPara);
+
+              successMsgBox.classList.add('is-visible');
+              successMsgBox.style.display = 'block';
+
+              // Hide inputs for clean confirmation
+              form.querySelectorAll('.form-group, .form-submit-btn, .form-privacy-note').forEach(el => {
+                el.style.display = 'none';
+              });
+
+              successMsgBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
-
-            const badgeWrap = document.createElement('div');
-            badgeWrap.style.marginBottom = '8px';
-            const badge = document.createElement('span');
-            badge.style.cssText = 'background: #b45309; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;';
-            badge.textContent = 'Chế độ thử nghiệm giao diện (Test Mode)';
-            badgeWrap.appendChild(badge);
-
-            const titlePara = document.createElement('div');
-            titlePara.style.fontWeight = '700';
-            titlePara.style.color = '#1f2937';
-            titlePara.textContent = 'Kiểm tra biểu mẫu thành công (Client-side Simulation)';
-
-            const detailBox = document.createElement('div');
-            detailBox.style.cssText = 'font-size: 0.88rem; color: #4b5563; margin-top: 8px; line-height: 1.6;';
-
-            const summaryIntro = document.createElement('p');
-            summaryIntro.style.margin = '0 0 6px 0';
-            summaryIntro.textContent = 'Dữ liệu mô phỏng vừa nhập:';
-            detailBox.appendChild(summaryIntro);
-
-            const list = document.createElement('ul');
-            list.style.cssText = 'margin: 0 0 8px 18px; padding: 0; list-style-type: disc;';
-
-            const liName = document.createElement('li');
-            liName.textContent = 'Họ và tên: ' + (submittedName || 'N/A');
-            list.appendChild(liName);
-
-            const liPhone = document.createElement('li');
-            liPhone.textContent = 'Số điện thoại: ' + (submittedPhone || 'N/A');
-            list.appendChild(liPhone);
-
-            const liCourse = document.createElement('li');
-            liCourse.textContent = 'Khóa học quan tâm: ' + (submittedCourse || 'N/A');
-            list.appendChild(liCourse);
-
-            const liTime = document.createElement('li');
-            liTime.textContent = 'Khung giờ tư vấn: ' + (submittedTime || 'N/A');
-            list.appendChild(liTime);
-
-            detailBox.appendChild(list);
-
-            const disclaimer = document.createElement('p');
-            disclaimer.style.cssText = 'margin: 0; font-size: 0.82rem; color: #6b7280; font-style: italic;';
-            disclaimer.textContent = 'Lưu ý: Form đang ở chế độ xem thử nghiệm giao diện trên Staging. Dữ liệu KHÔNG gửi email, KHÔNG gọi API và KHÔNG ghi nhận lượt đăng ký thật theo đúng yêu cầu kiểm thử.';
-            detailBox.appendChild(disclaimer);
-
-            successMsgBox.appendChild(badgeWrap);
-            successMsgBox.appendChild(titlePara);
-            successMsgBox.appendChild(detailBox);
-
-            successMsgBox.classList.add('is-visible');
-            successMsgBox.style.display = 'block';
-
-            // Hide input fields for clean confirmation
-            form.querySelectorAll('.form-group, .form-submit-btn, .form-privacy-note').forEach(el => {
-              el.style.display = 'none';
-            });
+          } else {
+            const errMsg = (resData && resData.message) ? resData.message : 'Có lỗi xảy ra khi gửi thông tin. Vui lòng kiểm tra lại hoặc liên hệ hotline.';
+            if (errorBox) {
+              errorBox.textContent = errMsg;
+              errorBox.classList.add('is-visible');
+              errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+              alert(errMsg);
+            }
           }
-        }, 500);
+        } catch (err) {
+          console.error('[Lily Chen Academy Theme] Lead form submission network error:', err);
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('is-loading');
+            submitBtn.innerHTML = originalBtnHtml;
+          }
+          if (errorBox) {
+            errorBox.textContent = 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng hoặc gọi hotline để được tư vấn ngay.';
+            errorBox.classList.add('is-visible');
+          }
+        }
       });
     });
   }

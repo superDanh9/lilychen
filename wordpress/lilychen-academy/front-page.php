@@ -695,14 +695,7 @@ $faqs         = lilychen_default_faqs();
               <p class="lead-form-sub">Nhận phân tích phong cách trang điểm &amp; bảng học phí</p>
             </div>
 
-            <!-- PROTOTYPE TEST MODE NOTICE -->
-            <div class="form-test-mode-banner" role="note">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="flex-shrink: 0; margin-top: 2px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-              <div>
-                <span class="form-test-mode-badge">Bản Mẫu Thử Nghiệm</span>
-                <strong>Tính năng gửi dữ liệu đang tạm tắt:</strong> Đây là bản mẫu duyệt giao diện trên Staging. Thao tác gửi form sẽ mô phỏng phản hồi tại chỗ mà không gọi API bên ngoài hay kích hoạt email thật.
-              </div>
-            </div>
+
 
             <form id="leadForm" class="lead-form" novalidate>
               <!-- Hidden Security & Honeypot Fields -->
