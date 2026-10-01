@@ -421,25 +421,8 @@ get_header();
               Thông tin được bảo mật tuyệt đối theo <a href="<?php echo esc_url(home_url('/chinh-sach-bao-mat/')); ?>" style="color: inherit; text-decoration: underline;">Chính sách bảo mật</a>. Lily Chen Academy sẽ liên hệ trong 24 giờ.
             </div>
 
-            <!-- Success Notification Box (Test Mode Compatibility) -->
-            <div id="formSuccessMsg" class="form-success-msg" role="status" aria-live="polite">
-              <div style="margin-bottom: 8px;">
-                <span style="background: #b45309; color: #fff; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;">Chế độ thử nghiệm giao diện (Test Mode)</span>
-              </div>
-              <div style="font-weight: 700; color: #1f2937;">Kiểm tra biểu mẫu thành công (Client-side Simulation)</div>
-              <div style="font-size: 0.88rem; color: #4b5563; margin-top: 8px; line-height: 1.6;">
-                <p style="margin: 0 0 6px 0;">Dữ liệu mô phỏng vừa nhập:</p>
-                <ul style="margin: 0 0 8px 18px; padding: 0; list-style-type: disc;">
-                  <li>Họ và tên: <span id="successUserName"></span></li>
-                  <li>Số điện thoại: <span id="successUserPhone"></span></li>
-                  <li>Khóa học quan tâm: <span id="successUserCourse"></span></li>
-                  <li>Khung giờ tư vấn: <span id="successUserTime"></span></li>
-                </ul>
-                <p style="margin: 0; font-size: 0.82rem; color: #6b7280; font-style: italic;">
-                  Lưu ý: Form đang ở chế độ xem thử nghiệm giao diện trên Staging. Dữ liệu KHÔNG gửi email, KHÔNG gọi API và KHÔNG ghi nhận lượt đăng ký thật theo đúng yêu cầu kiểm thử.
-                </p>
-              </div>
-            </div>
+            <!-- Success Notification Box -->
+            <div id="formSuccessMsg" class="form-success-msg" role="status" aria-live="polite"></div>
           </form>
         </div>
       </div>

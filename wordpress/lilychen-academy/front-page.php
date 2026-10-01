@@ -741,7 +741,7 @@ $faqs         = lilychen_default_faqs();
               </div>
 
               <button type="submit" class="btn btn-primary btn-lg form-submit-btn">
-                GỬI ĐĂNG KÝ TƯ VẤN (THỬ NGHIỆM)
+                GỬI ĐĂNG KÝ TƯ VẤN
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
               </button>
 
@@ -751,9 +751,7 @@ $faqs         = lilychen_default_faqs();
               </div>
 
               <!-- Success Notification Box -->
-              <div id="formSuccessMsg" class="form-success-msg" role="status" aria-live="polite">
-                🎉 <strong>Đăng ký thành công!</strong> Cảm ơn bạn <span id="successUserName"></span>. Master Lily Chen đã nhận được thông tin và sẽ gọi điện tư vấn lộ trình chi tiết cho bạn qua số điện thoại <span id="successUserPhone"></span> trong ít phút tới!
-              </div>
+              <div id="formSuccessMsg" class="form-success-msg" role="status" aria-live="polite"></div>
             </form>
           </div>
         </div>
