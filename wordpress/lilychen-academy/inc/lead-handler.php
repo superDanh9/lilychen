@@ -12,8 +12,40 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-// Địa chỉ email nhận thông báo mặc định (đã được chủ dự án xác nhận)
-define('LILYCHEN_LEAD_RECIPIENT_EMAIL', 'thlongntl@gmail.com');
+// Danh sách địa chỉ email nhận thông báo đăng ký mới (đã được chủ dự án xác nhận)
+if (!defined('LILYCHEN_LEAD_RECIPIENT_EMAILS')) {
+    define('LILYCHEN_LEAD_RECIPIENT_EMAILS', array(
+        'thlongntl@gmail.com',
+        'danh39379@gmail.com',
+    ));
+}
+
+// Giữ định nghĩa cũ để tương thích ngược nếu có module gọi hằng số đơn
+if (!defined('LILYCHEN_LEAD_RECIPIENT_EMAIL')) {
+    define('LILYCHEN_LEAD_RECIPIENT_EMAIL', 'thlongntl@gmail.com');
+}
+
+/**
+ * Lấy danh sách địa chỉ email nhận thông báo đăng ký tư vấn
+ *
+ * @return array
+ */
+function lilychen_get_lead_recipient_emails() {
+    $recipients = defined('LILYCHEN_LEAD_RECIPIENT_EMAILS') 
+        ? LILYCHEN_LEAD_RECIPIENT_EMAILS 
+        : array('thlongntl@gmail.com', 'danh39379@gmail.com');
+    return apply_filters('lilychen_lead_recipient_emails', $recipients);
+}
+
+/**
+ * Ghi nhận lỗi chi tiết khi wp_mail gặp sự cố
+ */
+function lilychen_catch_lead_mail_failed($wp_error) {
+    if (is_wp_error($wp_error)) {
+        $GLOBALS['lilychen_last_mail_error'] = $wp_error->get_error_message();
+    }
+}
+add_action('wp_mail_failed', 'lilychen_catch_lead_mail_failed');
 
 /**
  * 1. Đăng ký Custom Post Type 'dang_ky_tu_van'
@@ -144,9 +176,10 @@ function lilychen_lead_render_meta_box($post) {
     $message     = get_post_meta($post->ID, '_lead_message', true);
     $source      = get_post_meta($post->ID, '_lead_source', true);
     $ip          = get_post_meta($post->ID, '_lead_ip', true);
-    $status      = get_post_meta($post->ID, '_lead_status', true);
-    $mail_status = get_post_meta($post->ID, '_mail_status', true);
-    $mail_error  = get_post_meta($post->ID, '_mail_error', true);
+    $status          = get_post_meta($post->ID, '_lead_status', true);
+    $mail_status     = get_post_meta($post->ID, '_mail_status', true);
+    $mail_error      = get_post_meta($post->ID, '_mail_error', true);
+    $mail_recipients = get_post_meta($post->ID, '_mail_recipients', true);
     ?>
     <table class="form-table" style="width: 100%;">
         <tr>
@@ -183,6 +216,10 @@ function lilychen_lead_render_meta_box($post) {
         <tr>
             <th><strong>Địa chỉ IP người gửi:</strong></th>
             <td><code><?php echo esc_html($ip ?: 'N/A'); ?></code></td>
+        </tr>
+        <tr>
+            <th><strong>Hộp thư nhận thông báo:</strong></th>
+            <td><code><?php echo esc_html($mail_recipients ?: implode(', ', (array)lilychen_get_lead_recipient_emails())); ?></code></td>
         </tr>
         <tr>
             <th><strong>Trạng thái thông báo Email:</strong></th>
@@ -325,9 +362,15 @@ function lilychen_process_lead_submission($data) {
     // Tăng đếm rate-limit
     set_transient($rate_limit_key, $submission_count + 1, 600); // 10 phút
 
-    // 5.6. GỬI EMAIL THÔNG BÁO TỚI CHỦ DỰ ÁN (thlongntl@gmail.com)
-    $recipient_email = apply_filters('lilychen_lead_recipient_email', LILYCHEN_LEAD_RECIPIENT_EMAIL);
-    $subject         = sprintf('[Lily Chen Academy] Đăng ký tư vấn mới: %s — %s', $name, $cleaned_phone);
+    // 5.6. GỬI EMAIL THÔNG BÁO TỚI CẢ HAI HỘP THƯ ĐÃ XÁC NHẬN (thlongntl@gmail.com, danh39379@gmail.com)
+    $recipients = lilychen_get_lead_recipient_emails();
+    if (!is_array($recipients)) {
+        $recipients = array_filter(array_map('trim', explode(',', (string)$recipients)));
+    }
+    $recipients_str = implode(', ', $recipients);
+    update_post_meta($post_id, '_mail_recipients', $recipients_str);
+
+    $subject = sprintf('[Lily Chen Academy] Đăng ký tư vấn mới: %s — %s', $name, $cleaned_phone);
 
     $email_content = '<div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">';
     $email_content .= '<div style="background: #111; color: #fff; padding: 20px; text-align: center;">';
@@ -355,13 +398,18 @@ function lilychen_process_lead_submission($data) {
         'From: Lily Chen Academy <no-reply@lilychenmakeup.com>',
     );
 
-    // Gửi email không chặn luồng thành công nếu SMTP lỗi
-    $mail_sent = @wp_mail($recipient_email, $subject, $email_content, $headers);
+    // Gửi email không chặn luồng thành công nếu SMTP lỗi; vẫn bảo toàn dữ liệu đăng ký
+    $GLOBALS['lilychen_last_mail_error'] = '';
+    $mail_sent = @wp_mail($recipients, $subject, $email_content, $headers);
     if ($mail_sent) {
         update_post_meta($post_id, '_mail_status', 'sent');
+        delete_post_meta($post_id, '_mail_error');
     } else {
         update_post_meta($post_id, '_mail_status', 'failed');
-        update_post_meta($post_id, '_mail_error', 'wp_mail returned false (check SMTP or Do Not Send setting)');
+        $error_detail = !empty($GLOBALS['lilychen_last_mail_error']) 
+            ? $GLOBALS['lilychen_last_mail_error'] 
+            : 'wp_mail returned false (check SMTP configuration or Do Not Send setting)';
+        update_post_meta($post_id, '_mail_error', sanitize_text_field($error_detail));
     }
 
     // 5.7. TRẢ VỀ KẾT QUẢ THÀNH CÔNG VÌ DỮ LIỆU ĐÃ LƯU AN TOÀN TRONG DATABASE
