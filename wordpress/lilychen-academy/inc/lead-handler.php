@@ -279,7 +279,12 @@ function lilychen_process_lead_submission($data) {
     // 5.2. Anti-spam: Time gate (Form phải được nạp tối thiểu 2.5 giây trước khi submit)
     $form_load_time = isset($data['_form_load_time']) ? floatval($data['_form_load_time']) : 0;
     if ($form_load_time > 0) {
-        $elapsed_seconds = (microtime(true) * 1000 - $form_load_time) / 1000;
+        // Hỗ trợ cả timestamp milliseconds (JS Date.now()) và seconds (PHP time())
+        if ($form_load_time > 100000000000) {
+            $elapsed_seconds = (microtime(true) * 1000 - $form_load_time) / 1000;
+        } else {
+            $elapsed_seconds = microtime(true) - $form_load_time;
+        }
         if ($elapsed_seconds < 2.5) {
             return array(
                 'success' => false,
@@ -395,12 +400,28 @@ function lilychen_process_lead_submission($data) {
 
     $headers = array(
         'Content-Type: text/html; charset=UTF-8',
-        'From: Lily Chen Academy <no-reply@lilychenmakeup.com>',
     );
+
+    // Bổ sung bản plain-text AltBody cho PHPMailer để tối ưu điểm spam (multipart/alternative)
+    $alt_callback = function($mailer) use ($name, $cleaned_phone, $course, $time, $source, $message) {
+        $mailer->AltBody = "THÔNG BÁO ĐĂNG KÝ TƯ VẤN KHÓA HỌC — LILY CHEN ACADEMY\n"
+            . "--------------------------------------------------\n"
+            . "Họ và tên: " . $name . "\n"
+            . "Số điện thoại: " . $cleaned_phone . "\n"
+            . "Khóa học quan tâm: " . $course . "\n"
+            . "Khung giờ tư vấn: " . $time . "\n"
+            . "Nguồn đăng ký: " . ($source ?: '/') . "\n"
+            . "Thời gian gửi: " . current_time('d/m/Y H:i:s') . "\n"
+            . "Ghi chú: " . ($message ?: '(Không có ghi chú)') . "\n\n"
+            . "Thông báo tự động từ Website Lily Chen Academy. Vui lòng liên hệ học viên trong vòng 24 giờ.";
+    };
+    add_action('phpmailer_init', $alt_callback);
 
     // Gửi email không chặn luồng thành công nếu SMTP lỗi; vẫn bảo toàn dữ liệu đăng ký
     $GLOBALS['lilychen_last_mail_error'] = '';
     $mail_sent = @wp_mail($recipients, $subject, $email_content, $headers);
+    remove_action('phpmailer_init', $alt_callback);
+
     if ($mail_sent) {
         update_post_meta($post_id, '_mail_status', 'sent');
         delete_post_meta($post_id, '_mail_error');
