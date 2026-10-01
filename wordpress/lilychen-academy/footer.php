@@ -97,7 +97,7 @@ $tiktok_url      = lilychen_get_content('tiktok_url', 'https://tiktok.com/@lilyc
                 <li class="footer-menu-item"><a href="<?php echo esc_url(home_url('/gioi-thieu/')); ?>">Giới Thiệu Học Viện</a></li>
                 <li class="footer-menu-item"><a href="<?php echo esc_url(home_url('/khoa-hoc-trang-diem-ca-nhan/')); ?>">Khóa Makeup Cá Nhân</a></li>
                 <li class="footer-menu-item"><a href="<?php echo esc_url(home_url('/khoa-hoc-trang-diem-chuyen-nghiep/')); ?>">Khóa Makeup Chuyên Nghiệp</a></li>
-                <li class="footer-menu-item"><a href="<?php echo esc_url(home_url('/portfolio/')); ?>">Tác Phẩm Học Viên</a></li>
+                <li class="footer-menu-item"><a href="<?php echo esc_url(home_url('/tac-pham-hoc-vien/')); ?>">Tác Phẩm Học Viên</a></li>
                 <li class="footer-menu-item"><a href="<?php echo esc_url(home_url('/#giang-vien')); ?>">Giảng Viên Lily Chen</a></li>
                 <li class="footer-menu-item"><a href="<?php echo esc_url(home_url('/#cam-nhan')); ?>">Cảm Nhận Học Viên</a></li>
                 <li class="footer-menu-item"><a href="<?php echo esc_url(home_url('/blog/')); ?>">Blog Kiến Thức</a></li>

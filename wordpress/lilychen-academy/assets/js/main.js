@@ -1026,6 +1026,7 @@
 
       if (blogButtons.length && blogCards.length) {
         blogButtons.forEach(btn => {
+          if (btn.tagName === 'A') return; // Bỏ qua nếu là thẻ link chuyên mục chuẩn WordPress
           btn.addEventListener('click', function () {
             blogButtons.forEach(b => b.classList.remove('active'));
             this.classList.add('active');

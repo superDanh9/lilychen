@@ -1,0 +1,513 @@
+<?php
+/**
+ * Template Name: Khóa Học Trang Điểm Cá Nhân
+ * Template Post Type: page
+ *
+ * Mẫu trang riêng cho đường dẫn /khoa-hoc-trang-diem-ca-nhan/.
+ * Chuyển giao trực tiếp 100% từ khoa-hoc-trang-diem-ca-nhan/index.html đã duyệt.
+ * Bảo toàn thiết kế, bảng học phí, giáo trình, ảnh học viên và form mô phỏng an toàn.
+ *
+ * @package LilyChen_Academy
+ */
+
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+get_header();
+?>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "Khóa Học Trang Điểm Cá Nhân",
+    "description": "Tự makeup chuyên nghiệp cho chính mình từ Zero-base đến tự tin xuất hiện ở mọi sự kiện. Lịch học linh động, tài trợ 100% mỹ phẩm và dụng cụ.",
+    "provider": {
+      "@type": "EducationalOrganization",
+      "name": "Lily Chen Makeup Academy",
+      "sameAs": "https://lilychenmakeup.com"
+    },
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Gói Cơ Bản",
+        "price": "1500000",
+        "priceCurrency": "VND",
+        "category": "Zero-base 4 buổi"
+      },
+      {
+        "@type": "Offer",
+        "name": "Gói Nâng Cao",
+        "price": "2000000",
+        "priceCurrency": "VND",
+        "category": "5 buổi có nền tảng"
+      },
+      {
+        "@type": "Offer",
+        "name": "Gói VIP 1:1",
+        "price": "3000000",
+        "priceCurrency": "VND",
+        "category": "5 buổi kèm 1:1 tặng gói chụp Beauty"
+      }
+    ]
+  }
+  </script>
+
+<main id="mainContent">
+    <!-- Page Hero Banner with Canvas -->
+    <section class="page-hero">
+      <canvas id="canhanHeroCanvas" class="particle-canvas page-hero-canvas" aria-hidden="true" data-engine="three.js r180"></canvas>
+      <div class="container">
+        <span class="page-hero-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/></svg>
+          KHÓA HỌC TRANG ĐIỂM CÁ NHÂN · LILY CHEN ACADEMY
+        </span>
+        <h1 class="page-hero-title">Khóa Học Trang Điểm Cá Nhân</h1>
+        <p class="page-hero-desc">
+          Tự makeup chuyên nghiệp cho chính mình — từ Zero-base đến tự tin xuất hiện ở mọi sự kiện. Lịch học linh động, tài trợ 100% mỹ phẩm &amp; dụng cụ chính hãng tại lớp.
+        </p>
+
+        <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; margin-bottom: 24px;">
+          <span style="background: rgba(255,255,255,0.85); border: 1px solid var(--border-subtle); padding: 6px 14px; border-radius: 99px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">
+            ✓ Phù hợp người chưa biết gì
+          </span>
+          <span style="background: rgba(255,255,255,0.85); border: 1px solid var(--border-subtle); padding: 6px 14px; border-radius: 99px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">
+            ✓ Giảng viên du học Nhật Bản
+          </span>
+          <span style="background: rgba(255,255,255,0.85); border: 1px solid var(--border-subtle); padding: 6px 14px; border-radius: 99px; font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">
+            ✓ 200+ học viên đã thành thạo
+          </span>
+        </div>
+
+        <div class="page-breadcrumbs">
+          <a href="<?php echo esc_url(home_url('/')); ?>">Trang Chủ</a>
+          <span>/</span>
+          <a href="<?php echo esc_url(home_url('/khoa-hoc/')); ?>">Khóa Học</a>
+          <span>/</span>
+          <span>Trang Điểm Cá Nhân</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Highlights Bar -->
+    <section style="background: #ffffff; border-bottom: 1px solid var(--border-hairline); padding: 24px 0;">
+      <div class="container">
+        <div class="course-feature-strip">
+          <div>
+            <div style="font-size: 1.5rem; margin-bottom: 4px;">📅</div>
+            <strong style="display: block; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 4px;">Lịch Học Linh Động</strong>
+            <span style="font-size: 0.86rem; color: var(--text-secondary);">Sắp xếp theo lịch rảnh của bạn — học buổi tối hoặc cuối tuần đều được</span>
+          </div>
+          <div>
+            <div style="font-size: 1.5rem; margin-bottom: 4px;">💄</div>
+            <strong style="display: block; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 4px;">Tài Trợ 100% Mỹ Phẩm</strong>
+            <span style="font-size: 0.86rem; color: var(--text-secondary);">Mỹ phẩm chính hãng từ phổ thông đến High-end — trải nghiệm tại lớp</span>
+          </div>
+          <div>
+            <div style="font-size: 1.5rem; margin-bottom: 4px;">🎓</div>
+            <strong style="display: block; font-size: 1.05rem; color: var(--text-primary); margin-bottom: 4px;">Dụng Cụ Chuyên Nghiệp</strong>
+            <span style="font-size: 0.86rem; color: var(--text-secondary);">Cọ, bảng pha, palette đầy đủ — bạn chỉ cần đến học</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 1: 4 Core Skills -->
+    <section class="section-padding">
+      <div class="container">
+        <div class="section-header text-center" data-reveal>
+          <span class="section-tag">SAU KHÓA HỌC BẠN SẼ</span>
+          <h2 class="section-title">Làm Chủ 4 Kỹ Năng Cốt Lõi</h2>
+          <p class="section-desc">
+            Không phải học theo công thức rập khuôn — bạn sẽ hiểu chính khuôn mặt mình và biết cách tôn lên vẻ đẹp riêng vốn có.
+          </p>
+        </div>
+
+        <div class="skills-grid" data-reveal-stagger>
+          <div class="skill-card">
+            <div class="skill-num">01</div>
+            <h3 class="skill-title">Hiểu Về Làn Da</h3>
+            <p class="skill-desc">
+              "Đọc vị" tình trạng da của chính mình. Nắm vững kỹ thuật xử lý lớp lót và che khuyết điểm "tàng hình" — lớp nền mỏng nhẹ, tự nhiên, bền màu suốt ngày dài không lo mốc phấn.
+            </p>
+          </div>
+
+          <div class="skill-card">
+            <div class="skill-num">02</div>
+            <h3 class="skill-title">Phù Phép Đôi Mắt</h3>
+            <p class="skill-desc">
+              Bí quyết kẻ eyeliner tự nhiên giúp mắt to tròn, sắc sảo. Thành thạo quy tắc phối màu phấn mắt — biến hóa linh hoạt từ thanh lịch công sở đến cuốn hút dạo phố.
+            </p>
+          </div>
+
+          <div class="skill-card">
+            <div class="skill-num">03</div>
+            <h3 class="skill-title">Định Hình Phong Cách</h3>
+            <p class="skill-desc">
+              Tự phân tích tỉ lệ khuôn mặt để tìm ra "chân ái". Chọn layout makeup tôn vinh nét sắc sảo vốn có và làm mờ khuyết điểm — không rập khuôn theo bất kỳ ai.
+            </p>
+          </div>
+
+          <div class="skill-card">
+            <div class="skill-num">04</div>
+            <h3 class="skill-title">Tối Ưu Túi Đồ Trang Điểm</h3>
+            <p class="skill-desc">
+              Chấm dứt lãng phí tiền vào mỹ phẩm "bắt trend" mà không dùng đến. Thiết lập túi makeup tinh gọn — chỉ giữ sản phẩm thật sự cần thiết, đa năng và hiệu quả cao nhất.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Transparent Pricing (3 Packages) -->
+    <section class="section-padding" style="background: var(--bg-surface);">
+      <div class="container">
+        <div class="section-header text-center" data-reveal>
+          <span class="section-tag">HỌC PHÍ MINH BẠCH</span>
+          <h2 class="section-title">Chọn Gói Học Phù Hợp Với Bạn</h2>
+          <p class="section-desc">
+            3 lộ trình từ cơ bản đến chuyên sâu — tài trợ 100% mỹ phẩm &amp; dụng cụ chính hãng tại lớp, cam kết không phát sinh chi phí ẩn.
+          </p>
+        </div>
+
+        <div class="pricing-grid" data-reveal-stagger>
+          <!-- Package 1: Cơ bản -->
+          <div class="pricing-tier-card">
+            <h3 class="pricing-tier-name">GÓI CƠ BẢN</h3>
+            <div class="pricing-tier-sub">Dành cho người mới bắt đầu (Zero-base)</div>
+            <div class="pricing-tier-val">1.500.000 <span style="font-size: 1.1rem; font-weight: 500;">đ</span></div>
+            <div class="pricing-tier-duration">Thời lượng: 4 buổi chuyên sâu</div>
+
+            <ul class="pricing-features-list">
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Kiến thức Skincare &amp; dưỡng ẩm nền tảng</span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Thao tác trang điểm hàng ngày trong 10-15 phút</span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Kỹ thuật đánh nền mỏng nhẹ, kiềm dầu</span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Layout dự tiệc nhẹ nhàng, thanh lịch</span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Tài trợ 100% mỹ phẩm &amp; dụng cụ tại lớp</span>
+              </li>
+            </ul>
+
+            <a href="#dang-ky" class="btn btn-secondary btn-block">
+              <span>ĐĂNG KÝ GÓI CƠ BẢN</span>
+            </a>
+          </div>
+
+          <!-- Package 2: Nâng cao (Phổ biến nhất) -->
+          <div class="pricing-tier-card popular">
+            <span class="pricing-popular-pill">PHỔ BIẾN NHẤT ⭐</span>
+            <h3 class="pricing-tier-name">GÓI NÂNG CAO</h3>
+            <div class="pricing-tier-sub">Dành cho người đã có nền tảng cơ bản</div>
+            <div class="pricing-tier-val">2.000.000 <span style="font-size: 1.1rem; font-weight: 500;">đ</span></div>
+            <div class="pricing-tier-duration">Thời lượng: 5 buổi chuyên sâu</div>
+
+            <ul class="pricing-features-list">
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span><strong>Toàn bộ kiến thức gói Cơ bản</strong></span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Xử lý khuyết điểm phức tạp (mụn, thâm, tàn nhang)</span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Layout dự tiệc độ khó cao &amp; phong cách Douyin</span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Trải nghiệm dòng mỹ phẩm High-end danh tiếng</span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Hỗ trợ uốn nắn kỹ thuật trực tiếp từ Giảng viên</span>
+              </li>
+            </ul>
+
+            <a href="#dang-ky" class="btn btn-primary btn-block">
+              <span>ĐĂNG KÝ GÓI NÂNG CAO</span>
+            </a>
+          </div>
+
+          <!-- Package 3: VIP 1:1 -->
+          <div class="pricing-tier-card">
+            <h3 class="pricing-tier-name">GÓI VIP 1:1</h3>
+            <div class="pricing-tier-sub">Giảng dạy kèm riêng 1 kèm 1 cùng Master</div>
+            <div class="pricing-tier-val">3.000.000 <span style="font-size: 1.1rem; font-weight: 500;">đ</span></div>
+            <div class="pricing-tier-duration">Thời lượng: 5 buổi kèm riêng 1:1</div>
+
+            <ul class="pricing-features-list">
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span><strong>Toàn bộ quyền lợi của gói Nâng cao</strong></span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span><strong>Giảng dạy 1 kèm 1 trực tiếp</strong> suốt 5 buổi</span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>🎁 <strong>Tặng Gói chụp ảnh Beauty nghệ thuật</strong></span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Hình ảnh chất lượng cao xây dựng thương hiệu cá nhân</span>
+              </li>
+              <li class="pricing-feature-item">
+                <svg class="check-icon" width="16" height="16" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Tư vấn shopping mỹ phẩm cá nhân hóa theo chất da</span>
+              </li>
+            </ul>
+
+            <a href="#dang-ky" class="btn btn-secondary btn-block">
+              <span>ĐĂNG KÝ GÓI VIP 1:1</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Master Profile -->
+    <section class="section-padding">
+      <div class="container">
+        <div class="instructor-intro-grid" data-reveal>
+          <div>
+            <img src="<?php echo esc_url(lilychen_image_url('ca-nhan-1.webp')); ?>" alt="Master Lily Chen - Nguyễn Phương Ly" style="width: 100%; border-radius: var(--radius-card); box-shadow: var(--shadow-md); object-fit: cover; max-height: 480px;">
+          </div>
+          <div>
+            <span class="section-tag">GIẢNG VIÊN CHÍNH</span>
+            <h2 class="section-title" style="margin-bottom: 12px;">Lily Chen — Nguyễn Phương Ly</h2>
+            <p style="color: var(--color-rose-deep); font-weight: 700; font-size: 1.05rem; margin-bottom: 18px;">
+              Founder · Du học ngành Mỹ phẩm tại Nhật Bản
+            </p>
+            <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text-secondary); margin-bottom: 24px;">
+              Người sáng lập Lily Chen Makeup Academy. Nổi bật với thế mạnh nghệ sĩ Facechart cùng tư duy thẩm mỹ hiện đại — kết hợp nền tảng đào tạo bài bản từ Nhật Bản với phong cách makeup tôn vinh nét đẹp Á Đông tự nhiên, thanh lịch.
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 18px 0; border-top: 1px solid var(--border-hairline); border-bottom: 1px solid var(--border-hairline);">
+              <div>
+                <strong style="display: block; font-family: var(--font-heading); font-size: 1.6rem; color: var(--color-rose);">3 Năm</strong>
+                <span style="font-size: 0.82rem; color: var(--text-muted);">Kinh nghiệm giảng dạy</span>
+              </div>
+              <div>
+                <strong style="display: block; font-family: var(--font-heading); font-size: 1.6rem; color: var(--color-rose);">200+</strong>
+                <span style="font-size: 0.82rem; color: var(--text-muted);">Học viên cá nhân</span>
+              </div>
+              <div>
+                <strong style="display: block; font-family: var(--font-heading); font-size: 1.6rem; color: var(--color-rose);">80+</strong>
+                <span style="font-size: 0.82rem; color: var(--text-muted);">Chuyên viên ra nghề</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 4: Student Results Gallery -->
+    <section class="section-padding" style="background: var(--bg-surface);">
+      <div class="container">
+        <div class="section-header text-center" data-reveal>
+          <span class="section-tag">KẾT QUẢ THỰC TẾ</span>
+          <h2 class="section-title">Ảnh Học Viên Tự Makeup Sau Tốt Nghiệp</h2>
+          <p class="section-desc">
+            Mỗi học viên một phong cách — không ai giống ai, nhưng đều tự tin tỏa sáng với chính khuôn mặt mình.
+          </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 36px;" data-reveal-stagger>
+          <div style="border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-sm);">
+            <img src="<?php echo esc_url(lilychen_image_url('ca-nhan-2.webp')); ?>" alt="Học viên trang điểm cá nhân tự makeup" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;">
+          </div>
+          <div style="border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-sm);">
+            <img src="<?php echo esc_url(lilychen_image_url('ca-nhan-3.webp')); ?>" alt="Học viên sau khóa cá nhân Lily Chen" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;">
+          </div>
+          <div style="border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-sm);">
+            <img src="<?php echo esc_url(lilychen_image_url('ca-nhan-4.webp')); ?>" alt="Layout cá nhân tự nhiên đi làm" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;">
+          </div>
+          <div style="border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-sm);">
+            <img src="<?php echo esc_url(lilychen_image_url('ca-nhan-5.webp')); ?>" alt="Trang điểm dự tiệc cá nhân kết khóa" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;">
+          </div>
+          <div style="border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-sm);">
+            <img src="<?php echo esc_url(lilychen_image_url('ca-nhan-6.webp')); ?>" alt="Tác phẩm học viên makeup cá nhân" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;">
+          </div>
+          <div style="border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-sm);">
+            <img src="<?php echo esc_url(lilychen_image_url('tacpham6.webp')); ?>" alt="Học viên tốt nghiệp Lily Chen Academy" style="width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: FAQs -->
+    <section class="section-padding">
+      <div class="container" style="max-width: 860px;">
+        <div class="section-header text-center" data-reveal>
+          <span class="section-tag">CÂU HỎI THƯỜNG GẶP</span>
+          <h2 class="section-title">Bạn Còn Băn Khoăn?</h2>
+          <p class="section-desc">Giải đáp chi tiết những câu hỏi thường gặp nhất từ học viên khóa cá nhân.</p>
+        </div>
+
+        <div class="faq-accordion" data-reveal-stagger>
+          <!-- FAQ 1 -->
+          <div class="faq-item">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>Tôi chưa từng makeup bao giờ, có theo được không?</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Hoàn toàn được. Khóa Cơ bản thiết kế riêng cho Zero-base — bắt đầu từ kiến thức skincare nền tảng đến từng thao tác makeup hàng ngày. Hơn 200 học viên trước đây cũng bắt đầu từ con số 0 và đã tự tin trang điểm đẹp sau khóa học.</p>
+            </div>
+          </div>
+
+          <!-- FAQ 2 -->
+          <div class="faq-item">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>Lịch học có cố định không? Tôi đi làm có theo được không?</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Lịch học hoàn toàn linh động. Bạn được sắp xếp lịch theo thời gian rảnh của mình — học buổi tối trong tuần hoặc cuối tuần đều được. Bạn có thể dời buổi học nếu báo trước cho học viện.</p>
+            </div>
+          </div>
+
+          <!-- FAQ 3 -->
+          <div class="faq-item">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>Tôi có cần mua mỹ phẩm và dụng cụ trước khi học không?</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Không cần. Lớp tài trợ 100% mỹ phẩm và dụng cụ chính hãng — từ skincare đến các thương hiệu phổ thông và High-end. Bạn chỉ cần đến lớp. Sau khi học xong, cô Ly sẽ tư vấn bạn mua đúng những món thực sự hợp với làn da mình, tránh lãng phí.</p>
+            </div>
+          </div>
+
+          <!-- FAQ 4 -->
+          <div class="faq-item">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>Sau khóa học có được hỗ trợ thêm không?</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Có. Học viên được hỗ trợ giải đáp thắc mắc trọn đời qua kênh Zalo riêng của Academy. Bất kỳ khi nào gặp layout khó hoặc cần gợi ý mỹ phẩm mới, cô Ly luôn sẵn sàng hỗ trợ bạn.</p>
+            </div>
+          </div>
+
+          <!-- FAQ 5 -->
+          <div class="faq-item">
+            <button type="button" class="faq-question" aria-expanded="false">
+              <span>Sự khác biệt giữa gói Nâng cao và gói VIP 1:1?</span>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
+            <div class="faq-answer">
+              <p>Gói VIP 1:1 bao gồm toàn bộ nội dung của gói Nâng cao, nhưng bạn được học kèm 1 kèm 1 riêng biệt cùng Master Lily Chen và nhận thêm món quà đặc biệt là <strong>Gói chụp ảnh Beauty nghệ thuật kết khóa</strong> — giúp bạn có sẵn bộ ảnh lung linh chất lượng cao để xây dựng thương hiệu cá nhân.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 6: Consultation Form -->
+    <section id="dang-ky" class="section-padding conversion-section">
+      <div class="container">
+        <div class="conversion-grid">
+          <div class="conversion-info" data-reveal>
+            <span class="section-tag">NHẬN TƯ VẤN LỘ TRÌNH</span>
+            <h2 class="conversion-title">Tự Tin Tỏa Sáng Với Nét Đẹp Độc Bản</h2>
+            <p class="conversion-desc">
+              Để lại thông tin — Lily Chen Academy sẽ liên hệ trong 24h để tư vấn gói học phù hợp nhất với mục tiêu và ngân sách của bạn.
+            </p>
+
+            <div class="conversion-benefits">
+              <div class="benefit-item">
+                <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Tư vấn miễn phí 100% | Không cam kết mua</span>
+              </div>
+              <div class="benefit-item">
+                <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Sắp xếp lịch học linh hoạt theo thời gian rảnh của bạn</span>
+              </div>
+              <div class="benefit-item">
+                <svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="var(--color-rose)"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                <span>Tài trợ 100% mỹ phẩm &amp; dụng cụ chính hãng tại lớp</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="lead-form-card" data-reveal>
+            <div class="lead-form-header">
+              <h3 class="lead-form-title">Đăng Ký Khóa Cá Nhân</h3>
+              <p class="lead-form-sub">Nhận phân tích tone da &amp; xếp lịch học linh hoạt</p>
+            </div>
+
+            <form id="leadForm" class="lead-form" novalidate>
+              <input type="hidden" name="source_page" value="Trang Khóa Học Trang Điểm Cá Nhân (/khoa-hoc-trang-diem-ca-nhan/)">
+
+              <div class="form-group">
+                <label for="leadName" class="form-label">Họ và tên của bạn <span>*</span></label>
+                <input type="text" id="leadName" name="name" class="form-control" placeholder="Ví dụ: Nguyễn Phương Mai" required>
+              </div>
+
+              <div class="form-group">
+                <label for="leadPhone" class="form-label">Số điện thoại / Zalo <span>*</span></label>
+                <input type="tel" id="leadPhone" name="phone" class="form-control" placeholder="Ví dụ: 0987 654 321" required>
+              </div>
+
+              <div class="form-group">
+                <label for="leadCourse" class="form-label">Gói học quan tâm <span>*</span></label>
+                <select id="leadCourse" name="course" class="form-control" required>
+                  <option value="Khóa Cá Nhân - Gói Nâng Cao (2.000.000đ)" selected>Gói Nâng Cao (5 buổi · 2.000.000đ - Phổ biến nhất ⭐)</option>
+                  <option value="Khóa Cá Nhân - Gói Cơ Bản (1.500.000đ)">Gói Cơ Bản (4 buổi · 1.500.000đ - Zero-base)</option>
+                  <option value="Khóa Cá Nhân - Gói VIP 1:1 (3.000.000đ)">Gói VIP 1:1 (5 buổi kèm riêng · 3.000.000đ)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="leadTime" class="form-label">Khung giờ bạn rảnh để học</label>
+                <select id="leadTime" name="time" class="form-control">
+                  <option value="Linh hoạt">Linh hoạt theo lịch của tôi</option>
+                  <option value="Ca Tối (18:00 - 20:30)">Ca Tối (18:00 - 20:30 - Thích hợp văn phòng)</option>
+                  <option value="Cuối tuần (Thứ 7 - CN)">Học cuối tuần (Thứ 7 - CN)</option>
+                  <option value="Ca Sáng (09:00 - 11:30)">Ca Sáng (09:00 - 11:30)</option>
+                  <option value="Ca Chiều (14:00 - 16:30)">Ca Chiều (14:00 - 16:30)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="leadMessage" class="form-label">Tình trạng da hoặc mong muốn của bạn</label>
+                <textarea id="leadMessage" name="message" class="form-control" rows="3" placeholder="Ví dụ: Da mình dầu mụn, muốn học để tự tin makeup đi làm nhẹ nhàng..."></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-lg form-submit-btn">
+                GỬI ĐĂNG KÝ TƯ VẤN
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
+              </button>
+
+              <div class="form-privacy-note">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                Thông tin được bảo mật tuyệt đối theo <a href="<?php echo esc_url(home_url('/chinh-sach-bao-mat/')); ?>" style="color: inherit; text-decoration: underline;">Chính sách bảo mật</a>. Phản hồi trong 24 giờ.
+              </div>
+
+              <!-- Success Notification Box (Test Mode Compatibility) -->
+              <div id="formSuccessMsg" class="form-success-msg" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+<?php
+get_footer();

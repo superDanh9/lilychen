@@ -302,4 +302,44 @@ a img.aligncenter {
   }
 }
 
+/* --------------------------------------------------------------------------
+   Subpage Extra Utilities
+   -------------------------------------------------------------------------- */
+.btn-large {
+  padding: 16px 36px !important;
+  font-size: 1.05rem !important;
+}
 
+.conversion-info {
+  margin-bottom: 24px;
+}
+
+.contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activity-info {
+  flex: 1;
+}
+
+.footer-copy {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.blog-meta-inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.blog-author,
+.blog-date,
+.blog-dot {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+}

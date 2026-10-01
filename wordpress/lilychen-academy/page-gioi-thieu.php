@@ -1,0 +1,567 @@
+<?php
+/**
+ * Template Name: Giới Thiệu (About Page)
+ * Template Post Type: page
+ *
+ * Mẫu trang riêng cho đường dẫn /gioi-thieu/ (Giới thiệu học viện).
+ * Chuyển giao trực tiếp 100% từ gioi-thieu/index.html đã duyệt.
+ * Bảo toàn thiết kế Fashion Editorial Scrollytelling, nội dung, ảnh và tương tác.
+ *
+ * @package LilyChen_Academy
+ */
+
+if (!defined('ABSPATH')) {
+    exit; // Exit if accessed directly.
+}
+
+get_header();
+?>
+
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "AboutPage",
+        "@id": "https://lilychenmakeup.com/gioi-thieu/#webpage",
+        "url": "https://lilychenmakeup.com/gioi-thieu/",
+        "name": "Giới Thiệu Lily Chen Makeup Academy | Triết Lý & Câu Chuyện Sáng Lập",
+        "description": "Câu chuyện sáng lập, triết lý đào tạo và nền tảng chuyên môn của Master Lily Chen tại Bình Dương.",
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Trang chủ", "item": "https://lilychenmakeup.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Giới Thiệu", "item": "https://lilychenmakeup.com/gioi-thieu/" }
+          ]
+        }
+      },
+      {
+        "@type": ["BeautySalon", "EducationalOrganization"],
+        "@id": "https://lilychenmakeup.com/#organization",
+        "name": "Lily Chen Makeup Academy",
+        "alternateName": "Học Viện Trang Điểm Lily Chen Bình Dương",
+        "url": "https://lilychenmakeup.com/",
+        "logo": "https://lilychenmakeup.com/images/logo-lilychen.png",
+        "telephone": "0889979791",
+        "email": "thlongntl@gmail.com",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "B14, Đường số 3, KDC Hiệp Phát 2, P. Hiệp Thành",
+          "addressLocality": "Thành phố Thủ Dầu Một",
+          "addressRegion": "Bình Dương",
+          "addressCountry": "VN"
+        },
+        "priceRange": "1.500.000đ - 25.000.000đ"
+      },
+      {
+        "@type": "Person",
+        "@id": "https://lilychenmakeup.com/#instructor",
+        "name": "Lily Chen (Nguyễn Phương Ly)",
+        "jobTitle": "Master Makeup Artist & Giảng viên sáng lập",
+        "worksFor": { "@id": "https://lilychenmakeup.com/#organization" }
+      }
+    ]
+  }
+  </script>
+
+<main id="mainContent">
+
+    <!-- ========================================================
+         1. FASHION EDITORIAL HERO
+         ======================================================== -->
+    <section class="about-hero" id="hero">
+      <canvas id="aboutHeroCanvas" class="particle-canvas page-hero-canvas" aria-hidden="true" data-engine="three.js r180"></canvas>
+      <div class="container">
+        <!-- Editorial Volume Header Bar -->
+        <div class="about-hero-topbar">
+          <span>Lily Chen Makeup Academy</span>
+          <span class="about-hero-topbar-center">Editorial 2026 · Tạp Chí Sáng Lập</span>
+          <span>Bình Dương, Việt Nam</span>
+        </div>
+
+        <div class="about-hero-grid">
+          <div class="about-hero-content">
+            <span class="editorial-tag">Artistic Director &amp; Boutique Academy</span>
+            <h1 class="about-hero-title">
+              Tôn vinh nét đẹp <em>độc bản</em><br class="hero-title-break">bằng sự thấu hiểu &amp;&nbsp;chuẩn&nbsp;mực
+            </h1>
+            <p class="about-hero-lead">
+              Tại <strong>Lily Chen Makeup Academy</strong>, chúng tôi tin rằng trang điểm không phải là phủ lấp hay biến bạn thành bản sao của bất kỳ ai. Đó là hành trình đánh thức khí chất riêng biệt qua tư duy mỹ phẩm an toàn và kỹ thuật vi chuẩn được tôi luyện từ Nhật Bản.
+            </p>
+            <div class="about-credential-chips">
+              <div class="credential-chip">
+                <svg viewBox="0 0 24 24"><path d="M12 2l2.4 7.4h7.6l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4-6.2-4.5h7.6z"/></svg>
+                <span>3+ Năm Đào Tạo Boutique</span>
+              </div>
+              <div class="credential-chip">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <span>280+ Học Viên Tốt Nghiệp</span>
+              </div>
+              <div class="credential-chip">
+                <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+                <span>Khoa Học Mỹ Phẩm Nhật Bản</span>
+              </div>
+              <div class="credential-chip">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                <span>Cố Vấn Sắc Đẹp TDMU 2025</span>
+              </div>
+            </div>
+            <a href="#cau-chuyen" class="about-hero-cue">
+              <span>Khám phá câu chuyện sáng lập học viện ↓</span>
+            </a>
+          </div>
+
+          <div class="about-hero-visual">
+            <div class="hero-portrait-frame">
+              <img src="<?php echo esc_url(lilychen_image_url('lily-chen-founder-portrait-full.webp')); ?>" alt="Master Lily Chen - Nguyễn Phương Ly Founder Lily Chen Makeup Academy Bình Dương" class="hero-portrait-img" width="1152" height="2048" fetchpriority="high">
+              <div class="hero-portrait-badge">
+                <div class="badge-name">Master Lily Chen</div>
+                <div class="badge-role">Nguyễn Phương Ly · Founder &amp; Giảng viên sáng lập</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         2. STICKY SCROLLYTELLING JOURNEY (CÂU CHUYỆN SÁNG LẬP)
+         ======================================================== -->
+    <section class="story-scrolly-section" id="cau-chuyen">
+      <div class="container">
+        <div class="editorial-section-header">
+          <span class="editorial-eyebrow">Hành Trình Khởi Nguồn</span>
+          <h2 class="editorial-heading">Câu Chuyện Sáng Lập</h2>
+          <p class="editorial-desc">
+            Từ những năm tháng tiếp thu tinh hoa thẩm mỹ tại đất nước mặt trời mọc đến khát vọng xây dựng một học viện Boutique tử tế, nơi mỗi học viên được nâng niu và trao gửi tay nghề thực chiến.
+          </p>
+        </div>
+
+        <div class="story-scrolly-grid">
+          <!-- Left Column: Sticky Media Frame (Desktop) -->
+          <div class="story-sticky-col">
+            <div class="story-media-card" id="storyMediaCard">
+              <!-- Indicators -->
+              <div class="story-indicator-bar" aria-hidden="true">
+                <span class="indicator-dot is-active" data-dot-index="0" title="Chương 1"></span>
+                <span class="indicator-dot" data-dot-index="1" title="Chương 2"></span>
+                <span class="indicator-dot" data-dot-index="2" title="Chương 3"></span>
+                <span class="indicator-dot" data-dot-index="3" title="Chương 4"></span>
+              </div>
+
+              <!-- Slide 0: Nền tảng Nhật Bản -->
+              <div class="story-slide is-active" data-slide-index="0">
+                <img src="<?php echo esc_url(lilychen_image_url('lily-chen-founder-portrait-full.webp')); ?>" alt="Chân dung Master Lily Chen - Du học chuyên sâu ngành Mỹ phẩm tại Nhật Bản" loading="lazy">
+                <div class="story-slide-overlay">
+                  <div class="slide-caption-tag">Chương 01 · Gốc Rễ</div>
+                  <div class="slide-caption-title">Tư duy mỹ phẩm an toàn &amp; Kỹ thuật vi chuẩn Nhật Bản</div>
+                </div>
+              </div>
+
+              <!-- Slide 1: Trăn trở mô hình đại trà -->
+              <div class="story-slide" data-slide-index="1">
+                <img src="<?php echo esc_url(lilychen_image_url('IMG_1644.webp')); ?>" alt="Layout trang điểm tự nhiên trong trẻo tôn vinh nét đẹp độc bản - Lily Chen Makeup Academy" loading="lazy">
+                <div class="story-slide-overlay">
+                  <div class="slide-caption-tag">Chương 02 · Trăn Trở</div>
+                  <div class="slide-caption-title">Vẻ đẹp tự nhiên trong trẻo — Khát vọng vượt qua lối trang điểm rập khuôn</div>
+                </div>
+              </div>
+
+              <!-- Slide 2: Khai sinh Boutique Academy 1 kèm 1 -->
+              <div class="story-slide" data-slide-index="2">
+                <img src="<?php echo esc_url(lilychen_image_url('IMG_1697.webp')); ?>" alt="Không gian studio Lily Chen Makeup Academy với mô hình đào tạo kèm cặp 1-1" loading="lazy">
+                <div class="story-slide-overlay">
+                  <div class="slide-caption-tag">Chương 03 · Khai Sinh</div>
+                  <div class="slide-caption-title">Mô hình Boutique: Tối đa 5 học viên, 90% thực hành mẫu thật tại studio</div>
+                </div>
+              </div>
+
+              <!-- Slide 3: Dấu mốc TDMU 2025 & Uy tín -->
+              <div class="story-slide" data-slide-index="3">
+                <img src="<?php echo esc_url(lilychen_image_url('lilychen-king-queen-collage-2025.webp')); ?>" alt="Lily Chen Makeup Academy - Đối tác trang điểm độc quyền Đêm chung kết King &amp; Queen TDMU 2025" loading="lazy">
+                <div class="story-slide-overlay">
+                  <div class="slide-caption-tag">Chương 04 · Khẳng Định</div>
+                  <div class="slide-caption-title">Đối tác trang điểm độc quyền Đêm chung kết King &amp; Queen TDMU 2025</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Scrollable Narrative Chapters -->
+          <div class="story-narrative-col">
+            <!-- Chapter 1 -->
+            <article class="story-chapter is-active-chapter" data-chapter-index="0" id="chapter-0">
+              <span class="chapter-watermark" aria-hidden="true">01</span>
+              <img src="<?php echo esc_url(lilychen_image_url('lily-chen-founder-portrait-full.webp')); ?>" alt="Master Lily Chen - Du học ngành Mỹ phẩm tại Nhật Bản" class="chapter-mobile-image" loading="lazy">
+              <span class="chapter-number-tag">Chương 01 / Gốc Rễ</span>
+              <h3 class="chapter-title">Nền tảng từ cái nôi mỹ phẩm Nhật Bản</h3>
+              <p class="chapter-text">
+                Bắt đầu hành trình từ những năm tháng du học chuyên sâu ngành Mỹ phẩm tại Nhật Bản, Lily Chen (Nguyễn Phương Ly) sớm tiếp cận với một nền văn hóa làm đẹp coi trọng tuyệt đối sự tinh tế, dược mỹ phẩm an toàn và tính kỷ luật chính xác đến từng chi tiết nhỏ.
+              </p>
+              <p class="chapter-text">
+                Tại đất nước mặt trời mọc, trang điểm không chỉ là sự biến tấu màu sắc bên ngoài mà là khoa học hiểu về cấu trúc tầng da, sắc tố biểu bì và cách chọn chất liệu tương thích. Đó chính là nền tảng định hình tư duy thẩm mỹ cốt lõi của cô: đặt yêu cầu khắt khe về chất lượng sản phẩm, kỹ thuật nương theo làn da và sự phù hợp hoàn hảo với từng gương mặt riêng biệt.
+              </p>
+              <div class="chapter-quote-box">
+                “Trang điểm chuẩn mực là khi người đối diện thấy bạn đẹp hơn, rạng rỡ hơn nhưng vẫn nhận ra đó là chính bạn — tự nhiên, tinh tế và đầy tự tin.”
+              </div>
+              <div class="chapter-chips">
+                <span class="chip-item">✓ Khoa học mỹ phẩm Nhật Bản</span>
+                <span class="chip-item">✓ Tôn trọng cấu trúc da</span>
+                <span class="chip-item">✓ Kỹ thuật vi chuẩn</span>
+              </div>
+            </article>
+
+            <!-- Chapter 2 -->
+            <article class="story-chapter" data-chapter-index="1" id="chapter-1">
+              <span class="chapter-watermark" aria-hidden="true">02</span>
+              <img src="<?php echo esc_url(lilychen_image_url('IMG_1644.webp')); ?>" alt="Layout trang điểm tự nhiên trong trẻo tôn vinh nét đẹp độc bản" class="chapter-mobile-image" loading="lazy">
+              <span class="chapter-number-tag">Chương 02 / Trăn Trở</span>
+              <h3 class="chapter-title">Nghịch lý giữa nhu cầu bùng nổ và đào tạo đại trà</h3>
+              <p class="chapter-text">
+                Khi trở về Việt Nam và đặt cơ sở tại Bình Dương, Lily nhận thấy nhu cầu làm đẹp và học nghề đang tăng trưởng mạnh mẽ hơn bao giờ hết. Rất nhiều bạn trẻ mong muốn xây dựng sự nghiệp độc lập vững chắc, và vô số chị em công sở khát khao làm chủ diện mạo để thăng tiến trong công việc.
+              </p>
+              <p class="chapter-text">
+                Tuy nhiên, phần lớn các trung tâm hiện có vẫn vận hành theo mô hình lớp học đông đúc từ 15 đến 20 người. Học viên phần lớn chỉ ngồi nhìn giảng viên biểu diễn trên sân khấu hoặc học qua tài liệu lý thuyết suông. Khi bước ra ngoài đời thực, gặp những gương mặt có khuyết điểm da, mắt một mí hay xương hàm góc cạnh, các bạn rơi vào hoang mang và mất phương hướng.
+              </p>
+              <div class="chapter-chips">
+                <span class="chip-item">✓ Khảo sát thực tế Bình Dương</span>
+                <span class="chip-item">✓ Nhận diện bất cập lớp đông</span>
+                <span class="chip-item">✓ Quyết tâm tạo lối đi riêng</span>
+              </div>
+            </article>
+
+            <!-- Chapter 3 -->
+            <article class="story-chapter" data-chapter-index="2" id="chapter-2">
+              <span class="chapter-watermark" aria-hidden="true">03</span>
+              <img src="<?php echo esc_url(lilychen_image_url('IMG_1697.webp')); ?>" alt="Mô hình đào tạo Boutique 1 kèm 1 tại studio Lily Chen Makeup Academy" class="chapter-mobile-image" loading="lazy">
+              <span class="chapter-number-tag">Chương 03 / Lựa Chọn</span>
+              <h3 class="chapter-title">Khai sinh mô hình Boutique Academy 1 kèm 1</h3>
+              <p class="chapter-text">
+                Không chấp nhận sự thỏa hiệp, <strong>Lily Chen Makeup Academy</strong> ra đời với một lối đi hoàn toàn khác biệt: mô hình học viện chuẩn Boutique. Mỗi lớp học giới hạn tuyệt đối không quá 5 học viên, đảm bảo 90% thời lượng là cầm cọ thực hành trực tiếp trên người mẫu thật.
+              </p>
+              <p class="chapter-text">
+                Ở đây không có khái niệm giao phó cho trợ giảng hay học sinh khóa trước dạy lại. Đích thân Master Lily Chen trực tiếp uốn nắn từng góc đặt cọ, lực ấn tay, cân chỉnh tỉ lệ gương mặt cho từng học viên suốt từ buổi nhập môn cho tới ngày ra nghề. Lộ trình học được thiết kế linh hoạt, cá nhân hóa theo đúng sở trường và năng khiếu của mỗi bạn.
+              </p>
+              <div class="chapter-quote-box">
+                “Quy mô lớp học có thể nhỏ, nhưng giá trị và tay nghề mà mỗi học viên nhận được phải là sự vững vàng và chuẩn xác tuyệt đối.”
+              </div>
+              <div class="chapter-chips">
+                <span class="chip-item">✓ Chuẩn Boutique tối đa 5 bạn</span>
+                <span class="chip-item">✓ 90% Cọ vẽ trên mẫu thật</span>
+                <span class="chip-item">✓ Đích thân Master kèm cặp</span>
+              </div>
+            </article>
+
+            <!-- Chapter 4 -->
+            <article class="story-chapter" data-chapter-index="3" id="chapter-3">
+              <span class="chapter-watermark" aria-hidden="true">04</span>
+              <img src="<?php echo esc_url(lilychen_image_url('lilychen-king-queen-collage-2025.webp')); ?>" alt="Đối tác trang điểm độc quyền King & Queen TDMU 2025" class="chapter-mobile-image" loading="lazy">
+              <span class="chapter-number-tag">Chương 04 / Dấu Ấn</span>
+              <h3 class="chapter-title">Quả ngọt từ sự tận tâm &amp; Dấu mốc TDMU 2025</h3>
+              <p class="chapter-text">
+                Sau gần 3 năm bền bỉ cống hiến, học viện tự hào đã đào tạo hơn 200 học viên cá nhân tự tin làm chủ diện mạo mỗi ngày và gần 80 học viên chuyên nghiệp tự tin mở tiệm, làm nghề thành công tại Bình Dương, TP. Hồ Chí Minh và các tỉnh lân cận.
+              </p>
+              <p class="chapter-text">
+                Đặc biệt, vào tháng 11/2025, Lily Chen Makeup Academy đã được Trường Đại học Thủ Dầu Một (TDMU) tin tưởng lựa chọn làm đối tác trang điểm chính thức cho toàn bộ thí sinh đêm chung kết cuộc thi <em>King &amp; Queen of Technology 2025</em>. Đây là dấu mốc minh chứng mạnh mẽ cho chuyên môn vững vàng, phong cách làm việc chuyên nghiệp và uy tín vững chắc của học viện.
+              </p>
+              <div class="chapter-chips">
+                <span class="chip-item">✓ 280+ Tốt nghiệp thành nghề</span>
+                <span class="chip-item">✓ Đối tác sắc đẹp TDMU 2025</span>
+                <span class="chip-item">✓ Uy tín hàng đầu Bình Dương</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         3. CORE PHILOSOPHY (TRIẾT LÝ ĐÀO TẠO) - 3-COLUMN EDITORIAL
+         ======================================================== -->
+    <section class="philosophy-section" id="triet-ly">
+      <div class="container">
+        <div class="editorial-section-header">
+          <span class="editorial-eyebrow">Kim Chỉ Nam Học Viện</span>
+          <h2 class="editorial-heading">Ba Giá Trị Cốt Lõi</h2>
+          <p class="editorial-desc">
+            Không chạy theo số đông, Lily Chen Makeup Academy kiên định với mô hình đào tạo thực chất, mang lại tay nghề vững chắc cho từng học viên.
+          </p>
+        </div>
+
+        <div class="philosophy-grid">
+          <!-- Card 01 -->
+          <div class="philosophy-card">
+            <div class="philosophy-num" aria-hidden="true">01</div>
+            <span class="philosophy-badge">Thực Chiến Tối Đa</span>
+            <h3>90% Thời Lượng Thực Hành Trên Mẫu Thật</h3>
+            <p class="philosophy-desc">
+              Lý thuyết được chắt lọc cô đọng tối đa để bạn dành trọn vẹn thời gian trực tiếp biến hóa trên những gương mặt thật với đa dạng cấu trúc da, dáng mắt và độ tuổi. Bạn học để làm được việc ngay, tích lũy phản xạ xử lý thực tế chứ không phải học thuộc lòng trên giấy.
+            </p>
+            <div class="philosophy-footer-point">
+              <span>✓ Rèn luyện phản xạ cầm cọ thực chiến</span>
+            </div>
+          </div>
+
+          <!-- Card 02 -->
+          <div class="philosophy-card">
+            <div class="philosophy-num" aria-hidden="true">02</div>
+            <span class="philosophy-badge">Kèm Sát 1 Kèm 1</span>
+            <h3>Mô Hình Boutique Giới Hạn Tối Đa 5 Học Viên</h3>
+            <p class="philosophy-desc">
+              Sĩ số lớp nhỏ giúp Master Lily Chen theo sát từng thao tác trong suốt buổi học. Mọi lỗi sai về góc cọ, độ tán phấn hay lực đè đều được phát hiện và chỉnh sửa ngay tại chỗ. Bạn không bao giờ phải tự xoay xở hay cảm thấy bị bỏ quên giữa một lớp học đông đúc.
+            </p>
+            <div class="philosophy-footer-point">
+              <span>✓ Đích thân Master trực tiếp uốn nắn</span>
+            </div>
+          </div>
+
+          <!-- Card 03 -->
+          <div class="philosophy-card">
+            <div class="philosophy-num" aria-hidden="true">03</div>
+            <span class="philosophy-badge">Tôn Vinh Độc Bản</span>
+            <h3>Cá Nhân Hóa Lộ Trình Theo Từng Gương Mặt</h3>
+            <p class="philosophy-desc">
+              Mỗi con người có cấu trúc xương, hốc mắt, khuôn môi và phong cách sống khác nhau. Chúng tôi hướng dẫn bạn cách đọc cấu trúc gương mặt và kết hợp kỹ thuật Facechart chuyên sâu để tôn vinh nét cuốn hút riêng, tuyệt đối không biến mọi người thành bản sao công nghiệp giống hệt nhau.
+            </p>
+            <div class="philosophy-footer-point">
+              <span>✓ Giáo trình độc bản theo nhân trắc học</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         4. REAL-WORLD ACTIVITIES & MAGAZINE COLLAGE
+         ======================================================== -->
+    <section class="activities-section" id="hoat-dong">
+      <div class="container">
+        <div class="editorial-section-header">
+          <span class="editorial-eyebrow">Dấu Ấn Chuyên Môn</span>
+          <h2 class="editorial-heading">Hoạt Động Thực Tế &amp; Sự Kiện</h2>
+          <p class="editorial-desc">
+            Những hình ảnh tư liệu chân thực từ các sự kiện quy mô lớn đến những khoảnh khắc miệt mài bên bàn trang điểm tại studio học viện.
+          </p>
+        </div>
+
+        <!-- Featured Collage: University Partnership -->
+        <div class="activities-collage-grid">
+          <div class="activity-feature-card">
+            <img src="<?php echo esc_url(lilychen_image_url('lilychen-king-queen-collage-2025.webp')); ?>" alt="Đối tác trang điểm cuộc thi King & Queen of Technology TDMU 2025" class="activity-feature-img" loading="lazy">
+            <div class="activity-feature-info">
+              <span class="activity-feature-badge">Dự Án Nổi Bật · Tháng 11/2025</span>
+              <h3 class="activity-feature-title">Đối Tác Trang Điểm Chính Thức — Đêm Chung Kết King &amp; Queen TDMU</h3>
+              <p class="activity-feature-desc">
+                Đội ngũ Lily Chen Academy trực tiếp phụ trách toàn bộ layout trang điểm sân khấu và chăm sóc hình ảnh cho thí sinh tại Đại học Thủ Dầu Một.
+              </p>
+            </div>
+          </div>
+
+          <div class="activity-side-col">
+            <div class="tdmu-quote-box">
+              <span class="tdmu-quote-icon">“</span>
+              <p class="tdmu-quote-text">
+                Xin cảm ơn Lily Chen Makeup Academy đã mang lại cho các thí sinh một diện mạo rạng rỡ, chỉn chu và đầy cảm hứng trong đêm chung kết.
+              </p>
+              <div class="tdmu-quote-author">
+                — Ban Tổ Chức King &amp; Queen of Technology 2025<br>
+                Trường Đại học Thủ Dầu Một (TDMU)
+              </div>
+            </div>
+
+            <div class="activity-side-img-box">
+              <div class="activity-thumbnail">
+                <img src="<?php echo esc_url(lilychen_image_url('lilychen-tdmu-award-ceremony.webp')); ?>" alt="Lễ trao giải và vinh danh đối tác TDMU" loading="lazy">
+              </div>
+              <div class="activity-thumbnail">
+                <img src="<?php echo esc_url(lilychen_image_url('lilychen-team-tdmu-2025.webp')); ?>" alt="Đội ngũ học viện Lily Chen tại sự kiện TDMU" loading="lazy">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Real Teaching Moments 4-Column Grid -->
+        <div class="studio-moments-wrap">
+          <h3 class="studio-moments-heading">Khoảnh Khắc Cầm Tay Chỉ Việc Tại Studio</h3>
+          <div class="studio-moments-grid">
+            <div class="moment-card">
+              <img src="<?php echo esc_url(lilychen_image_url('IMG_1644.webp')); ?>" alt="Bàn trang điểm và dụng cụ chuyên nghiệp chuẩn Boutique" loading="lazy">
+              <div class="moment-card-label">Không gian Boutique ánh sáng chuẩn studio</div>
+            </div>
+            <div class="moment-card">
+              <img src="<?php echo esc_url(lilychen_image_url('IMG_1680.webp')); ?>" alt="Master Lily Chen kèm sát từng nét cọ cho học viên" loading="lazy">
+              <div class="moment-card-label">Kèm sát 1:1 trên mẫu thật từ buổi đầu</div>
+            </div>
+            <div class="moment-card">
+              <img src="<?php echo esc_url(lilychen_image_url('IMG_1683.webp')); ?>" alt="Học viên chăm chút chi tiết layout trang điểm" loading="lazy">
+              <div class="moment-card-label">Rèn luyện phản xạ xử lý khuyết điểm da</div>
+            </div>
+            <div class="moment-card">
+              <img src="<?php echo esc_url(lilychen_image_url('IMG_1697.webp')); ?>" alt="Tác phẩm hoàn thiện của học viên khóa chuyên nghiệp" loading="lazy">
+              <div class="moment-card-label">Tác phẩm tốt nghiệp rạng rỡ của học viên</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         5. ACADEMY IN NUMBERS (CON SỐ BIẾT NÓI)
+         ======================================================== -->
+    <section class="about-metrics-section">
+      <div class="container">
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-number">03+</div>
+            <div class="metric-title">Năm Hoạt Động</div>
+            <p class="metric-desc">Đào tạo chuyên sâu và khẳng định uy tín hàng đầu tại Bình Dương.</p>
+          </div>
+          <div class="metric-card">
+            <div class="metric-number">280+</div>
+            <div class="metric-title">Học Viên Tốt Nghiệp</div>
+            <p class="metric-desc">Bao gồm hơn 200 học viên cá nhân và gần 80 thợ chuyên nghiệp.</p>
+          </div>
+          <div class="metric-card">
+            <div class="metric-number">05</div>
+            <div class="metric-title">Học Viên / Lớp</div>
+            <p class="metric-desc">Sĩ số vàng chuẩn Boutique đảm bảo chất lượng kèm cặp từng bạn.</p>
+          </div>
+          <div class="metric-card">
+            <div class="metric-number">90%</div>
+            <div class="metric-title">Thực Hành Mẫu Thật</div>
+            <p class="metric-desc">Tập trung rèn giũa kỹ năng thực chiến, nói không với học lý thuyết chay.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         6. EDITORIAL OUTRO & DUAL CALL-TO-ACTION
+         ======================================================== -->
+    <section class="about-outro-section">
+      <div class="container">
+        <div class="about-outro-box">
+          <span class="outro-tag">Lời Kết &amp; Khởi Đầu Hành Trình</span>
+          <h2 class="outro-title">Sẵn Sàng Làm Chủ Diện Mạo &amp; Tay Nghề Của Bạn?</h2>
+          <p class="outro-quote">
+            “Mỗi người phụ nữ sinh ra đều sở hữu một nét đẹp độc bản. Sứ mệnh của chúng tôi không phải là biến bạn thành một ai khác, mà là đánh thức sự tự tin rạng rỡ vốn có trong chính bạn.”
+          </p>
+          <div class="outro-signature">Lily Chen — Giảng Viên Sáng Lập Học Viện</div>
+          <div class="outro-cta-row">
+            <a href="<?php echo esc_url(home_url('/khoa-hoc/')); ?>" class="btn-primary-luxury">
+              <span>Khám Phá Khóa Học</span>
+            </a>
+            <a href="<?php echo esc_url(home_url('/#dang-ky')); ?>" class="btn-secondary-luxury">
+              <span>Đăng Ký Tư Vấn Trực Tiếp</span>
+            </a>
+          </div>
+          <div class="outro-contact-strip">
+            <span>📍 KDC Hiệp Phát 2, P. Hiệp Thành, TP. Thủ Dầu Một, Bình Dương</span>
+            <span>📞 Hotline / Zalo: <a href="tel:0889979791">088 997 97 91</a></span>
+            <span>⏱ 08:30 - 20:30 (Thứ 2 - CN)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+<script>
+    // Scrollytelling Interactive Controller for About Page
+    document.addEventListener('DOMContentLoaded', function() {
+      const chapters = document.querySelectorAll('.story-chapter');
+      const slides = document.querySelectorAll('.story-slide');
+      const dots = document.querySelectorAll('.story-indicator-bar .indicator-dot');
+
+      if (!chapters.length || !slides.length) return;
+
+      let currentActiveIndex = 0;
+
+      function updateActiveChapter(index) {
+        if (index === currentActiveIndex) return;
+        currentActiveIndex = index;
+
+        // Update slides
+        slides.forEach((slide, i) => {
+          if (i === index) {
+            slide.classList.add('is-active');
+          } else {
+            slide.classList.remove('is-active');
+          }
+        });
+
+        // Update indicator dots
+        dots.forEach((dot, i) => {
+          if (i === index) {
+            dot.classList.add('is-active');
+          } else {
+            dot.classList.remove('is-active');
+          }
+        });
+
+        // Update chapter highlight
+        chapters.forEach((chap, i) => {
+          if (i === index) {
+            chap.classList.add('is-active-chapter');
+          } else {
+            chap.classList.remove('is-active-chapter');
+          }
+        });
+      }
+
+      // Intersection Observer with refined threshold
+      const observerOptions = {
+        root: null,
+        rootMargin: '-25% 0px -40% 0px',
+        threshold: [0, 0.25, 0.5]
+      };
+
+      const chapterObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.getAttribute('data-chapter-index'), 10);
+            updateActiveChapter(index);
+          }
+        });
+      }, observerOptions);
+
+      chapters.forEach(chap => chapterObserver.observe(chap));
+
+      // Scroll listener fallback for rapid scrolling
+      let scrollTimer = null;
+      window.addEventListener('scroll', function() {
+        if (scrollTimer) return;
+        scrollTimer = setTimeout(() => {
+          scrollTimer = null;
+          const viewportMid = window.innerHeight * 0.45;
+          let closestIndex = currentActiveIndex;
+          let minDistance = Infinity;
+
+          chapters.forEach((chap, i) => {
+            const rect = chap.getBoundingClientRect();
+            const chapMid = rect.top + rect.height / 2;
+            const distance = Math.abs(chapMid - viewportMid);
+            if (rect.top < window.innerHeight && rect.bottom > 0 && distance < minDistance) {
+              minDistance = distance;
+              closestIndex = i;
+            }
+          });
+
+          updateActiveChapter(closestIndex);
+        }, 60);
+      }, { passive: true });
+
+      // Click on dot to scroll to chapter
+      dots.forEach((dot, i) => {
+        dot.style.cursor = 'pointer';
+        dot.addEventListener('click', () => {
+          if (chapters[i]) {
+            chapters[i].scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        });
+      });
+    });
+  </script>
+
+<?php
+get_footer();

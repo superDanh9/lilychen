@@ -112,13 +112,18 @@ add_action('wp_enqueue_scripts', 'lilychen_scripts');
  * Fallback menu when no menu has been assigned yet in WordPress Admin
  */
 function lilychen_primary_menu_fallback() {
-    $is_khoa_hoc = is_page('khoa-hoc') || is_page_template('page-khoa-hoc.php');
+    $is_gioi_thieu = is_page('gioi-thieu') || is_page_template('page-gioi-thieu.php');
+    $is_khoa_hoc   = is_page(array('khoa-hoc', 'khoa-hoc-trang-diem-ca-nhan', 'khoa-hoc-trang-diem-chuyen-nghiep')) || is_page_template(array('page-khoa-hoc.php', 'page-khoa-hoc-trang-diem-ca-nhan.php', 'page-khoa-hoc-trang-diem-chuyen-nghiep.php'));
+    $is_tac_pham   = is_page(array('tac-pham-hoc-vien', 'portfolio')) || is_page_template(array('page-tac-pham-hoc-vien.php', 'page-portfolio.php'));
+    $is_blog       = is_home() || is_page('blog') || is_page_template(array('home.php', 'page-blog.php')) || is_singular('post') || is_category() || is_tag();
+    $is_lien_he    = is_page(array('lien-he', 'contact')) || is_page_template(array('page-lien-he.php', 'page-contact.php'));
     ?>
     <nav class="desktop-nav" aria-label="<?php esc_attr_e('Menu chính', 'lilychen-academy'); ?>">
-        <a href="<?php echo esc_url(home_url('/gioi-thieu/')); ?>" class="nav-link"><?php esc_html_e('Giới Thiệu', 'lilychen-academy'); ?></a>
+        <a href="<?php echo esc_url(home_url('/gioi-thieu/')); ?>" class="nav-link<?php echo $is_gioi_thieu ? ' active' : ''; ?>"><?php esc_html_e('Giới Thiệu', 'lilychen-academy'); ?></a>
         <a href="<?php echo esc_url(home_url('/khoa-hoc/')); ?>" class="nav-link<?php echo $is_khoa_hoc ? ' active' : ''; ?>"><?php esc_html_e('Khóa Học', 'lilychen-academy'); ?></a>
-        <a href="<?php echo esc_url(home_url('/portfolio/')); ?>" class="nav-link"><?php esc_html_e('Tác Phẩm', 'lilychen-academy'); ?></a>
-        <a href="<?php echo esc_url(home_url('/blog/')); ?>" class="nav-link"><?php esc_html_e('Blog', 'lilychen-academy'); ?></a>
+        <a href="<?php echo esc_url(home_url('/tac-pham-hoc-vien/')); ?>" class="nav-link<?php echo $is_tac_pham ? ' active' : ''; ?>"><?php esc_html_e('Tác Phẩm', 'lilychen-academy'); ?></a>
+        <a href="<?php echo esc_url(home_url('/blog/')); ?>" class="nav-link<?php echo $is_blog ? ' active' : ''; ?>"><?php esc_html_e('Blog', 'lilychen-academy'); ?></a>
+        <a href="<?php echo esc_url(home_url('/lien-he/')); ?>" class="nav-link<?php echo $is_lien_he ? ' active' : ''; ?>"><?php esc_html_e('Liên Hệ', 'lilychen-academy'); ?></a>
     </nav>
     <?php
 }
@@ -127,13 +132,18 @@ function lilychen_primary_menu_fallback() {
  * Fallback mobile menu when no menu has been assigned yet in WordPress Admin
  */
 function lilychen_mobile_menu_fallback() {
-    $is_khoa_hoc = is_page('khoa-hoc') || is_page_template('page-khoa-hoc.php');
+    $is_gioi_thieu = is_page('gioi-thieu') || is_page_template('page-gioi-thieu.php');
+    $is_khoa_hoc   = is_page(array('khoa-hoc', 'khoa-hoc-trang-diem-ca-nhan', 'khoa-hoc-trang-diem-chuyen-nghiep')) || is_page_template(array('page-khoa-hoc.php', 'page-khoa-hoc-trang-diem-ca-nhan.php', 'page-khoa-hoc-trang-diem-chuyen-nghiep.php'));
+    $is_tac_pham   = is_page(array('tac-pham-hoc-vien', 'portfolio')) || is_page_template(array('page-tac-pham-hoc-vien.php', 'page-portfolio.php'));
+    $is_blog       = is_home() || is_page('blog') || is_page_template(array('home.php', 'page-blog.php')) || is_singular('post') || is_category() || is_tag();
+    $is_lien_he    = is_page(array('lien-he', 'contact')) || is_page_template(array('page-lien-he.php', 'page-contact.php'));
     ?>
     <ul class="mobile-nav-list">
-        <li><a href="<?php echo esc_url(home_url('/gioi-thieu/')); ?>" class="mobile-nav-link"><?php esc_html_e('Giới Thiệu', 'lilychen-academy'); ?></a></li>
+        <li><a href="<?php echo esc_url(home_url('/gioi-thieu/')); ?>" class="mobile-nav-link<?php echo $is_gioi_thieu ? ' active' : ''; ?>"><?php esc_html_e('Giới Thiệu', 'lilychen-academy'); ?></a></li>
         <li><a href="<?php echo esc_url(home_url('/khoa-hoc/')); ?>" class="mobile-nav-link<?php echo $is_khoa_hoc ? ' active' : ''; ?>"><?php esc_html_e('Khóa Học', 'lilychen-academy'); ?></a></li>
-        <li><a href="<?php echo esc_url(home_url('/portfolio/')); ?>" class="mobile-nav-link"><?php esc_html_e('Tác Phẩm', 'lilychen-academy'); ?></a></li>
-        <li><a href="<?php echo esc_url(home_url('/blog/')); ?>" class="mobile-nav-link"><?php esc_html_e('Blog', 'lilychen-academy'); ?></a></li>
+        <li><a href="<?php echo esc_url(home_url('/tac-pham-hoc-vien/')); ?>" class="mobile-nav-link<?php echo $is_tac_pham ? ' active' : ''; ?>"><?php esc_html_e('Tác Phẩm', 'lilychen-academy'); ?></a></li>
+        <li><a href="<?php echo esc_url(home_url('/blog/')); ?>" class="mobile-nav-link<?php echo $is_blog ? ' active' : ''; ?>"><?php esc_html_e('Blog', 'lilychen-academy'); ?></a></li>
+        <li><a href="<?php echo esc_url(home_url('/lien-he/')); ?>" class="mobile-nav-link<?php echo $is_lien_he ? ' active' : ''; ?>"><?php esc_html_e('Liên Hệ', 'lilychen-academy'); ?></a></li>
     </ul>
     <?php
 }
