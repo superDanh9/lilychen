@@ -40,292 +40,332 @@
   }
 
   // ---------------------------------------------------------------------------
-  // 2. Antigravity-Style Opening Particle Field Engine (MainParticlesComponent)
+  // 2. Approved Magnetic Orbit Particle Field Engine (Scaled Reference Coordinate Space)
+  // Source: C:\\Users\\Admin\\.codex\\visualizations\\2026\\10\\02\\01a0fcfd-dbc4-7c60-b42e-8b524b815ba5\\particle-magnetic-orbit.html
+  // Reference space: 736 x 360 CSS px
+  // Parameters: count: 300, pull: 1.2, radius: 180, orbit: 1.2, speed: 1.9, size: 3, magnet: true
+  // Interaction speed scale: interactionTimeScale = 1.5 (1.5x faster attraction, orbit & recovery)
+  // Palette: Authentic original website luxury palette (#d64c78, #ba8672, #e48ea0)
+  // Spatial scaling: uniform scale ratio mapping 736x360 reference to actual hero area
+  // Particle size scaling: sizeScale = Math.sqrt(scale) for subtle elegance
   // ---------------------------------------------------------------------------
   class AntigravityOpeningField {
     constructor(canvas, options = {}) {
       this.canvas = canvas;
-      this.parent = canvas.parentElement;
-      if (!this.canvas || !this.parent) return;
+      this.container = canvas.parentElement || document.body;
+      if (!this.canvas || !this.container) return;
 
       this.ctx = canvas.getContext('2d');
       if (!this.ctx) return;
 
-      this.type = options.type || 'hero'; // 'hero' | 'page' | 'article'
+      this.type = options.type || 'hero';
       this.canvas.setAttribute('data-engine', 'three.js r180');
 
-      this.width = 0;
-      this.height = 0;
-      this.dpr = 1;
-      this.particles = [];
-      this.animId = null;
-      this.lastTime = performance.now();
-      this.isVisible = true;
-      this.isTabActive = !document.hidden;
-
-      // Antigravity Pointer & Respiratory Wave Configuration
-      this.config = {
-        magnetRadius: this.type === 'hero' ? 145 : (this.type === 'page' ? 120 : 95),
-        ringStrength: 0.85,    // Soft magnetic repulsion halo
-        swirlStrength: 0.48,   // Tangential vortex swirl around cursor halo
-        waveSpeed: 0.018,      // Living respiratory wave cadence
-        waveAmplitude: 14,     // Natural idle drift amplitude (px)
-        lerpSpeed: 0.075       // Smooth exponential decay inertia (LERP)
+      // Exact parameters from approved simulation
+      this.cfg = {
+        count: options.count || (this.type === 'hero' ? 300 : (this.type === 'page' ? 120 : 60)),
+        pull: 1.2,
+        radius: 180,
+        orbit: 1.2,
+        speed: 1.9,
+        size: 3,
+        magnet: true
       };
 
-      this.mouse = {
-        x: -9999,
-        y: -9999,
-        active: false
-      };
+      // Interaction time scale: 1.5x faster pointer tracking, orbital speed, and return recovery
+      this.interactionTimeScale = 1.5;
+
+      // Authentic original website luxury palette (saved directly from original codebase)
+      this.colors = [
+        'rgb(214, 76, 120)',  // Couture Rose (#d64c78)
+        'rgb(186, 134, 114)', // Warm Tuscan Bronze (#ba8672)
+        'rgb(228, 142, 160)'  // Radiant Stardust Blush (#e48ea0)
+      ];
+
+      // Physical screen dimensions (CSS px)
+      this.w = 0;
+      this.h = 0;
+
+      // Scaling factors & logic simulation coordinate space
+      this.scale = 1;
+      this.sizeScale = 1;
+      this.lw = 736;
+      this.lh = 360;
 
       this.time = 0;
+      this.last = 0;
+      this.raf = 0;
+      this.visible = true;
+      this.particles = [];
+      this.mouse = { x: 0, y: 0, active: false };
+      this.lmouse = { x: 0, y: 0 };
+
+      this.reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+      this.paused = this.reduced.matches;
+
       this.init();
     }
 
-    init() {
-      this.bindEvents();
-      this.resize();
-      if (!prefersReducedMotion) {
-        this.startLoop();
+    /**
+     * Calculate uniform spatial scale based on actual canvas dimensions
+     * Reference desktop baseline: 736 x 360 CSS px
+     */
+    calculateScale(w, h) {
+      if (w >= 768) {
+        // Desktop / Tablet landscape: uniform scale anchored to 736 x 360
+        // Prevents orbital distortion while ensuring full visual presence across large hero
+        const rawScale = Math.min(w / 736, h / 360);
+        return Math.max(1.0, Math.min(2.2, rawScale));
       } else {
-        this.drawStaticFrame();
+        // Mobile portrait: scale calibrated to viewport width so the halo occupies ~68% of screen
+        // Prevents particles from spilling off mobile edges while avoiding cramped clustering
+        const mobileScale = (w * 0.68) / (2 * 180);
+        return Math.max(0.60, Math.min(1.05, mobileScale));
       }
     }
 
-    getParticleCount(w) {
-      if (this.type === 'hero') {
-        if (w < 768) return 58;
-        if (w < 1200) return 115;
-        return 185;
-      }
-      if (this.type === 'page') {
-        if (w < 768) return 30;
-        if (w < 1200) return 52;
-        return 80;
-      }
-      // article header
-      if (w < 768) return 18;
-      if (w < 1200) return 30;
-      return 42;
-    }
+    populate() {
+      const cfg = this.cfg;
+      const lw = this.lw;
+      const lh = this.lh;
+      const colors = this.colors;
 
-    createParticles() {
-      const count = this.getParticleCount(this.width);
-      this.particles = [];
-
-      // Color palettes tailored for high contrast and luxury elegance on light ivory background (#faf8f6)
-      const colorPalettes = [
-        { r: 214, g: 76,  b: 120 }, // Couture Rose
-        { r: 186, g: 134, b: 114 }, // Warm Tuscan Bronze
-        { r: 228, g: 142, b: 160 }  // Radiant Stardust Blush
-      ];
-
-      for (let i = 0; i < count; i++) {
-        const originX = Math.random() * this.width;
-        const originY = Math.random() * this.height;
-        const isFocal = Math.random() < 0.10;
-        const pal = colorPalettes[Math.floor(Math.random() * colorPalettes.length)];
-
+      while (this.particles.length < cfg.count) {
+        const u = Math.random(), v = Math.random();
         this.particles.push({
-          originX: originX,
-          originY: originY,
-          x: originX,
-          y: originY,
-          baseRadius: isFocal ? (4.2 + Math.random() * 1.4) : (2.2 + Math.random() * 1.7),
-          baseAlpha: isFocal ? (0.75 + Math.random() * 0.18) : (0.48 + Math.random() * 0.24),
+          u,
+          v,
+          lx: u * lw,
+          ly: v * lh,
+          vx: 0,
+          vy: 0,
           phase: Math.random() * Math.PI * 2,
-          speedOffset: 0.7 + Math.random() * 0.6,
-          pulseSpeed: 1.6 + Math.random() * 1.2,
-          waveAmp: this.config.waveAmplitude * (0.8 + Math.random() * 0.4),
-          swirlDir: Math.random() < 0.5 ? 1 : -1,
-          isFocal: isFocal,
-          r: pal.r,
-          g: pal.g,
-          b: pal.b
+          rate: .7 + Math.random() * .6,
+          band: Math.random(),
+          direction: Math.random() < .25 ? -1 : 1,
+          color: Math.floor(Math.random() * colors.length)
         });
       }
+      this.particles.length = cfg.count;
+    }
+
+    draw(step) {
+      const cfg = this.cfg;
+      const mouse = this.mouse;
+      const active = mouse.active && cfg.magnet;
+      const lmouse = this.lmouse;
+      const time = this.time;
+      const lw = this.lw;
+      const lh = this.lh;
+      const scale = this.scale;
+      const sizeScale = this.sizeScale;
+      const w = this.w;
+      const h = this.h;
+      const ctx = this.ctx;
+      const particles = this.particles;
+
+      // Interaction time scale: 1.5x faster motion and recovery
+      // Substepping with 2 iterations ensures ultra-smooth orbital curves and numerical stability
+      if (step) {
+        const substeps = 2;
+        const subDt = (step * this.interactionTimeScale) / substeps;
+
+        for (let s = 0; s < substeps; s++) {
+          for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            const phase = time * p.rate + p.phase;
+            let vx, vy;
+
+            if (active) {
+              // Each particle responds to pointer independently in logic reference space
+              const dx = p.lx - lmouse.x;
+              const dy = p.ly - lmouse.y;
+              const d = Math.hypot(dx, dy);
+              const angle = d > .001 ? Math.atan2(dy, dx) : p.phase;
+              const nx = Math.cos(angle);
+              const ny = Math.sin(angle);
+              const rest = 22 + Math.sqrt(p.band) * (cfg.radius - 22) + Math.sin(phase) * 12;
+              const radial = -(d - rest) * .035 * cfg.pull + Math.max(0, 18 - d) * .09;
+              const tangent = cfg.orbit * (.35 + p.rate * .45) * p.direction;
+              vx = nx * radial - ny * tangent;
+              vy = ny * radial + nx * tangent;
+            } else {
+              const tx = p.u * lw + Math.cos(phase) * 12;
+              const ty = p.v * lh + Math.sin(phase) * 12;
+              vx = (tx - p.lx) * .045;
+              vy = (ty - p.ly) * .045;
+            }
+
+            const blend = 1 - Math.pow(1 - .08 * p.rate, subDt);
+            p.vx += (vx - p.vx) * blend;
+            p.vy += (vy - p.vy) * blend;
+            p.lx += p.vx * subDt;
+            p.ly += p.vy * subDt;
+          }
+        }
+      }
+
+      for (let i = 0; i < particles.length; i++) {
+        const p = particles[i];
+        const phase = time * p.rate + p.phase;
+        p.z = Math.sin(phase * .55);
+      }
+
+      // Render to canvas
+      ctx.clearRect(0, 0, w, h);
+      const sorted = [...particles].sort((a, b) => a.z - b.z);
+      const colors = this.colors;
+
+      for (let i = 0; i < sorted.length; i++) {
+        const p = sorted[i];
+        const phase = time * p.rate + p.phase;
+        const radial = active ? Math.min(1, Math.hypot(p.lx - lmouse.x, p.ly - lmouse.y) / cfg.radius) : .25 + .75 * p.band;
+        const pulse = 1 + Math.sin(phase * 2) * .2;
+        const depth = 1 + p.z * .16;
+
+        // Base logic diameter from approved simulation formula (no 0.85 reduction)
+        const logicDiameter = (.65 + (cfg.size - .65) * radial) * pulse * depth;
+        // Particle size scales moderately using sqrt(scale) for delicate elegance
+        const finalDiameter = logicDiameter * sizeScale;
+
+        // Transform logic coordinates to screen coordinates
+        const screenX = p.lx * scale;
+        const screenY = p.ly * scale;
+
+        ctx.globalAlpha = Math.max(.15, Math.min(.9, (.6 + Math.sin(phase) * .25) * (1 + p.z * .08)));
+        ctx.fillStyle = colors[p.color];
+        ctx.beginPath();
+        ctx.arc(screenX, screenY, finalDiameter / 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
     }
 
     resize() {
-      const rect = this.parent.getBoundingClientRect();
-      const newW = Math.max(Math.floor(rect.width), 1);
-      const newH = Math.max(Math.floor(rect.height), 1);
-      if (newW <= 0 || newH <= 0) return;
+      const rect = this.container.getBoundingClientRect();
+      const newW = Math.max(Math.floor(rect.width || this.canvas.clientWidth), 1);
+      const newH = Math.max(Math.floor(rect.height || this.canvas.clientHeight), 1);
 
-      this.width = newW;
-      this.height = newH;
-      this.dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const oldLw = this.lw;
+      const oldLh = this.lh;
 
-      this.canvas.width = Math.floor(this.width * this.dpr);
-      this.canvas.height = Math.floor(this.height * this.dpr);
-      this.canvas.style.width = this.width + 'px';
-      this.canvas.style.height = this.height + 'px';
+      this.w = newW;
+      this.h = newH;
 
-      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-      this.ctx.scale(this.dpr, this.dpr);
+      // Calculate spatial scale and particle size scale
+      this.scale = this.calculateScale(this.w, this.h);
+      this.sizeScale = Math.sqrt(this.scale);
 
-      this.config.magnetRadius = this.width < 768 ? 95 : (this.width < 1200 ? 120 : (this.type === 'hero' ? 145 : 120));
+      // Logic simulation bounds
+      this.lw = this.w / this.scale;
+      this.lh = this.h / this.scale;
 
-      this.createParticles();
-      if (prefersReducedMotion) {
-        this.drawStaticFrame();
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      this.canvas.width = Math.round(this.w * dpr);
+      this.canvas.height = Math.round(this.h * dpr);
+      this.canvas.style.width = this.w + 'px';
+      this.canvas.style.height = this.h + 'px';
+      this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      if (oldLw && oldLh) {
+        for (let i = 0; i < this.particles.length; i++) {
+          const p = this.particles[i];
+          p.lx *= (this.lw / oldLw);
+          p.ly *= (this.lh / oldLh);
+        }
+      }
+
+      this.mouse.active = false;
+      this.draw(0);
+    }
+
+    tick(ts) {
+      this.raf = 0;
+      if (this.paused || !this.visible || document.hidden) return;
+      const step = this.last ? Math.min(2, (ts - this.last) / (1000 / 60)) : 1;
+      this.last = ts;
+      // Normal time progression keeps self-oscillation, breathing pulse & depth variations unchanged
+      this.time += .02 * (this.cfg.speed / 1.2) * step;
+      this.draw(step);
+      this.raf = requestAnimationFrame((now) => this.tick(now));
+    }
+
+    schedule() {
+      cancelAnimationFrame(this.raf);
+      this.raf = 0;
+      this.last = 0;
+      if (!this.paused && this.visible && !document.hidden) {
+        this.raf = requestAnimationFrame((now) => this.tick(now));
+      } else {
+        this.draw(0);
       }
     }
 
     bindEvents() {
-      const onPointerMove = (e) => {
-        const rect = this.parent.getBoundingClientRect();
+      const point = (e) => {
+        const r = this.container.getBoundingClientRect();
         if (
-          e.clientX >= rect.left &&
-          e.clientX <= rect.right &&
-          e.clientY >= rect.top &&
-          e.clientY <= rect.bottom
+          e.clientX >= r.left &&
+          e.clientX <= r.right &&
+          e.clientY >= r.top &&
+          e.clientY <= r.bottom
         ) {
-          this.mouse.x = e.clientX - rect.left;
-          this.mouse.y = e.clientY - rect.top;
+          this.mouse.x = e.clientX - r.left;
+          this.mouse.y = e.clientY - r.top;
+          // Transform cursor position into logic simulation space
+          this.lmouse.x = this.mouse.x / this.scale;
+          this.lmouse.y = this.mouse.y / this.scale;
           this.mouse.active = true;
         } else {
-          this.mouse.active = false;
-          this.mouse.x = -9999;
-          this.mouse.y = -9999;
-        }
-      };
-
-      const onPointerLeave = () => {
-        this.mouse.active = false;
-        this.mouse.x = -9999;
-        this.mouse.y = -9999;
-      };
-
-      window.addEventListener('mousemove', onPointerMove, { passive: true });
-      window.addEventListener('mouseleave', onPointerLeave);
-      this.parent.addEventListener('mouseleave', onPointerLeave);
-
-      if ('IntersectionObserver' in window) {
-        const obs = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            this.isVisible = entry.isIntersecting;
-            if (this.isVisible) this.startLoop();
-            else this.stopLoop();
-          });
-        }, { threshold: 0.05 });
-        obs.observe(this.parent);
-      }
-
-      document.addEventListener('visibilitychange', () => {
-        this.isTabActive = !document.hidden;
-        if (this.isTabActive) this.startLoop();
-        else this.stopLoop();
-      });
-
-      let resizeTimer = null;
-      window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => this.resize(), 140);
-      }, { passive: true });
-    }
-
-    startLoop() {
-      if (!this.animId && !prefersReducedMotion && this.isVisible && this.isTabActive) {
-        this.lastTime = performance.now();
-        this.animId = requestAnimationFrame((now) => this.loop(now));
-      }
-    }
-
-    stopLoop() {
-      if (this.animId) {
-        cancelAnimationFrame(this.animId);
-        this.animId = null;
-      }
-    }
-
-    drawStaticFrame() {
-      this.ctx.clearRect(0, 0, this.width, this.height);
-      for (let i = 0; i < this.particles.length; i++) {
-        const p = this.particles[i];
-        this.ctx.beginPath();
-        this.ctx.arc(p.originX, p.originY, p.baseRadius, 0, Math.PI * 2);
-        this.ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${p.baseAlpha})`;
-        this.ctx.fill();
-        if (p.isFocal) {
-          this.ctx.beginPath();
-          this.ctx.arc(p.originX, p.originY, p.baseRadius * 2.5, 0, Math.PI * 2);
-          this.ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${p.baseAlpha * 0.22})`;
-          this.ctx.fill();
-        }
-      }
-    }
-
-    loop(now) {
-      if (prefersReducedMotion || !this.isVisible || !this.isTabActive) {
-        this.animId = null;
-        return;
-      }
-
-      this.ctx.clearRect(0, 0, this.width, this.height);
-      this.time += this.config.waveSpeed;
-      const time = this.time;
-
-      const magnetRadius = this.config.magnetRadius;
-      const ringStrength = this.config.ringStrength;
-      const swirlStrength = this.config.swirlStrength;
-      const lerpSpeed = this.config.lerpSpeed;
-
-      for (let i = 0; i < this.particles.length; i++) {
-        const p = this.particles[i];
-
-        // 1. Natural living wave oscillation around origin anchor
-        const floatX = Math.cos(time * p.speedOffset + p.phase) * p.waveAmp;
-        const floatY = Math.sin(time * p.speedOffset + p.phase) * p.waveAmp;
-
-        let targetX = p.originX + floatX;
-        let targetY = p.originY + floatY;
-
-        // 2. Cursor repulsion & tangential swirl around cursor
-        if (this.mouse.active && this.mouse.x > -5000) {
-          const dx = targetX - this.mouse.x;
-          const dy = targetY - this.mouse.y;
-          const dist = Math.hypot(dx, dy);
-
-          if (dist < magnetRadius && dist > 0.001) {
-            const forceAngle = Math.atan2(dy, dx);
-            const pushDist = (magnetRadius - dist) * ringStrength;
-            targetX += Math.cos(forceAngle) * pushDist;
-            targetY += Math.sin(forceAngle) * pushDist;
-
-            // Swirl tangentially along the magnetic halo
-            const tangentAngle = forceAngle + (Math.PI / 2) * p.swirlDir;
-            const swirlFactor = Math.sin((1 - dist / magnetRadius) * Math.PI) * swirlStrength;
-            targetX += Math.cos(tangentAngle) * pushDist * swirlFactor;
-            targetY += Math.sin(tangentAngle) * pushDist * swirlFactor;
+          if (this.mouse.active) {
+            leave();
           }
         }
+      };
 
-        // 3. Smooth exponential decay interpolation (LERP)
-        p.x += (targetX - p.x) * lerpSpeed;
-        p.y += (targetY - p.y) * lerpSpeed;
+      const leave = () => {
+        this.mouse.active = false;
+      };
 
-        // 4. Subtle respiratory pulse (co giãn nhẹ ngay cả khi không di chuột)
-        const pulse = 1 + Math.sin(time * p.pulseSpeed + p.phase) * 0.22;
-        const currentRadius = p.baseRadius * pulse;
-        const currentAlpha = Math.min(1, Math.max(0.18, p.baseAlpha * (0.85 + Math.sin(time * 1.5 + p.phase) * 0.2)));
+      // Pointer tracking over entire hero container, including child headings/buttons
+      window.addEventListener('pointermove', point, { passive: true });
+      this.container.addEventListener('pointerenter', point, { passive: true });
+      this.container.addEventListener('pointerdown', point, { passive: true });
+      this.container.addEventListener('pointerleave', leave);
+      window.addEventListener('pointercancel', leave);
+      window.addEventListener('pointerup', (e) => {
+        if (e.pointerType !== 'mouse') leave();
+      });
+      window.addEventListener('blur', leave);
+      document.addEventListener('mouseleave', leave);
 
-        // 5. Render circular particle (Hạt dạng tròn sắc nét)
-        this.ctx.beginPath();
-        this.ctx.arc(p.x, p.y, currentRadius, 0, Math.PI * 2);
-        this.ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${currentAlpha})`;
-        this.ctx.fill();
+      // Visibility & Reduced Motion
+      document.addEventListener('visibilitychange', () => this.schedule());
+      this.reduced.addEventListener('change', () => {
+        this.paused = this.reduced.matches;
+        this.schedule();
+      });
 
-        if (p.isFocal) {
-          this.ctx.beginPath();
-          this.ctx.arc(p.x, p.y, currentRadius * 2.5, 0, Math.PI * 2);
-          this.ctx.fillStyle = `rgba(${p.r}, ${p.g}, ${p.b}, ${currentAlpha * 0.22})`;
-          this.ctx.fill();
-        }
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+          this.visible = entries[0].isIntersecting;
+          this.schedule();
+        }, { threshold: 0.05 }).observe(this.container);
       }
 
-      this.animId = requestAnimationFrame((n) => this.loop(n));
+      if ('ResizeObserver' in window) {
+        new ResizeObserver(() => this.resize()).observe(this.container);
+      } else {
+        window.addEventListener('resize', () => this.resize(), { passive: true });
+      }
+    }
+
+    init() {
+      this.resize();
+      this.populate();
+      this.bindEvents();
+      this.draw(0);
+      this.schedule();
     }
   }
 

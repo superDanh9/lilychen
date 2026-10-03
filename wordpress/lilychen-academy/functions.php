@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-define('LILYCHEN_VERSION', '1.0.0');
+define('LILYCHEN_VERSION', '1.0.1');
 
 /**
  * Sets up theme defaults and registers support for various WordPress features.
