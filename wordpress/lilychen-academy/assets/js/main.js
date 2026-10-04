@@ -869,17 +869,17 @@
       el.setAttribute('data-reveal', '');
     });
 
-    // 2. Identify and tag Staggered Grids with [data-reveal-stagger]
+    // 2. Identify and tag Staggered Grids with [data-reveal-stagger] (Gallery handled by GSAP)
     const staggerGrids = document.querySelectorAll(
-      '.photo-mosaic, .gallery-grid, .activity-mosaic, .testimonials-grid, .blog-grid, .faq-accordion'
+      '.photo-mosaic, .activity-mosaic, .testimonials-grid, .blog-grid, .faq-accordion'
     );
     staggerGrids.forEach(el => {
       el.setAttribute('data-reveal-stagger', '');
     });
 
-    // 3. Single Block Reveals
+    // 3. Single Block Reveals (Courses handled exclusively by GSAP ScrollTrigger)
     const singleBlocks = document.querySelectorAll(
-      '.course-open-section, .instructor-visual, .lead-form-card'
+      '.instructor-visual, .lead-form-card'
     );
     singleBlocks.forEach(el => {
       el.setAttribute('data-reveal', '');
@@ -1051,6 +1051,10 @@
                 item.style.display = 'none';
               }
             });
+
+            if (typeof ScrollTrigger !== 'undefined') {
+              ScrollTrigger.refresh();
+            }
           });
         });
       }
@@ -1377,6 +1381,222 @@
   }
 
   // ---------------------------------------------------------------------------
+  // 12. GSAP ScrollTrigger & Micro-Interactions Engine
+  // ---------------------------------------------------------------------------
+  function initGsapAnimations() {
+    if (typeof gsap === 'undefined') {
+      // Progressive enhancement: if GSAP fails to load, content remains 100% visible and accessible
+      return;
+    }
+
+    if (typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+    }
+
+    // Setup responsive matchMedia & reduced motion context
+    const mm = gsap.matchMedia();
+
+    mm.add({
+      isDesktop: '(min-width: 768px)',
+      isMobile: '(max-width: 767px)',
+      reduceMotion: '(prefers-reduced-motion: reduce)'
+    }, (context) => {
+      const { reduceMotion, isDesktop } = context.conditions;
+
+      // If user prefers reduced motion, set final values immediately with zero animation
+      if (reduceMotion) {
+        gsap.set('.course-open-section', { opacity: 1, y: 0, clearProps: 'transform' });
+        gsap.set('.gallery-grid .gallery-item', { opacity: 1, scale: 1, clearProps: 'transform' });
+        return;
+      }
+
+      // -----------------------------------------------------------------------
+      // 2.A Parallax Banner Trang Chủ
+      // Requirement:
+      // If banner has a suitable background image layer, translate ~30% of scroll distance.
+      // "Nếu banner không có lớp ảnh nền phù hợp, không tự thêm ảnh, không lấy canvas hạt làm nền parallax. Bỏ qua hiệu ứng này và ghi rõ lý do; tiếp tục các phần còn lại."
+      // Note: The hero banner uses a radial-gradient background and an interactive 2D canvas particle field.
+      // No suitable background image exists. In strict adherence to requirement 2.A, no artificial image is added
+      // and the particle canvas is NOT modified or transformed, avoiding any mouse coordinate offset.
+      // -----------------------------------------------------------------------
+      const heroBanner = document.getElementById('hero') || document.querySelector('.hero-section');
+      const heroBgImage = heroBanner ? heroBanner.querySelector('.hero-bg-img, .hero-background-image, img.hero-bg') : null;
+
+      if (heroBgImage) {
+        gsap.to(heroBgImage, {
+          y: () => heroBanner.offsetHeight * 0.3,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroBanner,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+            invalidateOnRefresh: true
+          }
+        });
+      }
+
+      // -----------------------------------------------------------------------
+      // 2.B Scroll Reveal Cho Hai Khóa Học
+      // Targets: Khóa Makeup Cá nhân (#khoa-ca-nhan) & Khóa Makeup Chuyên nghiệp (#khoa-hoc)
+      // From: opacity: 0, y: 50 -> To: opacity: 1, y: 0
+      // duration: 0.8, ease: "power2.out", trigger when each enters viewport, once: true
+      // -----------------------------------------------------------------------
+      const courseBlocks = document.querySelectorAll('#khoa-hoc, #khoa-ca-nhan, [data-course-id="pro"], [data-course-id="personal"]');
+      const uniqueCourseBlocks = Array.from(new Set(courseBlocks));
+
+      uniqueCourseBlocks.forEach(block => {
+        gsap.fromTo(block, 
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: block,
+              start: 'top 85%',
+              once: true
+            },
+            onComplete: () => {
+              // Clean up inline transform to maintain pure layout and prevent mouse interaction offset
+              gsap.set(block, { clearProps: 'transform' });
+            }
+          }
+        );
+      });
+
+      // -----------------------------------------------------------------------
+      // 2.C Stagger Cho Thư Viện Tác Phẩm Học Viên
+      // From: opacity: 0, scale: 0.9 -> To: opacity: 1, scale: 1
+      // stagger: 0.15, duration: 0.8, ease: "power2.out"
+      // ScrollTrigger once: true.
+      // Using ScrollTrigger.batch for viewport grouping on long grids
+      // -----------------------------------------------------------------------
+      const galleryItems = document.querySelectorAll('.gallery-grid .gallery-item');
+      if (galleryItems.length && typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.batch(galleryItems, {
+          interval: 0.1,
+          batchMax: isDesktop ? 3 : 2,
+          start: 'top 88%',
+          once: true,
+          onEnter: (batch) => {
+            gsap.fromTo(batch,
+              { opacity: 0, scale: 0.9 },
+              {
+                opacity: 1,
+                scale: 1,
+                stagger: 0.15,
+                duration: 0.8,
+                ease: 'power2.out',
+                overwrite: 'auto',
+                onComplete: () => {
+                  // Clean up transform so CSS hover (translateY, scale) functions seamlessly
+                  gsap.set(batch, { clearProps: 'transform' });
+                }
+              }
+            );
+          }
+        });
+      } else if (galleryItems.length) {
+        gsap.to(galleryItems, { opacity: 1, scale: 1, duration: 0.8, stagger: 0.15, ease: 'power2.out' });
+      }
+    });
+
+    // -----------------------------------------------------------------------
+    // 2.D Hover Cho CTA Đăng Ký / Liên Hệ
+    // When hover/focus: scale: 1.05, 0.3s, gentle ease.
+    // When mouseleave/blur: return to initial in 0.3s.
+    // Static shadow layer animated via opacity (--cta-glow-opacity).
+    // Keyboard focus supported, focus ring preserved.
+    // Overwrite 'auto' prevents rapid hover piling up.
+    // Touch devices ignore hover to prevent sticky hover states.
+    // -----------------------------------------------------------------------
+    initCtaHoverEffects();
+
+    // Refresh ScrollTrigger on window complete load for precise layout measurements
+    window.addEventListener('load', () => {
+      if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
+      }
+    }, { once: true });
+  }
+
+  function initCtaHoverEffects() {
+    const ctaSelectors = [
+      '.btn-consult',
+      '#heroCtaPrimary',
+      '#heroCtaSecondary',
+      '.course-open-action .btn',
+      '.form-submit-btn',
+      '.fab-btn',
+      'a[href*="#dang-ky"]',
+      'a[href*="lien-he"]'
+    ];
+
+    const elements = document.querySelectorAll(ctaSelectors.join(', '));
+    const uniqueElements = Array.from(new Set(elements));
+
+    uniqueElements.forEach(btn => {
+      btn.classList.add('cta-glow-btn');
+
+      let isHovered = false;
+
+      function handleEnter(e) {
+        // If pointerType is touch, ignore to prevent stuck hover on mobile
+        if (e && e.pointerType === 'touch') return;
+        if (isHovered) return;
+        isHovered = true;
+
+        if (prefersReducedMotion) {
+          btn.style.setProperty('--cta-glow-opacity', '1');
+          return;
+        }
+
+        gsap.to(btn, {
+          scale: 1.05,
+          '--cta-glow-opacity': 1,
+          duration: 0.3,
+          ease: 'power1.out',
+          overwrite: 'auto'
+        });
+      }
+
+      function handleLeave(e) {
+        if (e && e.pointerType === 'touch') return;
+        if (!isHovered) return;
+        isHovered = false;
+
+        if (prefersReducedMotion) {
+          btn.style.setProperty('--cta-glow-opacity', '0');
+          return;
+        }
+
+        gsap.to(btn, {
+          scale: 1,
+          '--cta-glow-opacity': 0,
+          duration: 0.3,
+          ease: 'power1.out',
+          overwrite: 'auto',
+          onComplete: () => {
+            if (!isHovered) {
+              gsap.set(btn, { clearProps: 'transform' });
+            }
+          }
+        });
+      }
+
+      // Pointer events with touch filter
+      btn.addEventListener('pointerenter', handleEnter);
+      btn.addEventListener('pointerleave', handleLeave);
+
+      // Accessible keyboard focus support
+      btn.addEventListener('focus', handleEnter);
+      btn.addEventListener('blur', handleLeave);
+    });
+  }
+
+  // ---------------------------------------------------------------------------
   // DOM Ready Orchestration
   // ---------------------------------------------------------------------------
   function onDomReady() {
@@ -1385,6 +1605,7 @@
     initCoursesMorphingParticles();
     initAmbientHeaderCanvases();
     initScrollReveal();
+    initGsapAnimations();
     initHeaderScroll();
     initMobileDrawer();
     initSmoothAnchorScroll();

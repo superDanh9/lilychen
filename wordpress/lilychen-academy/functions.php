@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit; // Exit if accessed directly.
 }
 
-define('LILYCHEN_VERSION', '1.0.1');
+define('LILYCHEN_VERSION', '1.0.2');
 
 /**
  * Sets up theme defaults and registers support for various WordPress features.
@@ -89,11 +89,28 @@ function lilychen_scripts() {
         LILYCHEN_VERSION
     );
 
-    // 4. Main Interactive Script (Particles canvas, accordion, mobile drawer, prototype test form)
+    // 4. Vendor Animation Libraries: GSAP Core & ScrollTrigger Plugin
+    wp_enqueue_script(
+        'gsap',
+        get_template_directory_uri() . '/assets/js/vendor/gsap.min.js',
+        array(),
+        '3.12.5',
+        true
+    );
+
+    wp_enqueue_script(
+        'gsap-scrolltrigger',
+        get_template_directory_uri() . '/assets/js/vendor/ScrollTrigger.min.js',
+        array('gsap'),
+        '3.12.5',
+        true
+    );
+
+    // 5. Main Interactive Script (Particles canvas, GSAP animations, accordion, mobile drawer)
     wp_enqueue_script(
         'lilychen-main-script',
         get_template_directory_uri() . '/assets/js/main.js',
-        array(),
+        array('gsap', 'gsap-scrolltrigger'),
         LILYCHEN_VERSION,
         true // In footer for performance
     );

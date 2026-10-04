@@ -869,17 +869,17 @@
       el.setAttribute('data-reveal', '');
     });
 
-    // 2. Identify and tag Staggered Grids with [data-reveal-stagger]
+    // 2. Identify and tag Staggered Grids with [data-reveal-stagger] (Gallery handled by GSAP)
     const staggerGrids = document.querySelectorAll(
-      '.photo-mosaic, .gallery-grid, .activity-mosaic, .testimonials-grid, .blog-grid, .faq-accordion'
+      '.photo-mosaic, .activity-mosaic, .testimonials-grid, .blog-grid, .faq-accordion'
     );
     staggerGrids.forEach(el => {
       el.setAttribute('data-reveal-stagger', '');
     });
 
-    // 3. Single Block Reveals
+    // 3. Single Block Reveals (Courses handled exclusively by GSAP ScrollTrigger)
     const singleBlocks = document.querySelectorAll(
-      '.course-open-section, .instructor-visual, .lead-form-card'
+      '.instructor-visual, .lead-form-card'
     );
     singleBlocks.forEach(el => {
       el.setAttribute('data-reveal', '');
@@ -1051,6 +1051,10 @@
                 item.style.display = 'none';
               }
             });
+
+            if (typeof ScrollTrigger !== 'undefined') {
+              ScrollTrigger.refresh();
+            }
           });
         });
       }
@@ -1066,6 +1070,7 @@
 
       if (blogButtons.length && blogCards.length) {
         blogButtons.forEach(btn => {
+          if (btn.tagName === 'A') return; // Bỏ qua nếu là thẻ link chuyên mục chuẩn WordPress
           btn.addEventListener('click', function () {
             blogButtons.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
@@ -1271,7 +1276,7 @@
         const formLoadTime = form.querySelector('input[name="_form_load_time"]')?.value || String(Date.now());
         const sourcePage = form.querySelector('input[name="source_page"]')?.value || window.location.pathname;
 
-        // 1. Sending State
+        // Real Lead Submission to Server (WordPress REST API with AJAX fallback)
         const originalBtnHtml = submitBtn ? submitBtn.innerHTML : 'GỬI ĐĂNG KÝ TƯ VẤN';
         if (submitBtn) {
           submitBtn.disabled = true;
@@ -1279,100 +1284,315 @@
           submitBtn.innerHTML = '<span>Đang gửi thông tin... ⏳</span>';
         }
 
+        const payload = {
+          name: submittedName,
+          phone: submittedPhone,
+          course: submittedCourse,
+          time: submittedTime,
+          message: submittedMessage,
+          source_page: sourcePage,
+          _hp_company: hpVal,
+          _form_load_time: formLoadTime,
+        };
+
+        const targetEndpoint = (window.lilychenVars && window.lilychenVars.restUrl)
+          ? window.lilychenVars.restUrl
+          : '/wp-json/lilychen/v1/lead';
+
+        const reqHeaders = {
+          'Content-Type': 'application/json',
+        };
+        if (window.lilychenVars && window.lilychenVars.nonce) {
+          reqHeaders['X-WP-Nonce'] = window.lilychenVars.nonce;
+        }
+
         try {
-          const response = await fetch('/api/contact', {
+          const response = await fetch(targetEndpoint, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-              name: submittedName,
-              phone: submittedPhone,
-              course: submittedCourse,
-              time: submittedTime,
-              message: submittedMessage,
-              source_page: sourcePage,
-              _hp_company: hpVal,
-              _form_load_time: formLoadTime
-            })
+            headers: reqHeaders,
+            body: JSON.stringify(payload),
           });
 
-          const data = await response.json().catch(() => ({}));
+          const resData = await response.json();
 
-          if (response.ok && data.success) {
-            // 2. Success State
-            const successMsgBox = form.querySelector('#formSuccessMsg, .form-success-msg');
-            const nameEl = form.querySelector('#successUserName');
-            const phoneEl = form.querySelector('#successUserPhone');
-
-            if (successMsgBox && nameEl && phoneEl) {
-              nameEl.textContent = submittedName;
-              phoneEl.textContent = submittedPhone;
-              successMsgBox.classList.add('is-visible');
-              successMsgBox.style.display = 'block';
-
-              // Hide all input groups & submit button for clean confirmation
-              form.querySelectorAll('.form-group, .form-submit-btn, .form-privacy-note').forEach(el => {
-                el.style.display = 'none';
-              });
-            } else {
-              // Standalone Course Page Form Success Replacement
-              form.innerHTML = `
-                <div class="form-success-card" style="text-align: center; padding: 36px 20px; animation: fadeIn 0.4s ease-out;">
-                  <div style="width: 60px; height: 60px; border-radius: 50%; background: #e8f5e9; color: #2e7d32; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px;">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-                  </div>
-                  <h4 style="font-size: 1.35rem; margin-bottom: 10px; color: var(--text-primary); font-family: var(--font-heading);">Đăng Ký Thành Công!</h4>
-                  <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; margin-bottom: 20px;">
-                    Cảm ơn <strong>${submittedName}</strong>! Master Lily Chen đã nhận được thông tin đăng ký tư vấn <strong>${submittedCourse}</strong>. Học viện sẽ liên hệ với bạn qua số điện thoại <strong>${submittedPhone}</strong> trong vòng 24 giờ.
-                  </p>
-                  <div style="background: var(--bg-subtle); padding: 14px 18px; border-radius: 8px; font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 20px;">
-                    📞 Cần hỗ trợ gấp? Gọi Hotline / Zalo: <a href="tel:0889979791" style="color: var(--color-rose-deep); font-weight: 700;">088 997 97 91</a>
-                  </div>
-                </div>
-              `;
-            }
-          } else {
-            throw new Error(data.error || 'Dịch vụ tạm thời không phản hồi.');
-          }
-
-        } catch (err) {
-          // 3. Failure State
-          console.error('[Lead Form Submission Error]', err);
           if (submitBtn) {
             submitBtn.disabled = false;
             submitBtn.classList.remove('is-loading');
             submitBtn.innerHTML = originalBtnHtml;
           }
 
-          if (errorBox) {
-            errorBox.classList.add('is-visible');
-            errorBox.innerHTML = `
-              <div style="display: flex; flex-direction: column; gap: 8px;">
-                <div>
-                  <strong>⚠️ Chưa thể gửi thông tin:</strong> ${err.message || 'Lỗi gián đoạn kết nối máy chủ.'}
-                </div>
-                <div style="font-size: 0.85rem; color: #7f1d1d;">
-                  Vui lòng bấm <strong>Thử gửi lại</strong> hoặc liên hệ trực tiếp qua Hotline/Zalo: <a href="tel:0889979791" style="color: #991b1b; text-decoration: underline; font-weight: 700;">088 997 97 91</a>.
-                </div>
-                <div>
-                  <button type="button" class="form-error-retry-btn" id="retrySubmitBtn">
-                    🔄 Thử gửi lại
-                  </button>
-                </div>
-              </div>
-            `;
+          if (response.ok && resData && resData.success) {
+            const successMsgBox = form.querySelector('#formSuccessMsg, .form-success-msg');
+            if (successMsgBox) {
+              while (successMsgBox.firstChild) {
+                successMsgBox.removeChild(successMsgBox.firstChild);
+              }
 
-            const retryBtn = errorBox.querySelector('#retrySubmitBtn');
-            if (retryBtn) {
-              retryBtn.addEventListener('click', () => {
-                form.requestSubmit();
+              const iconWrap = document.createElement('div');
+              iconWrap.style.cssText = 'width: 44px; height: 44px; border-radius: 50%; background: #d1e7dd; color: #0f5132; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: bold; margin: 0 auto 10px;';
+              iconWrap.textContent = '✓';
+
+              const titlePara = document.createElement('div');
+              titlePara.style.cssText = 'font-weight: 700; color: #0f5132; font-size: 1.05rem; margin-bottom: 6px; text-align: center;';
+              titlePara.textContent = 'Gửi Yêu Cầu Tư Vấn Thành Công!';
+
+              const descPara = document.createElement('p');
+              descPara.style.cssText = 'font-size: 0.92rem; color: #4b5563; line-height: 1.6; margin: 0; text-align: center;';
+              descPara.textContent = resData.message || ('Cảm ơn ' + submittedName + '! Lily Chen Academy đã nhận được thông tin và sẽ liên hệ qua số ' + submittedPhone + ' trong 24 giờ tới.');
+
+              successMsgBox.appendChild(iconWrap);
+              successMsgBox.appendChild(titlePara);
+              successMsgBox.appendChild(descPara);
+
+              successMsgBox.classList.add('is-visible');
+              successMsgBox.style.display = 'block';
+
+              // Hide inputs for clean confirmation
+              form.querySelectorAll('.form-group, .form-submit-btn, .form-privacy-note').forEach(el => {
+                el.style.display = 'none';
               });
+
+              successMsgBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             }
+          } else {
+            const errMsg = (resData && resData.message) ? resData.message : 'Có lỗi xảy ra khi gửi thông tin. Vui lòng kiểm tra lại hoặc liên hệ hotline.';
+            if (errorBox) {
+              errorBox.textContent = errMsg;
+              errorBox.classList.add('is-visible');
+              errorBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+              alert(errMsg);
+            }
+          }
+        } catch (err) {
+          console.error('[Lily Chen Academy Theme] Lead form submission network error:', err);
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('is-loading');
+            submitBtn.innerHTML = originalBtnHtml;
+          }
+          if (errorBox) {
+            errorBox.textContent = 'Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối mạng hoặc gọi hotline để được tư vấn ngay.';
+            errorBox.classList.add('is-visible');
           }
         }
       });
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // 12. GSAP ScrollTrigger & Micro-Interactions Engine
+  // ---------------------------------------------------------------------------
+  function initGsapAnimations() {
+    if (typeof gsap === 'undefined') {
+      // Progressive enhancement: if GSAP fails to load, content remains 100% visible and accessible
+      return;
+    }
+
+    if (typeof ScrollTrigger !== 'undefined') {
+      gsap.registerPlugin(ScrollTrigger);
+    }
+
+    // Setup responsive matchMedia & reduced motion context
+    const mm = gsap.matchMedia();
+
+    mm.add({
+      isDesktop: '(min-width: 768px)',
+      isMobile: '(max-width: 767px)',
+      reduceMotion: '(prefers-reduced-motion: reduce)'
+    }, (context) => {
+      const { reduceMotion, isDesktop } = context.conditions;
+
+      // If user prefers reduced motion, set final values immediately with zero animation
+      if (reduceMotion) {
+        gsap.set('.course-open-section', { opacity: 1, y: 0, clearProps: 'transform' });
+        gsap.set('.gallery-grid .gallery-item', { opacity: 1, scale: 1, clearProps: 'transform' });
+        return;
+      }
+
+      // -----------------------------------------------------------------------
+      // 2.A Parallax Banner Trang Chủ
+      // Requirement:
+      // If banner has a suitable background image layer, translate ~30% of scroll distance.
+      // "Nếu banner không có lớp ảnh nền phù hợp, không tự thêm ảnh, không lấy canvas hạt làm nền parallax. Bỏ qua hiệu ứng này và ghi rõ lý do; tiếp tục các phần còn lại."
+      // Note: The hero banner uses a radial-gradient background and an interactive 2D canvas particle field.
+      // No suitable background image exists. In strict adherence to requirement 2.A, no artificial image is added
+      // and the particle canvas is NOT modified or transformed, avoiding any mouse coordinate offset.
+      // -----------------------------------------------------------------------
+      const heroBanner = document.getElementById('hero') || document.querySelector('.hero-section');
+      const heroBgImage = heroBanner ? heroBanner.querySelector('.hero-bg-img, .hero-background-image, img.hero-bg') : null;
+
+      if (heroBgImage) {
+        gsap.to(heroBgImage, {
+          y: () => heroBanner.offsetHeight * 0.3,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: heroBanner,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: true,
+            invalidateOnRefresh: true
+          }
+        });
+      }
+
+      // -----------------------------------------------------------------------
+      // 2.B Scroll Reveal Cho Hai Khóa Học
+      // Targets: Khóa Makeup Cá nhân (#khoa-ca-nhan) & Khóa Makeup Chuyên nghiệp (#khoa-hoc)
+      // From: opacity: 0, y: 50 -> To: opacity: 1, y: 0
+      // duration: 0.8, ease: "power2.out", trigger when each enters viewport, once: true
+      // -----------------------------------------------------------------------
+      const courseBlocks = document.querySelectorAll('#khoa-hoc, #khoa-ca-nhan, [data-course-id="pro"], [data-course-id="personal"]');
+      const uniqueCourseBlocks = Array.from(new Set(courseBlocks));
+
+      uniqueCourseBlocks.forEach(block => {
+        gsap.fromTo(block, 
+          { opacity: 0, y: 50 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: {
+              trigger: block,
+              start: 'top 85%',
+              once: true
+            },
+            onComplete: () => {
+              // Clean up inline transform to maintain pure layout and prevent mouse interaction offset
+              gsap.set(block, { clearProps: 'transform' });
+            }
+          }
+        );
+      });
+
+      // -----------------------------------------------------------------------
+      // 2.C Stagger Cho Thư Viện Tác Phẩm Học Viên
+      // From: opacity: 0, scale: 0.9 -> To: opacity: 1, scale: 1
+      // stagger: 0.15, duration: 0.8, ease: "power2.out"
+      // ScrollTrigger once: true.
+      // Using ScrollTrigger.batch for viewport grouping on long grids
+      // -----------------------------------------------------------------------
+      const galleryItems = document.querySelectorAll('.gallery-grid .gallery-item');
+      if (galleryItems.length && typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.batch(galleryItems, {
+          interval: 0.1,
+          batchMax: isDesktop ? 3 : 2,
+          start: 'top 88%',
+          once: true,
+          onEnter: (batch) => {
+            gsap.fromTo(batch,
+              { opacity: 0, scale: 0.9 },
+              {
+                opacity: 1,
+                scale: 1,
+                stagger: 0.15,
+                duration: 0.8,
+                ease: 'power2.out',
+                overwrite: 'auto',
+                onComplete: () => {
+                  // Clean up transform so CSS hover (translateY, scale) functions seamlessly
+                  gsap.set(batch, { clearProps: 'transform' });
+                }
+              }
+            );
+          }
+        });
+      } else if (galleryItems.length) {
+        gsap.to(galleryItems, { opacity: 1, scale: 1, duration: 0.8, stagger: 0.15, ease: 'power2.out' });
+      }
+    });
+
+    // -----------------------------------------------------------------------
+    // 2.D Hover Cho CTA Đăng Ký / Liên Hệ
+    // When hover/focus: scale: 1.05, 0.3s, gentle ease.
+    // When mouseleave/blur: return to initial in 0.3s.
+    // Static shadow layer animated via opacity (--cta-glow-opacity).
+    // Keyboard focus supported, focus ring preserved.
+    // Overwrite 'auto' prevents rapid hover piling up.
+    // Touch devices ignore hover to prevent sticky hover states.
+    // -----------------------------------------------------------------------
+    initCtaHoverEffects();
+
+    // Refresh ScrollTrigger on window complete load for precise layout measurements
+    window.addEventListener('load', () => {
+      if (typeof ScrollTrigger !== 'undefined') {
+        ScrollTrigger.refresh();
+      }
+    }, { once: true });
+  }
+
+  function initCtaHoverEffects() {
+    const ctaSelectors = [
+      '.btn-consult',
+      '#heroCtaPrimary',
+      '#heroCtaSecondary',
+      '.course-open-action .btn',
+      '.form-submit-btn',
+      '.fab-btn',
+      'a[href*="#dang-ky"]',
+      'a[href*="lien-he"]'
+    ];
+
+    const elements = document.querySelectorAll(ctaSelectors.join(', '));
+    const uniqueElements = Array.from(new Set(elements));
+
+    uniqueElements.forEach(btn => {
+      btn.classList.add('cta-glow-btn');
+
+      let isHovered = false;
+
+      function handleEnter(e) {
+        // If pointerType is touch, ignore to prevent stuck hover on mobile
+        if (e && e.pointerType === 'touch') return;
+        if (isHovered) return;
+        isHovered = true;
+
+        if (prefersReducedMotion) {
+          btn.style.setProperty('--cta-glow-opacity', '1');
+          return;
+        }
+
+        gsap.to(btn, {
+          scale: 1.05,
+          '--cta-glow-opacity': 1,
+          duration: 0.3,
+          ease: 'power1.out',
+          overwrite: 'auto'
+        });
+      }
+
+      function handleLeave(e) {
+        if (e && e.pointerType === 'touch') return;
+        if (!isHovered) return;
+        isHovered = false;
+
+        if (prefersReducedMotion) {
+          btn.style.setProperty('--cta-glow-opacity', '0');
+          return;
+        }
+
+        gsap.to(btn, {
+          scale: 1,
+          '--cta-glow-opacity': 0,
+          duration: 0.3,
+          ease: 'power1.out',
+          overwrite: 'auto',
+          onComplete: () => {
+            if (!isHovered) {
+              gsap.set(btn, { clearProps: 'transform' });
+            }
+          }
+        });
+      }
+
+      // Pointer events with touch filter
+      btn.addEventListener('pointerenter', handleEnter);
+      btn.addEventListener('pointerleave', handleLeave);
+
+      // Accessible keyboard focus support
+      btn.addEventListener('focus', handleEnter);
+      btn.addEventListener('blur', handleLeave);
     });
   }
 
@@ -1385,6 +1605,7 @@
     initCoursesMorphingParticles();
     initAmbientHeaderCanvases();
     initScrollReveal();
+    initGsapAnimations();
     initHeaderScroll();
     initMobileDrawer();
     initSmoothAnchorScroll();
