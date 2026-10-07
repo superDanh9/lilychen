@@ -1,6 +1,8 @@
+> Sắp xếp 08/10/2026: đường dẫn trong dấu backtick được hiểu từ gốc dự án, trừ tên handoff cùng thư mục. Trang HTML cũ và các mẫu thử nay ở `prototypes/static-site/`; thông tin triển khai bên dưới là ghi nhận lịch sử.
+
 # TÀI LIỆU NỘI BỘ: LƯU TRỮ NỘI DUNG CHI TIẾT CÁC KHÓA HỌC & CHƯƠNG TRÌNH ĐÀO TẠO
 > **Dự án**: Lily Chen Makeup Academy  
-> **Mục đích**: Lưu trữ toàn bộ nội dung chi tiết, giáo trình, cam kết và thông tin chuyên sâu đã được tinh gọn khỏi trang chủ (`index.html`) để sẵn sàng đưa vào các trang giới thiệu khóa học chuyên biệt (Landing Pages) trong giai đoạn tiếp theo.  
+> **Mục đích**: Lưu trữ toàn bộ nội dung chi tiết, giáo trình, cam kết và thông tin chuyên sâu đã được tinh gọn khỏi trang chủ (`prototypes/static-site/index.html`) để sẵn sàng đưa vào các trang giới thiệu khóa học chuyên biệt (Landing Pages) trong giai đoạn tiếp theo.  
 > **Trạng thái trang đích**: Hiện tại website **chưa có trang đích khóa học độc lập** (các thư mục như `/hoc-makeup-ca-nhan/`, `/hoc-makeup-chuyen-nghiep-binh-duong/` là các bài viết cẩm nang Blog chuẩn SEO/E-E-A-T, không phải trang bán khóa học). Nút "Xem khóa học" trên trang chủ tạm thời điều hướng về section `#khoa-hoc`.
 
 ---

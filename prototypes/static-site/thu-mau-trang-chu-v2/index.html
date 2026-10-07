@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>Lily Chen Makeup Academy | Bản Thử Nghiệm Bố Cục Trang Chủ Mới (v2)</title>
+  <meta name="description" content="Bản thử nghiệm giao diện trang chủ mới cho Lily Chen Makeup Academy: chuyển động hạt Antigravity tương tác, bố cục thoáng đạt, tôn vinh tác phẩm và đào tạo thực chiến 1 kèm 1 tại Thủ Dầu Một, Bình Dương.">
+  <meta name="robots" content="noindex, nofollow">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../images/logo-lilychen.png">
+
+  <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Dedicated Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ========================================================
+       TOP BANNER: PROTOTYPE NOTICE & SCOPE
+       ======================================================== -->
+  <aside class="proto-top-banner" role="status" aria-label="Thông báo bản thử nghiệm">
+    <div class="site-container banner-flex">
+      <div class="banner-badge">Bản Thử Nghiệm v2</div>
+      <div class="banner-msg">
+        Định hướng bố cục mới &amp; chuẩn chuyển động Antigravity Google · Chưa áp dụng vào website thật
+      </div>
+      <div class="banner-actions">
+        <a href="../index.html" class="banner-back-link">Về website hiện tại &rarr;</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========================================================
+       HEADER NAVIGATION
+       ======================================================== -->
+  <header class="site-header" id="siteHeader">
+    <div class="site-container header-inner">
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-link" aria-label="Lily Chen Makeup Academy - Về đầu trang">
+        <span class="brand-title">LILY CHEN</span>
+        <span class="brand-subtitle">MAKEUP ACADEMY</span>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav class="desktop-nav" aria-label="Menu điều hướng chính">
+        <a href="#khoa-hoc-chinh" class="nav-anchor">Khóa Học</a>
+        <a href="#tac-pham" class="nav-anchor">Tác Phẩm</a>
+        <a href="#trai-nghiem" class="nav-anchor">Trải Nghiệm</a>
+        <a href="#giang-vien" class="nav-anchor">Giảng Viên</a>
+        <a href="#cam-nhan" class="nav-anchor">Cảm Nhận</a>
+        <a href="#faq" class="nav-anchor">Hỏi Đáp</a>
+        <a href="#blog" class="nav-anchor">Blog</a>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="header-actions">
+        <a href="#dang-ky-tu-van" class="btn-primary-header">
+          <span>Đăng Ký Tư Vấn</span>
+        </a>
+
+        <!-- Mobile Hamburger Toggle -->
+        <button type="button" class="mobile-toggle" id="mobileToggle" aria-label="Mở menu di động" aria-expanded="false" aria-controls="mobileDrawer">
+          <span class="toggle-bar"></span>
+          <span class="toggle-bar"></span>
+          <span class="toggle-bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div class="mobile-drawer" id="mobileDrawer" aria-hidden="true">
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <div class="drawer-panel">
+      <div class="drawer-header">
+        <div class="brand-link">
+          <span class="brand-title">LILY CHEN</span>
+          <span class="brand-subtitle">MAKEUP ACADEMY</span>
+        </div>
+        <button type="button" class="drawer-close" id="drawerClose" aria-label="Đóng menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+      <ul class="drawer-nav">
+        <li><a href="#khoa-hoc-chinh" class="drawer-link">Khóa Học Tuyển Sinh</a></li>
+        <li><a href="#tac-pham" class="drawer-link">Tác Phẩm Thực Tế</a></li>
+        <li><a href="#trai-nghiem" class="drawer-link">Trải Nghiệm &amp; Hoạt Động</a></li>
+        <li><a href="#giang-vien" class="drawer-link">Master Lily Chen</a></li>
+        <li><a href="#cam-nhan" class="drawer-link">Cảm Nhận Học Viên</a></li>
+        <li><a href="#faq" class="drawer-link">Câu Hỏi Thường Gặp</a></li>
+        <li><a href="#blog" class="drawer-link">Blog &amp; Cẩm Nang</a></li>
+      </ul>
+      <div class="drawer-footer">
+        <a href="#dang-ky-tu-van" class="btn-block-consult">
+          <span>Nhận Tư Vấn Lộ Trình</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <main id="mainContent">
+
+    <!-- ========================================================
+         SECTION 1: MỞ ĐẦU (HERO SECTION - MOTION CHUẨN 0-20 GIÂY)
+         ======================================================== -->
+    <section class="hero-section" id="hero">
+      <!-- Dedicated 2D Particle Field Canvas -->
+      <canvas id="heroParticleCanvas" class="hero-particle-canvas" aria-hidden="true"></canvas>
+
+      <div class="site-container hero-container">
+        <!-- Eyebrow Tag -->
+        <div class="hero-eyebrow">
+          <span class="eyebrow-dot" aria-hidden="true"></span>
+          <span class="eyebrow-text">Thủ Dầu Một · Bình Dương</span>
+          <span class="eyebrow-sep">·</span>
+          <span class="eyebrow-sub">Đào Tạo Chuẩn Boutique</span>
+        </div>
+
+        <!-- Headline with Elegant Hierarchy & Editorial Warmth -->
+        <h1 class="hero-headline">
+          <span class="headline-row headline-primary">
+            Đào Tạo Makeup
+          </span>
+          <span class="headline-row headline-emphasis">
+            <em class="font-serif">Chuyên Nghiệp</em> &amp; <em class="font-serif">Cá Nhân</em>
+          </span>
+        </h1>
+
+        <!-- Short Supportive Philosophy From Source -->
+        <p class="hero-lead">
+          Kỹ thuật makeup tôn vinh vẻ đẹp độc bản qua phương pháp cầm tay chỉ việc 1 kèm 1 — 90% thực hành mẫu thật trực tiếp cùng Master Lily Chen, lớp tối đa 5 học viên.
+        </p>
+
+        <!-- Primary & Secondary Actions -->
+        <div class="hero-actions">
+          <a href="#khoa-hoc-chinh" class="btn-cta-hero" id="heroCtaExplore">
+            <span>Khám Phá 2 Hướng Học</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="#tac-pham" class="btn-ghost-hero" id="heroCtaPortfolio">
+            <span>Xem Tác Phẩm Thực Tế</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 17l9.2-9.2M17 17V7H7"/>
+            </svg>
+          </a>
+        </div>
+
+        <!-- Metric Proof Ribbons -->
+        <div class="hero-stats-row">
+          <div class="stat-item">
+            <span class="stat-number">200+</span>
+            <span class="stat-label">Học viên tốt nghiệp</span>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat-item">
+            <span class="stat-number">90%</span>
+            <span class="stat-label">Thực hành mẫu thật</span>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat-item">
+            <span class="stat-number">1 : 5</span>
+            <span class="stat-label">Sĩ số vàng / kèm 1:1</span>
+          </div>
+          <div class="stat-divider" aria-hidden="true"></div>
+          <div class="stat-item">
+            <span class="stat-number">100%</span>
+            <span class="stat-label">Học phí trọn gói</span>
+          </div>
+        </div>
+
+        <!-- Accessible Motion Dock Controller -->
+        <div class="hero-motion-dock">
+          <button type="button" id="heroMotionToggle" class="motion-toggle-chip" aria-pressed="false" title="Nhấn để tạm dừng hoặc tiếp tục hiệu ứng hạt chuyển động">
+            <span class="chip-indicator" aria-hidden="true"></span>
+            <span class="chip-text" id="heroMotionLabel">Hiệu ứng hạt: Đang chạy</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 2: TÁC PHẨM CHỌN LỌC (CHỨNG MINH BẰNG HÌNH ẢNH)
+         ======================================================== -->
+    <section class="section-editorial gallery-section" id="tac-pham">
+      <div class="site-container">
+        <!-- Section Header -->
+        <div class="section-title-wrap">
+          <div class="title-meta">
+            <span class="section-kicker">Chất Lượng Chứng Minh Bằng Thực Tế</span>
+            <h2 class="section-heading font-serif">Vẻ Đẹp Độc Bản Qua Từng Nét Cọ</h2>
+            <p class="section-subtext">
+              Kỹ thuật tán nền mỏng mịn "glass-skin", che khuyết điểm không mốc dày và tôn đường nét thanh tú riêng biệt cho từng gương mặt.
+            </p>
+          </div>
+          <div class="title-link-side">
+            <a href="../portfolio.html" class="inline-arrow-link" title="Xem tất cả tác phẩm học viên">
+              <span>Xem đầy đủ tác phẩm</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Filter Tab Controls -->
+        <div class="gallery-filter-bar" role="tablist" aria-label="Bộ lọc chuyên mục tác phẩm">
+          <button type="button" class="filter-pill active" data-filter="all" role="tab" aria-selected="true">Tất Cả Tác Phẩm</button>
+          <button type="button" class="filter-pill" data-filter="codau" role="tab" aria-selected="false">Makeup Cô Dâu</button>
+          <button type="button" class="filter-pill" data-filter="tiec" role="tab" aria-selected="false">Dạ Tiệc &amp; Kỷ Yếu</button>
+          <button type="button" class="filter-pill" data-filter="canhan" role="tab" aria-selected="false">Douyin &amp; Cá Nhân</button>
+        </div>
+
+        <!-- Curated Clean Editorial Mosaic: No text obscuring faces -->
+        <div class="curated-mosaic" id="galleryGrid">
+          <!-- Item 1: Cô dâu cam đào -->
+          <article class="mosaic-item mosaic-item-featured" data-category="codau">
+            <div class="mosaic-frame">
+              <img src="../images/tacpham6.webp" alt="Layout makeup cô dâu tone cam đào trong trẻo thực hiện bởi học viên Lily Chen" class="mosaic-asset" loading="lazy">
+              <div class="mosaic-caption">
+                <span class="caption-cat">Makeup Cô Dâu</span>
+                <h3 class="caption-title">Cô dâu tone cam đào trong veo</h3>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 2: Douyin thanh thuần -->
+          <article class="mosaic-item" data-category="canhan">
+            <div class="mosaic-frame">
+              <img src="../images/IMG_1644.webp" alt="Layout trang điểm Douyin bọng mắt tự nhiên thanh thuần" class="mosaic-asset" loading="lazy">
+              <div class="mosaic-caption">
+                <span class="caption-cat">Douyin Trend</span>
+                <h3 class="caption-title">Layout Douyin thanh thuần tự nhiên</h3>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 3: Dạ tiệc nâu tây -->
+          <article class="mosaic-item" data-category="tiec">
+            <div class="mosaic-frame">
+              <img src="../images/tacpham7.webp" alt="Makeup dạ tiệc tone nâu tây sang trọng cuốn hút" class="mosaic-asset" loading="lazy">
+              <div class="mosaic-caption">
+                <span class="caption-cat">Dạ Tiệc</span>
+                <h3 class="caption-title">Layout tiệc tone nâu tây quý phái</h3>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 4: Cô dâu truyền thống -->
+          <article class="mosaic-item" data-category="codau">
+            <div class="mosaic-frame">
+              <img src="../images/IMG_1680.webp" alt="Layout cô dâu áo dài đỏ truyền thống ngày vu quy bài thi tốt nghiệp" class="mosaic-asset" loading="lazy">
+              <div class="mosaic-caption">
+                <span class="caption-cat">Cô Dâu Truyền Thống</span>
+                <h3 class="caption-title">Áo dài vu quy bài thi tốt nghiệp</h3>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 5: Cá nhân 10 phút -->
+          <article class="mosaic-item" data-category="canhan">
+            <div class="mosaic-frame">
+              <img src="../images/IMG_1646.webp" alt="Layout trang điểm cá nhân nhẹ nhàng 10 phút đi làm" class="mosaic-asset" loading="lazy">
+              <div class="mosaic-caption">
+                <span class="caption-cat">Cá Nhân Hàng Ngày</span>
+                <h3 class="caption-title">Kỹ thuật nền mỏng 10 phút mỗi sáng</h3>
+              </div>
+            </div>
+          </article>
+
+          <!-- Item 6: Kỷ yếu thanh xuân -->
+          <article class="mosaic-item" data-category="tiec">
+            <div class="mosaic-frame">
+              <img src="../images/IMG_1697.webp" alt="Makeup kỷ yếu trong sáng rạng rỡ của học viên" class="mosaic-asset" loading="lazy">
+              <div class="mosaic-caption">
+                <span class="caption-cat">Kỷ Yếu</span>
+                <h3 class="caption-title">Tone kỷ yếu thanh xuân trong sáng</h3>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 3: HAI HƯỚNG HỌC (ĐIỂM TƯƠNG TÁC CHÍNH - 34–45 GIÂY)
+         Antigravity Particle Morphing: Left = 4-Petal Frame / Right = 6-Cluster Ring
+         ======================================================== -->
+    <section class="section-editorial interactive-courses-section" id="khoa-hoc-chinh">
+      <!-- Unified Morphing Particle Canvas covering both columns -->
+      <canvas id="coursesMorphCanvas" class="courses-morph-canvas" aria-hidden="true"></canvas>
+
+      <div class="site-container courses-container">
+        <!-- Section Intro -->
+        <div class="courses-intro-header">
+          <span class="section-kicker">Chương Trình Đào Tạo Trọng Tâm</span>
+          <h2 class="section-heading font-serif">Chọn Hướng Đi Phù Hợp Mục Tiêu Của Bạn</h2>
+          <p class="section-subtext">
+            Chuyển chuột hoặc chạm vào từng hướng học bên dưới để trải nghiệm hiệu ứng hạt hội tụ bao quanh khối thông tin.
+          </p>
+        </div>
+
+        <!-- 2 Large Interactive Cards Side-by-Side (Stacked on Mobile) -->
+        <div class="courses-dual-grid">
+
+          <!-- COURSE 1: CHUYÊN NGHIỆP (LEFT CARD - 4-Petal Clover Form) -->
+          <div class="course-interactive-card" id="cardCoursePro" data-course="pro" tabindex="0" role="region" aria-labelledby="headingCoursePro">
+            <div class="card-glass-shell">
+              <!-- Eyebrow & Badge -->
+              <div class="card-eyebrow-row">
+                <span class="course-badge badge-pro">Học Nghề Toàn Diện</span>
+                <span class="course-target-hint">Dành cho Gen Z &amp; Người muốn mở Studio / MUA tự do</span>
+              </div>
+
+              <!-- Title -->
+              <h3 class="course-card-title font-serif" id="headingCoursePro">Khóa Makeup Chuyên Nghiệp</h3>
+
+              <!-- Brief Result Statement -->
+              <p class="course-card-lead">
+                Đào tạo nghề trọn vẹn từ số 0 đến tự tin nhận khách với thu nhập 15–35 triệu/tháng. 90% thực hành mẫu thật trực tiếp cùng Master Lily Chen uốn nắn từng nét cọ.
+              </p>
+
+              <!-- Tuition & Decision Data -->
+              <div class="course-pricing-box">
+                <div class="price-primary">
+                  <span class="price-amount">25.000.000đ</span>
+                  <span class="price-original">30.000.000đ</span>
+                </div>
+                <div class="price-benefit">
+                  Tiết kiệm 5.000.000đ · Hỗ trợ trả góp 2–3 đợt không lãi suất · Tặng trọn bộ cọ cao cấp
+                </div>
+              </div>
+
+              <!-- Specs Bar -->
+              <div class="course-spec-grid">
+                <div class="spec-col">
+                  <span class="spec-label">Thời lượng</span>
+                  <strong class="spec-val">3 Tháng thực chiến</strong>
+                </div>
+                <div class="spec-col">
+                  <span class="spec-label">Thực hành</span>
+                  <strong class="spec-val">90% trên mẫu thật</strong>
+                </div>
+                <div class="spec-col">
+                  <span class="spec-label">Sĩ số lớp</span>
+                  <strong class="spec-val">Tối đa 5 học viên</strong>
+                </div>
+              </div>
+
+              <!-- Condensed Curriculum Highlights -->
+              <ul class="course-checklist">
+                <li>
+                  <svg class="check-bullet" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Làm chủ toàn diện: Cô dâu, Dạ tiệc, Kỷ yếu &amp; Douyin hot trend</span>
+                </li>
+                <li>
+                  <svg class="check-bullet" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Xử lý chuyên sâu da mụn/sẹo, tạo khối 3D &amp; làm tóc đi tiệc đồng bộ</span>
+                </li>
+                <li>
+                  <svg class="check-bullet" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Thi tốt nghiệp, cấp chứng chỉ Academy &amp; hỗ trợ chụp portfolio nhận khách</span>
+                </li>
+              </ul>
+
+              <!-- Card Action Buttons -->
+              <div class="course-card-actions">
+                <a href="../khoa-hoc-trang-diem-chuyen-nghiep/" class="btn-card-primary">
+                  <span>Xem Chi Tiết Khóa Học</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#dang-ky-tu-van" class="btn-card-secondary" data-course-select="Khóa Chuyên Nghiệp 3 Tháng">
+                  <span>Nhận Bảng Lộ Trình</span>
+                </a>
+              </div>
+
+              <!-- Motion Shape Label -->
+              <div class="card-motion-indicator">
+                <span class="shape-dot pro-dot"></span>
+                <span>Hạt tụ hình khung hoa 4 cánh (Biểu tượng 4 giai đoạn đào tạo)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- COURSE 2: CÁ NHÂN (RIGHT CARD - 6-Cluster Orbital Ring) -->
+          <div class="course-interactive-card" id="cardCoursePersonal" data-course="personal" tabindex="0" role="region" aria-labelledby="headingCoursePersonal">
+            <div class="card-glass-shell">
+              <!-- Eyebrow & Badge -->
+              <div class="card-eyebrow-row">
+                <span class="course-badge badge-personal">Làm Đẹp Cá Nhân</span>
+                <span class="course-target-hint">Dành cho Phụ nữ công sở, Sinh viên &amp; Yêu bản thân</span>
+              </div>
+
+              <!-- Title -->
+              <h3 class="course-card-title font-serif" id="headingCoursePersonal">Khóa Trang Điểm Cá Nhân</h3>
+
+              <!-- Brief Result Statement -->
+              <p class="course-card-lead">
+                Tự tin trang điểm nhẹ nhàng, tôn nét tự nhiên chỉ sau 10–15 phút mỗi sáng và làm chủ layout dự tiệc thanh lịch, không phụ thuộc tiệm.
+              </p>
+
+              <!-- Tuition & Decision Data -->
+              <div class="course-pricing-box">
+                <div class="price-primary">
+                  <span class="price-amount">Từ 1.500.000đ</span>
+                  <span class="price-unit">/ trọn gói</span>
+                </div>
+                <div class="price-benefit">
+                  Tài trợ 100% mỹ phẩm &amp; dụng cụ chính hãng tại lớp · Không phát sinh bất kỳ phụ phí
+                </div>
+              </div>
+
+              <!-- Specs Bar -->
+              <div class="course-spec-grid">
+                <div class="spec-col">
+                  <span class="spec-label">Thời lượng</span>
+                  <strong class="spec-val">4 Buổi chuyên sâu</strong>
+                </div>
+                <div class="spec-col">
+                  <span class="spec-label">Lịch học</span>
+                  <strong class="spec-val">Linh hoạt T2 – CN</strong>
+                </div>
+                <div class="spec-col">
+                  <span class="spec-label">Sĩ số lớp</span>
+                  <strong class="spec-val">Tối đa 5 người</strong>
+                </div>
+              </div>
+
+              <!-- Condensed Curriculum Highlights -->
+              <ul class="course-checklist">
+                <li>
+                  <svg class="check-bullet" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Phân tích cấu trúc mặt, nhận diện tone da cá nhân &amp; tránh mua sai mỹ phẩm</span>
+                </li>
+                <li>
+                  <svg class="check-bullet" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Kỹ thuật tán nền mỏng mịn "glass-skin", kiềm dầu và chống mốc cakey cả ngày</span>
+                </li>
+                <li>
+                  <svg class="check-bullet" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                  <span>Layout đi làm 10 phút thanh lịch &amp; biến hóa layout dạ tiệc cuốn hút</span>
+                </li>
+              </ul>
+
+              <!-- Card Action Buttons -->
+              <div class="course-card-actions">
+                <a href="../khoa-hoc-trang-diem-ca-nhan/" class="btn-card-primary">
+                  <span>Xem Chi Tiết Khóa Học</span>
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="#dang-ky-tu-van" class="btn-card-secondary" data-course-select="Khóa Cá Nhân 4 Buổi">
+                  <span>Đăng Ký Tư Vấn</span>
+                </a>
+              </div>
+
+              <!-- Motion Shape Label -->
+              <div class="card-motion-indicator">
+                <span class="shape-dot personal-dot"></span>
+                <span>Hạt tụ hình 6 cụm hoa tròn quỹ đạo (Tỏa sáng nét đẹp tự nhiên)</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 4: TRẢI NGHIỆM HỌC (TỪ LỚP HỌC ĐẾN THỰC CHIẾN)
+         ======================================================== -->
+    <section class="section-editorial learning-experience-section" id="trai-nghiem">
+      <div class="site-container">
+        <!-- Section Title -->
+        <div class="section-title-wrap">
+          <div class="title-meta">
+            <span class="section-kicker">Triết Lý &amp; Thực Hành</span>
+            <h2 class="section-heading font-serif">Môi Trường Học Tập Cầm Tay Chỉ Việc</h2>
+            <p class="section-subtext">
+              Không học lý thuyết suông, không chen chúc lớp đông. Từng buổi học là sự va chạm thực tế với người mẫu thật và sự đồng hành sát sao của giảng viên.
+            </p>
+          </div>
+        </div>
+
+        <!-- 3 USP Pillars -->
+        <div class="usp-cards-grid">
+          <div class="usp-card">
+            <div class="usp-number font-serif">01</div>
+            <h3 class="usp-title">90% Thực Hành Trên Mẫu Thật</h3>
+            <p class="usp-desc">
+              Va chạm trực tiếp người mẫu thật từ buổi đầu tiên. Trải nghiệm xử lý đa dạng nền da: da mụn, da khô, da dầu và nhiều cấu trúc khuôn mặt để ra nghề nhận khách tự tin ngay.
+            </p>
+          </div>
+
+          <div class="usp-card">
+            <div class="usp-number font-serif">02</div>
+            <h3 class="usp-title">Sĩ Số Vàng 1 : 5 Học Viên</h3>
+            <p class="usp-desc">
+              Mỗi lớp tối đa 5 học viên để Master Lily Chen trực tiếp uốn nắn từng góc cầm cọ, lực tán mút và sửa lỗi kỹ thuật tức thì. Người chưa từng cầm cọ đều tiến bộ rõ rệt.
+            </p>
+          </div>
+
+          <div class="usp-card">
+            <div class="usp-number font-serif">03</div>
+            <h3 class="usp-title">Minh Bạch 100% Học Phí</h3>
+            <p class="usp-desc">
+              Học phí trọn gói bao gồm đầy đủ mỹ phẩm cao cấp và dụng cụ thực hành tại phòng lab. Nói không với phát sinh chi phí cốp đồ, hỗ trợ trả góp 2–3 đợt nhẹ nhàng.
+            </p>
+          </div>
+        </div>
+
+        <!-- Real Event Feature: King & Queen 2025 at TDMU -->
+        <div class="real-event-card">
+          <div class="event-text-col">
+            <span class="event-tag">Hoạt Động Thực Tế Tiêu Biểu</span>
+            <h3 class="event-title font-serif">Chung Kết King &amp; Queen 2025 · Đại Học Thủ Dầu Một</h3>
+            <p class="event-lead">
+              Master Lily Chen vinh dự đảm nhiệm vai trò <strong>Ban Giám Khảo Chuyên Môn</strong> và tài trợ toàn bộ layout trang điểm cho thí sinh đêm chung kết.
+            </p>
+            <p class="event-detail">
+              Học viên khóa chuyên nghiệp trực tiếp tham gia ekip hậu trường sân khấu, rèn luyện bản lĩnh xử lý áp lực thời gian, điều kiện ánh sáng biểu diễn và tích lũy profile uy tín ngay trong thời gian theo học.
+            </p>
+          </div>
+
+          <div class="event-mosaic-col">
+            <div class="event-img-tile tile-wide">
+              <img src="../images/lilychen-team-tdmu-2025.webp" alt="Đội ngũ Lily Chen Makeup Academy tại đêm chung kết King & Queen 2025" loading="lazy">
+              <span class="img-badge">Đội ngũ hậu trường</span>
+            </div>
+            <div class="event-img-tile">
+              <img src="../images/lilychen-tdmu-award-ceremony.webp" alt="Master Lily Chen trao giải trên sân khấu King & Queen 2025" loading="lazy">
+              <span class="img-badge">Trao giải sân khấu</span>
+            </div>
+            <div class="event-img-tile">
+              <img src="../images/lilychen-king-queen-collage-2025.webp" alt="Layout makeup thí sinh King & Queen 2025" loading="lazy">
+              <span class="img-badge">Layout thí sinh</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 5: GIẢNG VIÊN VÀ TIẾNG NÓI HỌC VIÊN
+         ======================================================== -->
+    <section class="section-editorial instructor-testimonial-section" id="giang-vien">
+      <div class="site-container">
+        <!-- Instructor Feature Box -->
+        <div class="instructor-feature-box">
+          <div class="instructor-image-side">
+            <div class="portrait-container">
+              <img src="../images/IMG_1683.webp" alt="Master Lily Chen (Nguyễn Phương Ly) - Giảng viên sáng lập Lily Chen Makeup Academy" class="portrait-photo" loading="lazy">
+              <div class="experience-chip">
+                <span class="exp-years font-serif">6+</span>
+                <span class="exp-text">Năm Kinh Nghiệm<br>Đào Tạo Thực Chiến</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="instructor-content-side">
+            <span class="section-kicker">Người Sáng Lập &amp; Giảng Viên Trực Tiếp</span>
+            <h2 class="instructor-title font-serif">Master Lily Chen</h2>
+            <div class="instructor-alias">(Nguyễn Phương Ly)</div>
+
+            <p class="instructor-story">
+              Chào bạn, mình là <strong>Lily Chen</strong>. Với hơn 6 năm gắn bó cùng nghề trang điểm tại Thủ Dầu Một, Bình Dương, mình đã đồng hành và dẫn dắt hơn <strong>200+ học viên</strong> — từ những bạn chưa từng biết cầm cây cọ đến khi tự tin làm chủ studio riêng hoặc rạng rỡ với nét đẹp của chính mình mỗi sáng.
+            </p>
+
+            <blockquote class="instructor-philosophy font-serif">
+              “Đối với Lily, makeup không phải là biến bạn thành một con người xa lạ, mà là kỹ thuật tôn vinh những đường nét đẹp nhất vốn có trên gương mặt bạn. Dạy nghề bằng sự chân thành, cầm tay uốn nắn từng nét cọ, không giấu nghề.”
+            </blockquote>
+
+            <div class="instructor-promises">
+              <div class="promise-tag">✓ Kèm sát 1:1 từng thao tác</div>
+              <div class="promise-tag">✓ 100% Không giấu nghề</div>
+              <div class="promise-tag">✓ Hỗ trợ kỹ thuật trọn đời</div>
+              <div class="promise-tag">✓ Hướng dẫn setup cốp đồ &amp; nhận khách</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Student Testimonials (Asymmetrical Rhythmic Grid) -->
+        <div class="testimonials-wrapper" id="cam-nhan">
+          <div class="testimonials-header">
+            <div>
+              <span class="section-kicker">Đánh Giá Thực Tế</span>
+              <h3 class="section-heading font-serif">Học Viên Nói Gì Sau Khóa Học?</h3>
+            </div>
+            <div class="rating-badge-summary">
+              <span class="rating-stars font-serif">4.9 / 5.0 ⭐</span>
+              <span class="rating-count">Từ 200+ học viên tốt nghiệp</span>
+            </div>
+          </div>
+
+          <div class="testimonials-cards-grid">
+            <!-- Review 1: Kim Hoa (Cá Nhân) -->
+            <article class="review-card">
+              <div class="review-stars" aria-label="5 trên 5 sao">★★★★★</div>
+              <p class="review-text">
+                “Giảng viên dạy rất có tâm, sau khi hoàn thành khóa cá nhân mình tự tin hơn hẳn. Trước đây mình xem YouTube tập đánh nền toàn bị mốc và dày cộm, đi làm ai cũng bảo trông già. Được cô Lily chỉnh cho lực tán mút và cách dưỡng ẩm trước khi makeup, giờ chỉ cần 10 phút là mình có lớp nền trong veo tự nhiên suốt cả ngày!”
+              </p>
+              <div class="review-author-row">
+                <img src="../images/IMG_1646.webp" alt="Học viên Nguyễn Thị Kim Hoa" class="author-photo" loading="lazy">
+                <div class="author-info">
+                  <h4 class="author-name">Nguyễn Thị Kim Hoa</h4>
+                  <span class="author-role">Khóa Trang Điểm Cá Nhân · Tốt nghiệp T1/2026</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Review 2: Mỹ Diệu (Chuyên Nghiệp) -->
+            <article class="review-card featured-review">
+              <div class="review-stars" aria-label="5 trên 5 sao">★★★★★</div>
+              <p class="review-text">
+                “Đây là nơi xứng đáng nhất để học nghề tại Bình Dương, chỉ dạy cực kỳ nhiệt tình. Hoàn thành khóa chuyên nghiệp mình đã tự tin ra nghề nhận khách ngay. Điểm mình ưng nhất là đúng nghĩa lớp nhỏ 5 người, cô kèm sát từng buổi và học phí trọn gói 100%, không bị phát sinh thêm bất kỳ chi phí dụng cụ nào.”
+              </p>
+              <div class="review-author-row">
+                <img src="../images/IMG_1644.webp" alt="Học viên Lê Mỹ Diệu" class="author-photo" loading="lazy">
+                <div class="author-info">
+                  <h4 class="author-name">Lê Mỹ Diệu</h4>
+                  <span class="author-role">Khóa Makeup Chuyên Nghiệp · Hiện là Freelance MUA</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- Review 3: Minh Trang (Chuyên Nghiệp) -->
+            <article class="review-card">
+              <div class="review-stars" aria-label="5 trên 5 sao">★★★★★</div>
+              <p class="review-text">
+                “Trong quá trình học mình gặp khó khăn tay cứng và kẻ mắt không đều, nhưng cô luôn kiên nhẫn cầm tay chỉ dạy, sửa từng nét cọ, rất là biết ơn cô! Sau khi tốt nghiệp cô còn hướng dẫn mình cách chụp ảnh mẫu và set up ánh sáng. Giờ mình đã mở được góc studio nhỏ tại nhà với lượng khách quen ổn định.”
+              </p>
+              <div class="review-author-row">
+                <img src="../images/IMG_1680.webp" alt="Học viên Nguyễn Minh Trang" class="author-photo" loading="lazy">
+                <div class="author-info">
+                  <h4 class="author-name">Nguyễn Minh Trang</h4>
+                  <span class="author-role">Khóa Makeup Chuyên Nghiệp · Đã mở Studio riêng</span>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 6: THÔNG TIN HỖ TRỢ QUYẾT ĐỊNH (FAQ & BLOG)
+         ======================================================== -->
+    <section class="section-editorial decision-support-section">
+      <div class="site-container">
+
+        <!-- FAQ Subsection -->
+        <div class="faq-block" id="faq">
+          <div class="section-title-wrap text-center-wrap">
+            <span class="section-kicker">Giải Đáp Băn Khoăn</span>
+            <h2 class="section-heading font-serif">Câu Hỏi Thường Gặp Khi Đăng Ký</h2>
+            <p class="section-subtext">
+              Những thông tin cốt lõi giúp bạn chọn đúng khóa học phù hợp với quỹ thời gian và định hướng bản thân.
+            </p>
+          </div>
+
+          <div class="faq-accordion-list" role="region" aria-label="Danh sách câu hỏi thường gặp">
+            <!-- FAQ 1 -->
+            <div class="faq-item">
+              <button class="faq-trigger" type="button" aria-expanded="false">
+                <span class="faq-q-text">1. Tôi chưa từng biết trang điểm hoặc vụng về kẻ mắt thì có học được không?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-drawer">
+                <p><strong>Hoàn toàn học được và làm đẹp được!</strong> Tại Lily Chen Academy, giáo trình được xây dựng theo phương pháp <em>Cầm tay chỉ việc 1 kèm 1</em>. Hơn 70% học viên bắt đầu từ con số 0. Master Lily Chen sẽ trực tiếp phân tích đặc điểm khuôn mặt bạn, uốn nắn từng động tác cổ tay, lực miết cọ và góc độ ánh sáng cho đến khi bạn tự tin làm đẹp cho chính mình hoặc khách hàng.</p>
+              </div>
+            </div>
+
+            <!-- FAQ 2 -->
+            <div class="faq-item">
+              <button class="faq-trigger" type="button" aria-expanded="false">
+                <span class="faq-q-text">2. Học phí có phát sinh thêm tiền mỹ phẩm hay dụng cụ trong quá trình học không?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-drawer">
+                <p><strong>Tuyệt đối không phát sinh chi phí ẩn!</strong> Học viện cam kết chính sách học phí trọn gói 100%. Toàn bộ mỹ phẩm cao cấp chính hãng (MAC, NARS, Shu Uemura, Clio, Espoir,...) cùng dụng cụ thực hành tại phòng lab đều được tài trợ miễn phí trong suốt khóa học. Bạn không lo bị ép mua cốp đồ nghề kém chất lượng.</p>
+              </div>
+            </div>
+
+            <!-- FAQ 3 -->
+            <div class="faq-item">
+              <button class="faq-trigger" type="button" aria-expanded="false">
+                <span class="faq-q-text">3. Khóa Chuyên Nghiệp có chính sách hỗ trợ chia nhỏ học phí trả góp không?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-drawer">
+                <p><strong>Có! Lily Chen luôn đồng hành cùng ước mơ nghề nghiệp của bạn.</strong> Để giảm bớt áp lực tài chính ban đầu cho các bạn trẻ và Gen Z, học viện hỗ trợ chia học phí thành <strong>2 đến 3 đợt thanh toán</strong> linh hoạt trong suốt thời gian đào tạo 3 tháng. Chính sách hoàn toàn không tính lãi suất, thủ tục đơn giản.</p>
+              </div>
+            </div>
+
+            <!-- FAQ 4 -->
+            <div class="faq-item">
+              <button class="faq-trigger" type="button" aria-expanded="false">
+                <span class="faq-q-text">4. Tốt nghiệp khóa Chuyên Nghiệp xong có cơ hội việc làm và thu nhập ra sao?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-drawer">
+                <p>Học viên xuất sắc sẽ được <strong>giữ lại làm trợ giảng</strong> hoặc được Master Lily Chen trực tiếp kết nối việc làm tại các Bridal Studio, Wedding House uy tín tại Bình Dương và TP.HCM. Bạn còn được đào tạo kỹ năng chụp ảnh beauty, xây dựng kênh cá nhân và tư vấn chiến lược mở Studio riêng với mức thu nhập từ 15–35 triệu/tháng.</p>
+              </div>
+            </div>
+
+            <!-- FAQ 5 -->
+            <div class="faq-item">
+              <button class="faq-trigger" type="button" aria-expanded="false">
+                <span class="faq-q-text">5. Trước khi nhập học tôi có cần tự mua mỹ phẩm hay cọ trang điểm không?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-drawer">
+                <p><strong>Bạn không cần mua trước!</strong> Việc tự mua khi chưa có kiến thức chuyên môn rất dễ dẫn đến lãng phí mỹ phẩm sai tone da. Tại lớp đã có sẵn đầy đủ đồ nghề tiêu chuẩn. Sau khi bạn đã hiểu rõ loại da và chất liệu, Master Lily Chen sẽ định hướng danh mục mua sắm tối ưu nhất.</p>
+              </div>
+            </div>
+
+            <!-- FAQ 6 -->
+            <div class="faq-item">
+              <button class="faq-trigger" type="button" aria-expanded="false">
+                <span class="faq-q-text">6. Thời gian học có linh hoạt cho người đang đi làm văn phòng hoặc sinh viên không?</span>
+                <span class="faq-icon" aria-hidden="true">+</span>
+              </button>
+              <div class="faq-drawer">
+                <p><strong>Cực kỳ linh hoạt!</strong> Học viện mở các ca học: <em>Ca Sáng (09:00 - 11:30)</em>, <em>Ca Chiều (14:00 - 16:30)</em> và <em>Ca Tối (18:00 - 20:30)</em> từ Thứ 2 đến Thứ 7. Nếu bận việc đột xuất, bạn chỉ cần báo trước để được dời lịch và bù bài 1:1 đầy đủ.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blog Articles Subsection -->
+        <div class="blog-block" id="blog">
+          <div class="section-title-wrap">
+            <div class="title-meta">
+              <span class="section-kicker">Cẩm Nang Làm Đẹp &amp; Định Hướng</span>
+              <h2 class="section-heading font-serif">Bài Viết Mới Từ Master Lily Chen</h2>
+              <p class="section-subtext">Kiến thức thực tế về nghề trang điểm, xử lý nền da và bí quyết làm đẹp hàng ngày.</p>
+            </div>
+            <div class="title-link-side">
+              <a href="../blog.html" class="inline-arrow-link">
+                <span>Xem tất cả bài viết</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
+
+          <div class="blog-articles-grid">
+            <!-- Article 1 -->
+            <article class="blog-preview-card">
+              <a href="../nghe-makeup-co-tuong-lai-khong/index.html" class="blog-thumb-link">
+                <img src="../images/nghe-makeup-co-tuong-lai-khong-featured.webp" alt="Nghề makeup có tương lai không? Lộ trình & góc nhìn thu nhập cho người mới" class="blog-img" loading="lazy">
+                <span class="blog-badge">Định Hướng Nghề</span>
+              </a>
+              <div class="blog-body">
+                <div class="blog-date-meta">05 Tháng 6, 2026 · Master Lily Chen</div>
+                <h3 class="blog-card-title">
+                  <a href="../nghe-makeup-co-tuong-lai-khong/index.html">Nghề Makeup Có Tương Lai Không? Lộ Trình &amp; Góc Nhìn Thu Nhập Cho Người Mới</a>
+                </h3>
+                <p class="blog-snippet">
+                  Phân tích nhu cầu ngành làm đẹp hiện nay, các khoảng thu nhập tham khảo và tầm quan trọng của việc rèn luyện tay nghề thực tế trên mẫu thật.
+                </p>
+                <a href="../nghe-makeup-co-tuong-lai-khong/index.html" class="blog-read-link">Đọc tiếp &rarr;</a>
+              </div>
+            </article>
+
+            <!-- Article 2 -->
+            <article class="blog-preview-card">
+              <a href="../cach-makeup-di-lam-10-phut/index.html" class="blog-thumb-link">
+                <img src="../cach-makeup-di-lam-10-phut/images/Nang-cong-so-makeup-di-lam-nhe-nhang-tu-nhien-1192x800.webp" alt="Cách makeup đi làm nhẹ nhàng trong 10 phút cho nàng công sở" class="blog-img" loading="lazy">
+                <span class="blog-badge">Makeup Cá Nhân</span>
+              </a>
+              <div class="blog-body">
+                <div class="blog-date-meta">10 Tháng 6, 2026 · Master Lily Chen</div>
+                <h3 class="blog-card-title">
+                  <a href="../cach-makeup-di-lam-10-phut/index.html">Cách Makeup Đi Làm Nhẹ Nhàng Trong 10 Phút Cho Nàng Công Sở</a>
+                </h3>
+                <p class="blog-snippet">
+                  Quy trình từng phút tối giản cho buổi sáng bận rộn: giữ nền mỏng nhẹ, không mốc khi ngồi phòng máy lạnh và luôn tươi tắn chuẩn thanh lịch.
+                </p>
+                <a href="../cach-makeup-di-lam-10-phut/index.html" class="blog-read-link">Đọc tiếp &rarr;</a>
+              </div>
+            </article>
+
+            <!-- Article 3 -->
+            <article class="blog-preview-card">
+              <a href="../che-khuyet-diem-da-mun-da-dau/index.html" class="blog-thumb-link">
+                <img src="../che-khuyet-diem-da-mun-da-dau/images/makeup-che-khuyet-diem-e1781457352881-2048x1246.webp" alt="Bí quyết makeup che khuyết điểm da dầu mụn không bị mốc" class="blog-img" loading="lazy">
+                <span class="blog-badge">Kỹ Thuật Nền 3D</span>
+              </a>
+              <div class="blog-body">
+                <div class="blog-date-meta">05 Tháng 6, 2026 · Master Lily Chen</div>
+                <h3 class="blog-card-title">
+                  <a href="../che-khuyet-diem-da-mun-da-dau/index.html">Makeup Che Khuyết Điểm Da Mụn, Da Dầu: Cách Lên Nền Không Mốc, Không Trôi</a>
+                </h3>
+                <p class="blog-snippet">
+                  Kỹ thuật dặm mút và chọn kem lót kiềm dầu chuẩn chuyên nghiệp, giúp che giấu mụn đỏ và lỗ chân lông to mà da vẫn căng mướt tự nhiên.
+                </p>
+                <a href="../che-khuyet-diem-da-mun-da-dau/index.html" class="blog-read-link">Đọc tiếp &rarr;</a>
+              </div>
+            </article>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================
+         SECTION 7: TƯ VẤN & FOOTER
+         ======================================================== -->
+    <section class="section-editorial consultation-section" id="dang-ky-tu-van">
+      <div class="site-container">
+        <div class="consultation-box">
+          <div class="consult-info-side">
+            <span class="section-kicker kicker-light">Kết Nối Trực Tiếp</span>
+            <h2 class="consult-heading font-serif">Bắt Đầu Hành Trình Làm Đẹp Cùng Lily Chen</h2>
+            <p class="consult-lead">
+              Để lại thông tin hoặc liên hệ trực tiếp để được Master Lily Chen phân tích dáng mặt, tư vấn lộ trình học phù hợp nhất với năng lực và quỹ thời gian của bạn.
+            </p>
+
+            <div class="consult-direct-cards">
+              <div class="direct-card">
+                <div class="direct-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57a1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>
+                </div>
+                <div class="direct-content">
+                  <span class="direct-label">Hotline &amp; Zalo Trực Tiếp</span>
+                  <a href="tel:0889979791" class="direct-val">088 997 97 91</a>
+                </div>
+              </div>
+
+              <div class="direct-card">
+                <div class="direct-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                </div>
+                <div class="direct-content">
+                  <span class="direct-label">Địa Chỉ Học Viện</span>
+                  <span class="direct-val-text">B14, Đường số 3, KDC Hiệp Phát 2, P. Hiệp Thành, TP. Thủ Dầu Một, Bình Dương</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="consult-form-side">
+            <div class="prototype-form-tag">
+              <span class="status-indicator"></span>
+              <span>Form Thử Nghiệm Giao Diện (Không gửi email/lead thật)</span>
+            </div>
+
+            <form id="prototypeLeadForm" class="proto-form" novalidate>
+              <div class="form-row">
+                <label for="leadFullName" class="form-label">Họ và tên của bạn <span class="required">*</span></label>
+                <input type="text" id="leadFullName" name="name" class="form-input" placeholder="Ví dụ: Nguyễn Phương Anh" required>
+              </div>
+
+              <div class="form-row">
+                <label for="leadPhone" class="form-label">Số điện thoại / Zalo <span class="required">*</span></label>
+                <input type="tel" id="leadPhone" name="phone" class="form-input" placeholder="Ví dụ: 0987 654 321" required>
+              </div>
+
+              <div class="form-row">
+                <label for="leadCourseSelect" class="form-label">Khóa học bạn đang quan tâm <span class="required">*</span></label>
+                <select id="leadCourseSelect" name="course" class="form-input" required>
+                  <option value="" disabled selected>-- Chọn khóa học bạn muốn tư vấn --</option>
+                  <option value="Khóa Chuyên Nghiệp 3 Tháng">Khóa Makeup Chuyên Nghiệp (3 Tháng - Ưu Đãi 25.000.000đ)</option>
+                  <option value="Khóa Cá Nhân 4 Buổi">Khóa Trang Điểm Cá Nhân (4 Buổi - Từ 1.500.000đ)</option>
+                  <option value="Khóa Cô Dâu Nâng Cao">Khóa Chuyên Sâu Cô Dâu &amp; Dạ Tiệc</option>
+                  <option value="Tư Vấn Chọn Khóa Phù Hợp">Tôi muốn Master Lily Chen tư vấn chọn khóa phù hợp</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <label for="leadSchedule" class="form-label">Khung giờ học thuận tiện nhất</label>
+                <select id="leadSchedule" name="time" class="form-input">
+                  <option value="Linh hoạt">Linh hoạt theo lịch rảnh của tôi</option>
+                  <option value="Ca Sáng (09:00 - 11:30)">Ca Sáng (09:00 - 11:30)</option>
+                  <option value="Ca Chiều (14:00 - 16:30)">Ca Chiều (14:00 - 16:30)</option>
+                  <option value="Ca Tối (18:00 - 20:30)">Ca Tối (18:00 - 20:30 - Thích hợp văn phòng)</option>
+                  <option value="Cuối tuần (Thứ 7 - CN)">Cuối tuần (Thứ 7 &amp; Chủ Nhật)</option>
+                </select>
+              </div>
+
+              <div class="form-row">
+                <label for="leadNotes" class="form-label">Ghi chú hoặc câu hỏi dành cho giảng viên</label>
+                <textarea id="leadNotes" name="message" class="form-input form-textarea" rows="3" placeholder="Ví dụ: Da mình da dầu có mụn nhẹ, chưa từng kẻ mắt, muốn học để tự tin đi làm hàng ngày..."></textarea>
+              </div>
+
+              <button type="submit" class="btn-form-submit" id="btnSubmitLead">
+                <span>GỬI ĐĂNG KÝ TƯ VẤN THỬ NGHIỆM</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
+              </button>
+
+              <div class="form-security-note">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                <span>Bảo mật thông tin theo <a href="../chinh-sach-bao-mat/" style="color:inherit; text-decoration: underline;">Chính sách bảo mật</a> · Bản thử không gửi email thực tế.</span>
+              </div>
+
+              <!-- Interactive Simulated Submission Alert -->
+              <div id="formSuccessNotice" class="form-success-alert" role="status" aria-live="polite">
+                <div class="alert-icon">✨</div>
+                <div class="alert-body">
+                  <strong>Thử nghiệm tương tác thành công!</strong>
+                  <p>Hệ thống đã ghi nhận thông tin mô phỏng của bạn <span id="mockName"></span> (<span id="mockPhone"></span>) cho khóa <span id="mockCourse"></span>. Trên phiên bản production, lead sẽ tự động lưu và gửi thông báo trực tiếp đến Master Lily Chen.</p>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================
+       FOOTER (CHARCOAL LUXURY #1C1B1A)
+       ======================================================== -->
+  <footer class="site-footer" role="contentinfo">
+    <div class="site-container footer-content-grid">
+      <!-- Col 1: Brand & Philosophy -->
+      <div class="footer-col">
+        <a href="index.html" class="brand-link footer-brand">
+          <span class="brand-title">LILY CHEN</span>
+          <span class="brand-subtitle">MAKEUP ACADEMY</span>
+        </a>
+        <p class="footer-bio-text">
+          Học viện đào tạo trang điểm cá nhân &amp; chuyên nghiệp chuẩn Boutique tại Thủ Dầu Một, Bình Dương. Tôn vinh nét đẹp độc bản với triết lý đào tạo thực chiến "Cầm tay chỉ việc 1 kèm 1 - Tự nhiên là đỉnh cao".
+        </p>
+        <div class="footer-hours-row">
+          <span>Giờ hoạt động: <strong>08:30 - 20:30 (Thứ 2 – CN)</strong></span>
+        </div>
+        <div class="footer-social-row">
+          <a href="https://www.facebook.com/LilyChenMakeup" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Facebook Lily Chen Makeup">
+            <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          </a>
+          <a href="https://zalo.me/0889979791" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Zalo Lily Chen">
+            <span style="font-weight: 800; font-size: 0.9rem;">Z</span>
+          </a>
+          <a href="https://tiktok.com/@lilychenmakeup" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="TikTok Lily Chen Makeup">
+            <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64c.298-.002.595.042.88.13V9.4a6.33 6.33 0 0 0-1-.08A6.34 6.34 0 0 0 3 15.66a6.34 6.34 0 0 0 10.82 4.49 6.27 6.27 0 0 0 1.87-4.48V8.69a8.18 8.18 0 0 0 4.78 1.52v-3.45a4.85 4.85 0 0 1-.88-.07z"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 2: NAP & Local SEO -->
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Thông Tin Liên Hệ</h4>
+        <div class="footer-contact-items">
+          <div class="contact-entry">
+            <strong>Địa chỉ:</strong>
+            <span>B14, Đường số 3, KDC Hiệp Phát 2, P. Hiệp Thành, TP. Thủ Dầu Một, Bình Dương</span>
+          </div>
+          <div class="contact-entry">
+            <strong>Hotline / Zalo:</strong>
+            <a href="tel:0889979791">088 997 97 91</a>
+          </div>
+          <div class="contact-entry">
+            <strong>Email:</strong>
+            <a href="mailto:lilychenmakeup@gmail.com">lilychenmakeup@gmail.com</a>
+          </div>
+          <div class="contact-entry">
+            <strong>Website chính thức:</strong>
+            <a href="https://lilychenmakeup.com/">lilychenmakeup.com</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Col 3: Navigation Links -->
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Điều Hướng Nhanh</h4>
+        <ul class="footer-nav-list">
+          <li><a href="../gioi-thieu/">Giới Thiệu Học Viện</a></li>
+          <li><a href="../khoa-hoc-trang-diem-ca-nhan/">Khóa Makeup Cá Nhân</a></li>
+          <li><a href="../khoa-hoc-trang-diem-chuyen-nghiep/">Khóa Makeup Chuyên Nghiệp</a></li>
+          <li><a href="../portfolio.html">Bộ Sưu Tập Tác Phẩm</a></li>
+          <li><a href="#giang-vien">Giảng Viên Lily Chen</a></li>
+          <li><a href="#cam-nhan">Cảm Nhận Học Viên</a></li>
+          <li><a href="../blog.html">Blog &amp; Cẩm Nang</a></li>
+          <li><a href="#faq">Câu Hỏi Thường Gặp</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Google Maps & Location -->
+      <div class="footer-col">
+        <h4 class="footer-col-heading">Vị Trí Học Viện</h4>
+        <div class="footer-map-wrapper">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3916.6575796982464!2d106.65825227583921!3d10.989218055230911!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3174d1a58df6ea8d%3A0xe54e6027a4d538fe!2zS0RDIEhp4buHcCBTaMOhdCAyLCBIaeG7h3AgVGjDoG5oLCBUaOG7pyBE4bqndSBN4buZdCwgQsOsbmggRMawxqFuZw!5e0!3m2!1svi!2s!4v1711280000000!5m2!1svi!2s" width="100%" height="160" style="border:0; border-radius: 8px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Bản đồ Lily Chen Makeup Academy Bình Dương"></iframe>
+        </div>
+        <p class="map-helper-text">
+          Gần cổng Đại học Thủ Dầu Một &amp; Chợ Đình. Có chỗ đậu xe máy và ô tô thuận tiện, an ninh.
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom Copyright & Legal Links -->
+    <div class="footer-bottom-bar">
+      <div class="site-container footer-bottom-flex">
+        <div class="copyright-text">
+          &copy; 2026 Lily Chen Makeup Academy. Bản quyền thuộc về Lily Chen. Bản thử nghiệm v2.
+        </div>
+        <div class="legal-links">
+          <a href="../gioi-thieu/">Giới thiệu</a>
+          <a href="../chinh-sach-bao-mat/">Chính sách bảo mật</a>
+          <a href="../dieu-khoan-su-dung/">Điều khoản sử dụng</a>
+          <a href="tel:0889979791">Hotline: 088 997 97 91</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================
+       FLOATING QUICK ACTION DOCK (ZALO & PHONE)
+       ======================================================== -->
+  <div class="floating-quick-dock" aria-label="Liên hệ nhanh">
+    <a href="https://zalo.me/0889979791" target="_blank" rel="noopener noreferrer" class="dock-btn dock-zalo" title="Chat Zalo cùng Lily Chen" aria-label="Chat Zalo 0889979791">
+      <span class="zalo-symbol">Zalo</span>
+    </a>
+    <a href="tel:0889979791" class="dock-btn dock-phone" title="Gọi Hotline 088 997 97 91" aria-label="Gọi điện 0889979791">
+      <svg viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.02-.24c1.12.37 2.33.57 3.57.57a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.24.2 2.45.57 3.57a1 1 0 01-.25 1.02l-2.2 2.2z"/></svg>
+    </a>
+  </div>
+
+  <!-- Dedicated Motion Logic Script -->
+  <script src="motion.js"></script>
+</body>
+</html>

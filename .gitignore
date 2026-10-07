@@ -19,3 +19,6 @@ theme-backup-2026-09-29/
 *backup*/
 *.bak
 
+# Temporary outputs & local test scripts
+outputs/
+scripts/
